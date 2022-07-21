@@ -77,7 +77,7 @@ export function generateKey(game: Game): number {
  * @param n The number of bits.
  * @returns N random bits.
  */
-export function randomBits(n: number = 31): number {
+function randomBits(n: number = 31): number {
   // Maximum support num is (2**31 - 1)
   return Math.floor(Math.random() * (2 ** n - 1) + 1);
 }

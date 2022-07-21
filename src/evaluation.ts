@@ -14,7 +14,7 @@ import {
 /**
  * End game starting value.
  */
-export const EndGameStart =
+const EndGameStart =
   KingValue + 2 * RookValue + 2 * BishopValue + 4 * PawnValue;
 
 /**
@@ -44,7 +44,7 @@ export function evaluate(game: Game): number {
  * @param side The side.
  * @returns The value of material.
  */
-export function getMaterialValue(game: Game, side: Color): number {
+function getMaterialValue(game: Game, side: Color): number {
   let material = 0;
   if (side === Color.White) {
     material += PawnValue * game.pieceCount[BoardPiece.WhitePawn];
@@ -71,7 +71,7 @@ export function getMaterialValue(game: Game, side: Color): number {
  * @param material The value of material.
  * @returns The evaluation of piece position.
  */
-export function getPositionEvaluation(
+function getPositionEvaluation(
   game: Game,
   side: Color,
   material: number

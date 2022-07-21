@@ -47,63 +47,63 @@ export class Search {
   /**
    * The game instance.
    */
-  game: Game;
+  private game: Game;
 
   /**
    * The best move that has been found.
    */
-  bestMove: number;
+  public bestMove: number;
 
   /**
    * The best score (evaluation) that has been found.
    */
-  bestScore: number;
+  public bestScore: number;
+
+  /**
+   * The number of nodes searched.
+   */
+  public nodes: number;
 
   /**
    * The principle variation table.
    * Key: {@link Game.key} - a zobrist hash for a board position.
    * Value: {@link Move} - the best move found.
    */
-  pvTable: Map<number, number>;
-
-  /**
-   * The number of nodes searched.
-   */
-  nodes: number;
-
-  /**
-   * The starting game ply.
-   */
-  startPly: number;
+  private pvTable: Map<number, number>;
 
   /**
    * The amount of time to search for, in milliseconds.
    */
-  time: number;
+  private time: number;
 
   /**
    * The search starting time.
    */
-  startTime: number;
+  private startTime: number;
+
+  /**
+   * The starting game ply.
+   */
+  private startPly: number;
 
   /**
    * The stop search flag.
    */
-  stop: boolean;
+  private stop: boolean;
 
   /**
    * Create a new search controller.
    * @param game The game instance.
    */
-  constructor(game: Game) {
+  public constructor(game: Game) {
     this.game = game;
     this.bestMove = 0;
     this.bestScore = -Infinity;
-    this.pvTable = new Map<number, number>();
     this.nodes = 0;
-    this.startPly = game.ply;
+    this.pvTable = new Map<number, number>();
     this.time = 0;
     this.startTime = 0;
+    this.startPly = game.ply;
     this.stop = true;
   }
 
@@ -112,16 +112,16 @@ export class Search {
    * @param time The search time (milliseconds), default 1000 ms.
    * @returns The best move.
    */
-  search(time: number = DefaultTime): number {
+  public search(time: number = DefaultTime): number {
     const { game } = this;
 
     this.bestMove = 0;
     this.bestScore = -Infinity;
-    this.pvTable = new Map<number, number>();
     this.nodes = 0;
-    this.startPly = game.ply;
+    this.pvTable = new Map<number, number>();
     this.time = time;
     this.startTime = performance.now();
+    this.startPly = game.ply;
     this.stop = false;
 
     let currentScore = -Infinity;
@@ -142,16 +142,16 @@ export class Search {
 
       if (!DEBUG) continue;
       const moveList = this.getMoveList(currentDepth);
-      let output = "Depth: " + currentDepth;
-      output += ",\tNodes: " + this.nodes;
-      output += ",\tScore: " + this.bestScore;
-      output += ",\tMove List: " + moveList.map(moveStringMin);
+      let output = `Depth: ${currentDepth}`;
+      output += `\tNodes: ${this.nodes}`;
+      output += `\tScore: ${this.bestScore}`;
+      output += `\tMove List: ${moveList.map(moveStringMin)}`;
       console.log(output);
     }
 
     this.stop = true;
 
-    if (DEBUG) console.log(`Best Move: ${moveString(this.bestMove)}\n`);
+    if (DEBUG) console.log(`Best Move: ${moveString(this.bestMove)}`);
 
     return this.bestMove;
   }
@@ -164,7 +164,7 @@ export class Search {
    * @param beta The beta value (maximum score)
    * @returns The best score.
    */
-  alphaBeta(depth: number, alpha: number, beta: number): number {
+  private alphaBeta(depth: number, alpha: number, beta: number): number {
     const { game } = this;
 
     this.checkTime();
@@ -232,7 +232,7 @@ export class Search {
    * @param beta The beta value (maximum score).
    * @returns The best score.
    */
-  quiescence(alpha: number, beta: number): number {
+  private quiescence(alpha: number, beta: number): number {
     const { game } = this;
 
     this.checkTime();
@@ -284,19 +284,11 @@ export class Search {
   }
 
   /**
-   * Perform time check while searching.
-   */
-  checkTime(): void {
-    if (this.nodes & TimeCheckNodes) return;
-    if (performance.now() - this.startTime > this.time) this.stop = true;
-  }
-
-  /**
    * Get the list of best moves.
    * @param depth The move list depth.
    * @returns A list of moves.
    */
-  getMoveList(depth: number): number[] {
+  public getMoveList(depth: number): number[] {
     const { game } = this;
     const moves: number[] = [];
 
@@ -310,5 +302,13 @@ export class Search {
     while (game.ply > this.startPly) game.takeBack();
 
     return moves;
+  }
+
+  /**
+   * Perform time check while searching.
+   */
+  private checkTime(): void {
+    if (this.nodes & TimeCheckNodes) return;
+    if (performance.now() - this.startTime > this.time) this.stop = true;
   }
 }
