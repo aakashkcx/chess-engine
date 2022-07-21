@@ -74,12 +74,29 @@ export function orderMoves(game: Game, moves: number[], pvMove?: number): void {
  * @param moveScores The list of move scores.
  */
 function sortMoves(moves: number[], moveScores: number[]): void {
-  for (let i = 0; i < moves.length; i++) {
-    for (let j = 0; j < moves.length - i - 1; j++) {
-      if (moveScores[j] < moveScores[j + 1]) {
-        [moves[j], moves[j + 1]] = [moves[j + 1], moves[j]];
-        [moveScores[j], moveScores[j + 1]] = [moveScores[j + 1], moveScores[j]];
-      }
+  // * Insertion Sort
+  for (let i = 1; i < moves.length; i++) {
+    let currentMove = moves[i];
+    let currentScore = moveScores[i];
+    let j;
+    for (j = i - 1; j >= 0 && moveScores[j] < currentScore; j--) {
+      moves[j + 1] = moves[j];
+      moveScores[j + 1] = moveScores[j];
     }
+    moves[j + 1] = currentMove;
+    moveScores[j + 1] = currentScore;
   }
+
+  // // * Bubble Sort
+  // for (let i = 0; i < moves.length - 1; i++) {
+  //   let flag = false;
+  //   for (let j = 0; j < moves.length - i - 1; j++) {
+  //     if (moveScores[j] < moveScores[j + 1]) {
+  //       [moves[j], moves[j + 1]] = [moves[j + 1], moves[j]];
+  //       [moveScores[j], moveScores[j + 1]] = [moveScores[j + 1], moveScores[j]];
+  //       flag = true;
+  //     }
+  //   }
+  //   if (!flag) break;
+  // }
 }
