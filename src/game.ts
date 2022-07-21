@@ -47,7 +47,7 @@ export class Game {
    * @example
    * board.pieceBoard[31] = BoardPiece.WhitePawn;
    */
-  pieceBoard: BoardPiece[];
+  public pieceBoard: BoardPiece[];
 
   /**
    * The number of each board piece currently on the board.
@@ -55,7 +55,7 @@ export class Game {
    * @example
    * board.pieceCount[BoardPiece.WhitePawn] // returns 8
    */
-  pieceCount: number[];
+  public pieceCount: number[];
 
   /**
    * A 2D piece list for each board piece, storing their 0-119 index within {@link pieceBoard}.
@@ -63,7 +63,7 @@ export class Game {
    * @example
    * board.pieceList[BoardPiece.WhitePawn][0] // returns 31
    */
-  pieceList: number[][];
+  public pieceList: number[][];
 
   /**
    * A 10*12 array storing the index of each piece within {@link pieceList}.
@@ -71,76 +71,76 @@ export class Game {
    * @example
    * board.pieceIndex[31] = 0;
    */
-  pieceIndex: number[];
+  public pieceIndex: number[];
 
   /**
    * The side to move (active color).
    */
-  sideToMove: Color;
+  public sideToMove: Color;
 
   /**
    * The castling availability for each side.
    * Represented as 4 bits, as described in {@link CastleRight}.
    */
-  castleRights: number;
+  public castleRights: number;
 
   /**
    * The current en passant target square.
    * If a pawn makes a two-square move, the square behind the pawn is recorded.
    * Stored as an 0-119 index.
    */
-  enPassant: number;
+  public enPassant: number;
 
   /**
    * The half move clock (fifty-move rule).
    * The number of half moves since last capture or pawn advance.
    */
-  halfMoves: number;
+  public halfMoves: number;
 
   /**
    * The number of full moves in the game.
    * Starts at 1 and incremented after each Black move.
    */
-  fullMoves: number;
+  public fullMoves: number;
 
   /**
    * The number of plies played in the game.
    * Starts at 0 and incremented after each move.
    */
-  ply: number;
+  public ply: number;
 
   /**
    * The zobrist hash for the current game state.
    */
-  key: number;
+  public key: number;
 
   /**
    * Stores the history of the game state.
    * Contains {@link State} values.
    * Indexed by {@link ply}.
    */
-  stateHistory: number[];
+  public stateHistory: number[];
 
   /**
    * Stores the move history of the game.
    * Contains {@link Move} values.
    * Indexed by {@link ply}.
    */
-  moveHistory: number[];
+  public moveHistory: number[];
 
   /**
    * Stores the hash key history of the game.
    * Contains zobrist hash values.
    * Indexed by {@link ply}.
    */
-  keyHistory: number[];
+  public keyHistory: number[];
 
   /**
    * Create a new game.
    * The board will be initialised with a FEN string or the default starting FEN string.
    * @param fen A starting Forsyth–Edwards Notation (FEN) string.
    */
-  constructor(fen: string = StartingFEN) {
+  public constructor(fen: string = StartingFEN) {
     this.pieceBoard = Array(120);
     this.pieceCount = Array(13);
     this.pieceList = Array(13);
@@ -162,7 +162,7 @@ export class Game {
   /**
    * Reset the game state to an empty board.
    */
-  resetBoard(): void {
+  public resetBoard(): void {
     this.pieceBoard = Array(120).fill(BoardPiece.OffBoard);
     this.pieceCount = Array(13).fill(0);
     this.pieceIndex = Array(120).fill(-1);
@@ -189,7 +189,7 @@ export class Game {
    * Populate the piece lists.
    * Fill the piece lists, piece counts, and piece index board.
    */
-  fillPieceLists(): void {
+  public fillPieceLists(): void {
     this.pieceCount.fill(0);
     this.pieceIndex.fill(-1);
     this.pieceList = Array(13)
@@ -213,7 +213,7 @@ export class Game {
    * @param index The index.
    * @param piece The piece.
    */
-  addPiece(index: number, piece: BoardPiece): void {
+  public addPiece(index: number, piece: BoardPiece): void {
     const pIndex = this.pieceCount[piece];
 
     this.pieceBoard[index] = piece;
@@ -230,7 +230,7 @@ export class Game {
    * @param start The index of the piece.
    * @param target The index to move to.
    */
-  movePiece(start: number, target: number): void {
+  public movePiece(start: number, target: number): void {
     const piece = this.pieceBoard[start];
     const pIndex = this.pieceIndex[start];
 
@@ -248,7 +248,7 @@ export class Game {
    * Remove a piece on the board.
    * @param index The index of the piece.
    */
-  removePiece(index: number): void {
+  public removePiece(index: number): void {
     const piece = this.pieceBoard[index];
     const pIndex = this.pieceIndex[index];
     const pIndexLast = this.pieceCount[piece] - 1;
@@ -268,7 +268,7 @@ export class Game {
    * Switch the side to move.
    * @returns The new color of the side to move.
    */
-  switchSide(): Color {
+  public switchSide(): Color {
     this.key ^= SideKey;
     return (this.sideToMove ^= 1);
   }
@@ -278,7 +278,7 @@ export class Game {
    * @param castleRight The castle right.
    * @returns Whether they can castle.
    */
-  getCastleRights(castleRight: CastleRight): boolean {
+  public getCastleRights(castleRight: CastleRight): boolean {
     return (this.castleRights & (1 << castleRight)) !== 0;
   }
 
@@ -287,7 +287,7 @@ export class Game {
    * @param castleRight The castle right.
    * @param value Whether they can castle.
    */
-  setCastleRights(castleRight: CastleRight, value: boolean): void {
+  public setCastleRights(castleRight: CastleRight, value: boolean): void {
     if (value) this.castleRights |= 1 << castleRight;
     else this.castleRights &= ~(1 << castleRight);
   }
@@ -297,7 +297,7 @@ export class Game {
    * @param side The side to check.
    * @returns Whether the side is in check.
    */
-  inCheck(side: Color = this.sideToMove): boolean {
+  public inCheck(side: Color = this.sideToMove): boolean {
     const king = this.pieceList[BP(side, Piece.King)][0];
     return this.isSquareAttacked(king, side);
   }
@@ -306,7 +306,7 @@ export class Game {
    * Generate legal moves on the board.
    * @returns Array of moves.
    */
-  generateMoves(): number[] {
+  public generateMoves(): number[] {
     return generateMoves(this).filter(this.isLegalMove, this);
   }
 
@@ -315,7 +315,7 @@ export class Game {
    * @param move The {@link Move} value.
    * @returns Whether the move is legal.
    */
-  isLegalMove(move: number): boolean {
+  public isLegalMove(move: number): boolean {
     if (!this.makeMove(move)) return false;
     this.takeBack();
     return true;
@@ -326,7 +326,7 @@ export class Game {
    * @param move The {@link Move} value.
    * @returns Whether the move was legal and completed.
    */
-  makeMove(move: number): boolean {
+  public makeMove(move: number): boolean {
     const [start, target, captured, flag] = getMove(move);
 
     const state = State(this.castleRights, this.enPassant, this.halfMoves);
@@ -401,7 +401,7 @@ export class Game {
   /**
    * Take back the last move made on the board.
    */
-  takeBack(): void {
+  public takeBack(): void {
     if (this.ply === 0) throw new Error("Cannot take back!");
 
     const move = this.moveHistory[this.ply - 1];
@@ -452,7 +452,10 @@ export class Game {
    * @param side The side to check from.
    * @returns Whether the square is attacked.
    */
-  isSquareAttacked(index: number, side: Color = this.sideToMove): boolean {
+  public isSquareAttacked(
+    index: number,
+    side: Color = this.sideToMove
+  ): boolean {
     // Pawn attacks.
     let offset = PawnCaptureOffsetL[side];
     let piece = this.pieceBoard[index + offset];
@@ -513,7 +516,7 @@ export class Game {
    * Get the FEN string of the current board.
    * @returns The Forsyth–Edwards Notation (FEN) string of the board.
    */
-  getFEN(): string {
+  public getFEN(): string {
     let fen: string = "";
 
     // Set piece placement string.
@@ -555,7 +558,7 @@ export class Game {
    * Set the board to a new FEN string.
    * @param fen A Forsyth–Edwards Notation (FEN) string.
    */
-  setFEN(fen: string): void {
+  public setFEN(fen: string): void {
     // Split FEN string and check length.
     const fenArray = fen.trim().split(" ");
     if (fenArray.length !== 6) throw new Error("Invalid FEN string!");
@@ -631,7 +634,7 @@ export class Game {
    * Get the game board indexed 0-63.
    * @returns The board of length 64.
    */
-  getBoard(): BoardPiece[] {
+  public getBoard(): BoardPiece[] {
     const board: BoardPiece[] = Array(64);
     for (let i = 0; i < 64; i++) board[i] = this.pieceBoard[index64To120(i)];
     return board;
@@ -642,7 +645,7 @@ export class Game {
    * @param symbols Whether to use symbols or letters to represent the board pieces.
    * @param minimal Whether to print only the board
    */
-  printBoard(symbols: boolean = false, minimal: boolean = false): void {
+  public printBoard(symbols: boolean = false, minimal: boolean = false): void {
     // Print the board.
     console.log("\n=================");
     for (let rank = 7; rank >= 0; rank--)
