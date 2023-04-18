@@ -79,8 +79,9 @@ export const PieceSymbols = ".♙♘♗♖♕♔♟♞♝♜♛♚";
  */
 export function colorPiece(color: Color, piece: Piece): ColorPiece {
   if (piece <= Piece.Empty) throw new Error();
+  if (color === Color.White) return piece as number as ColorPiece;
   if (color === Color.Black) return piece + ColorPiece.WhiteKing;
-  return piece as number;
+  throw new Error();
 }
 
 /**
