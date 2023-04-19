@@ -1,14 +1,14 @@
 import {
-  BishopValue,
+  BISHOP_VALUE,
   Color,
   ColorPiece,
-  KingValue,
-  KnightValue,
-  PawnValue,
+  KING_VALUE,
+  KNIGHT_VALUE,
+  PAWN_VALUE,
   Piece,
   PieceNames,
-  QueenValue,
-  RookValue,
+  QUEEN_VALUE,
+  ROOK_VALUE,
   colorPiece,
   getColor,
   getPiece,
@@ -69,12 +69,12 @@ describe("getPiece() function", () => {
 
 describe("getValue() function", () => {
   test("should return correct value", () => {
-    expect(getValue(Piece.Pawn)).toBe(PawnValue);
-    expect(getValue(Piece.Knight)).toBe(KnightValue);
-    expect(getValue(Piece.Bishop)).toBe(BishopValue);
-    expect(getValue(Piece.Rook)).toBe(RookValue);
-    expect(getValue(Piece.Queen)).toBe(QueenValue);
-    expect(getValue(Piece.King)).toBe(KingValue);
+    expect(getValue(Piece.Pawn)).toBe(PAWN_VALUE);
+    expect(getValue(Piece.Knight)).toBe(KNIGHT_VALUE);
+    expect(getValue(Piece.Bishop)).toBe(BISHOP_VALUE);
+    expect(getValue(Piece.Rook)).toBe(ROOK_VALUE);
+    expect(getValue(Piece.Queen)).toBe(QUEEN_VALUE);
+    expect(getValue(Piece.King)).toBe(KING_VALUE);
   });
 
   test("should return zero value", () => {
