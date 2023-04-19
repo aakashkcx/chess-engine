@@ -63,13 +63,13 @@ export const KING_VALUE = 10000;
  * A list of piece names.
  * Indexed by {@link Piece} or {@link ColorPiece}.
  */
-export const PieceNames = ".PNBRQKpnbrqk";
+export const PieceName = ".PNBRQKpnbrqk";
 
 /**
  * A list of piece symbols.
  * Indexed by {@link Piece} or {@link ColorPiece}.
  */
-export const PieceSymbols = ".♙♘♗♖♕♔♟♞♝♜♛♚";
+export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
 
 /**
  * Create a color piece.

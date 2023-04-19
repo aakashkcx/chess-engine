@@ -6,7 +6,8 @@ import {
   KNIGHT_VALUE,
   PAWN_VALUE,
   Piece,
-  PieceNames,
+  PieceName,
+  PieceSymbol,
   QUEEN_VALUE,
   ROOK_VALUE,
   colorPiece,
@@ -83,15 +84,26 @@ describe("getValue() function", () => {
   });
 });
 
-describe("PieceNames and PieceSymbols lists", () => {
+describe("PieceName and PieceSymbol lists", () => {
   test("should return correct character", () => {
-    expect(PieceNames[Piece.Empty]).toBe(".");
-    expect(PieceNames[ColorPiece.Empty]).toBe(".");
-    expect(PieceNames[Piece.Pawn]).toBe("P");
-    expect(PieceNames[ColorPiece.WhiteKnight]).toBe("N");
-    expect(PieceNames[ColorPiece.BlackBishop]).toBe("b");
-    expect(PieceNames[Piece.Rook]).toBe("R");
-    expect(PieceNames[ColorPiece.WhiteQueen]).toBe("Q");
-    expect(PieceNames[ColorPiece.BlackKing]).toBe("k");
+    expect(PieceName[Piece.Empty]).toBe(".");
+    expect(PieceName[ColorPiece.Empty]).toBe(".");
+    expect(PieceName[Piece.Pawn]).toBe("P");
+    expect(PieceName[ColorPiece.WhiteKnight]).toBe("N");
+    expect(PieceName[ColorPiece.BlackBishop]).toBe("b");
+    expect(PieceName[Piece.Rook]).toBe("R");
+    expect(PieceName[ColorPiece.WhiteQueen]).toBe("Q");
+    expect(PieceName[ColorPiece.BlackKing]).toBe("k");
+  });
+
+  test("should return correct symbol", () => {
+    expect(PieceSymbol[Piece.Empty]).toBe(".");
+    expect(PieceSymbol[ColorPiece.Empty]).toBe(".");
+    expect(PieceSymbol[Piece.Pawn]).toBe("♙");
+    expect(PieceSymbol[ColorPiece.WhiteKnight]).toBe("♘");
+    expect(PieceSymbol[ColorPiece.BlackBishop]).toBe("♝");
+    expect(PieceSymbol[Piece.Rook]).toBe("♖");
+    expect(PieceSymbol[ColorPiece.WhiteQueen]).toBe("♕");
+    expect(PieceSymbol[ColorPiece.BlackKing]).toBe("♚");
   });
 });
