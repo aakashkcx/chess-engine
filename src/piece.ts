@@ -1,5 +1,5 @@
 /**
- * The colors of the chess board.
+ * The colors of the chessboard.
  */
 export enum Color {
   White,
@@ -41,32 +41,32 @@ export enum ColorPiece {
   BlackKing,
 }
 
-/** Value of a pawn piece. */
-export const PawnValue = 100;
+/** The value of a pawn piece. */
+export const PAWN_VALUE = 100;
 
-/** Value of a knight piece. */
-export const KnightValue = 300;
+/** The value of a knight piece. */
+export const KNIGHT_VALUE = 300;
 
-/** Value of a bishop piece. */
-export const BishopValue = 350;
+/** The value of a bishop piece. */
+export const BISHOP_VALUE = 350;
 
-/** Value of a rook piece. */
-export const RookValue = 500;
+/** The value of a rook piece. */
+export const ROOK_VALUE = 500;
 
-/** Value of a queen piece. */
-export const QueenValue = 1000;
+/** The value of a queen piece. */
+export const QUEEN_VALUE = 1000;
 
-/** Value of a king piece. */
-export const KingValue = 10000;
+/** The value of a king piece. */
+export const KING_VALUE = 10000;
 
 /**
- * Array of piece names.
+ * A list of piece names.
  * Indexed by {@link Piece} or {@link ColorPiece}.
  */
 export const PieceNames = ".PNBRQKpnbrqk";
 
 /**
- * Array of piece symbols.
+ * A list of piece symbols.
  * Indexed by {@link Piece} or {@link ColorPiece}.
  */
 export const PieceSymbols = ".♙♘♗♖♕♔♟♞♝♜♛♚";
@@ -96,7 +96,7 @@ export function getColor(colorPiece: ColorPiece): Color {
 }
 
 /**
- * Get the piece type from a color piece.
+ * Get the piece type of a color piece.
  * @param colorPiece The color piece.
  * @returns The piece type.
  */
@@ -113,11 +113,11 @@ export function getPiece(colorPiece: ColorPiece): Piece {
  */
 export function getValue(piece: Piece): number {
   if (piece === Piece.Empty) return 0;
-  if (piece === Piece.Pawn) return PawnValue;
-  if (piece === Piece.Knight) return KnightValue;
-  if (piece === Piece.Bishop) return BishopValue;
-  if (piece === Piece.Rook) return RookValue;
-  if (piece === Piece.Queen) return QueenValue;
-  if (piece === Piece.King) return KingValue;
+  if (piece === Piece.Pawn) return PAWN_VALUE;
+  if (piece === Piece.Knight) return KNIGHT_VALUE;
+  if (piece === Piece.Bishop) return BISHOP_VALUE;
+  if (piece === Piece.Rook) return ROOK_VALUE;
+  if (piece === Piece.Queen) return QUEEN_VALUE;
+  if (piece === Piece.King) return KING_VALUE;
   return 0;
 }
