@@ -10,29 +10,29 @@ import {
   PieceSymbol,
   QUEEN_VALUE,
   ROOK_VALUE,
-  colorPiece,
+  createPiece,
   getColor,
   getPiece,
   getValue,
 } from "../src/piece";
 
-describe("colorPiece() function", () => {
+describe("createPiece() function", () => {
   test("should return correct ColorPiece", () => {
-    expect(colorPiece(Color.White, Piece.Pawn)).toBe(ColorPiece.WhitePawn);
-    expect(colorPiece(Color.Black, Piece.Knight)).toBe(ColorPiece.BlackKnight);
-    expect(colorPiece(Color.White, Piece.Bishop)).toBe(ColorPiece.WhiteBishop);
-    expect(colorPiece(Color.Black, Piece.Rook)).toBe(ColorPiece.BlackRook);
-    expect(colorPiece(Color.White, Piece.Queen)).toBe(ColorPiece.WhiteQueen);
-    expect(colorPiece(Color.Black, Piece.King)).toBe(ColorPiece.BlackKing);
+    expect(createPiece(Color.White, Piece.Pawn)).toBe(ColorPiece.WhitePawn);
+    expect(createPiece(Color.Black, Piece.Knight)).toBe(ColorPiece.BlackKnight);
+    expect(createPiece(Color.White, Piece.Bishop)).toBe(ColorPiece.WhiteBishop);
+    expect(createPiece(Color.Black, Piece.Rook)).toBe(ColorPiece.BlackRook);
+    expect(createPiece(Color.White, Piece.Queen)).toBe(ColorPiece.WhiteQueen);
+    expect(createPiece(Color.Black, Piece.King)).toBe(ColorPiece.BlackKing);
   });
 
   test("should throw Error", () => {
-    expect(() => colorPiece(Color.White, Piece.Empty)).toThrow();
-    expect(() => colorPiece(Color.Black, Piece.Empty)).toThrow();
-    expect(() => colorPiece(Color.White, Piece.OffBoard)).toThrow();
-    expect(() => colorPiece(Color.Black, Piece.OffBoard)).toThrow();
-    expect(() => colorPiece(Color.None, Piece.Pawn)).toThrow();
-    expect(() => colorPiece(Color.None, Piece.King)).toThrow();
+    expect(() => createPiece(Color.White, Piece.Empty)).toThrow();
+    expect(() => createPiece(Color.Black, Piece.Empty)).toThrow();
+    expect(() => createPiece(Color.White, Piece.OffBoard)).toThrow();
+    expect(() => createPiece(Color.Black, Piece.OffBoard)).toThrow();
+    expect(() => createPiece(Color.None, Piece.Pawn)).toThrow();
+    expect(() => createPiece(Color.None, Piece.King)).toThrow();
   });
 });
 

@@ -77,7 +77,7 @@ export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
  * @param piece The piece type.
  * @returns The color piece.
  */
-export function colorPiece(color: Color, piece: Piece): ColorPiece {
+export function createPiece(color: Color, piece: Piece): ColorPiece {
   if (piece <= Piece.Empty) throw new Error();
   if (color === Color.White) return piece as number as ColorPiece;
   if (color === Color.Black) return piece + ColorPiece.WhiteKing;
