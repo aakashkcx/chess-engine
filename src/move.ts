@@ -150,7 +150,12 @@ export function moveString(move: Move): string {
   const target = (move & TARGET_MASK) >> TARGET_SHIFT;
   const captured = (move & CAPTURED_MASK) >> CAPTURED_SHIFT;
   const flag = (move & FLAG_MASK) >> FLAG_SHIFT;
-  return string120(start) + string120(target) + PieceName[captured] + flag;
+  return (
+    string120(start) +
+    string120(target) +
+    (captured ? PieceName[captured] : "") +
+    (flag ? MoveFlag[flag] : "")
+  );
 }
 
 /**
