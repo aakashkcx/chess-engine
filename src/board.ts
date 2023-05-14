@@ -1,4 +1,10 @@
 /**
+ * The starting Forsyth–Edwards Notation (FEN) string.
+ */
+export const STARTING_FEN =
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+/**
  * The horizontal files (0-7).
  */
 export type File = number;
@@ -189,6 +195,7 @@ export function string120(index120: Index120): string {
  */
 export function stringTo64(string: string): Index64 {
   const rank = parseInt(string[1]) - 1;
+  if (isNaN(rank)) throw new Error();
   const file = string.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
   return rank * 8 + file;
 }
@@ -200,6 +207,7 @@ export function stringTo64(string: string): Index64 {
  */
 export function stringTo120(string: string): Index120 {
   const rank = parseInt(string[1]) - 1;
+  if (isNaN(rank)) throw new Error();
   const file = string.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
   return (rank + 2) * 10 + (file + 1);
 }
