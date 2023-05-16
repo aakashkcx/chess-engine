@@ -14,6 +14,14 @@ export enum CastleRight {
   BlackQueen,
 }
 
+export const NO_CASTLE_RIGHTS = 0;
+
+export const ALL_CASTLE_RIGHTS =
+  1 << CastleRight.WhiteKing ||
+  1 << CastleRight.WhiteQueen ||
+  1 << CastleRight.BlackKing ||
+  1 << CastleRight.BlackQueen;
+
 /**
  * Get the castling availability of a castle right type.
  * @param castlingRights The castling rights.
