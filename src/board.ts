@@ -1,10 +1,4 @@
 /**
- * The starting Forsyth–Edwards Notation (FEN) string.
- */
-export const STARTING_FEN =
-  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-/**
  * The horizontal files (0-7).
  */
 export type File = number;
