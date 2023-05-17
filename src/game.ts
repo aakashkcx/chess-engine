@@ -17,24 +17,24 @@ export class ChessGame {
   pieceBoard: ColorPiece[] = [];
 
   /**
-   * The number of each piece currently on the board.
+   * The total number of each piece type on the board.
    */
   pieceCount: number[] = [];
 
   /**
-   * The piece lists for each piece, storing their indexes on the board.
+   * The piece lists for each piece type, storing the index of each piece on the board.
    */
   pieceLists: Index120[][] = [];
 
   /**
-   * A 10*12 array storing the index of each piece within the piece lists.
+   * A 10*12 array storing the index of each piece on the board within the piece lists.
    */
   pieceListIndex: number[] = [];
 
   /**
-   * The next side to move (active color).
+   * The next color to move.
    */
-  sideToMove: Color = Color.White;
+  activeColor: Color = Color.White;
 
   /**
    * The castling availability.
@@ -76,7 +76,7 @@ export class ChessGame {
       .fill([])
       .map(() => []);
     this.pieceListIndex = Array(120).fill(-1);
-    this.sideToMove = Color.White;
+    this.activeColor = Color.White;
     this.castlingRights = NO_CASTLE_RIGHTS;
     this.enPassant = 0;
     this.halfMoves = 0;
@@ -100,6 +100,61 @@ export class ChessGame {
       this.pieceListIndex[index120] = pieceListIndex;
       this.pieceCount[piece]++;
     }
+  }
+
+  /**
+   * Add a piece to the chessboard.
+   * @param index120 The 120 index.
+   * @param piece The color piece.
+   */
+  addPiece(index120: Index120, piece: ColorPiece) {
+    const pieceListIndex = this.pieceCount[piece];
+    this.pieceBoard[index120] = piece;
+    this.pieceLists[piece][pieceListIndex] = index120;
+    this.pieceListIndex[index120] = pieceListIndex;
+    this.pieceCount[piece]++;
+  }
+
+  /**
+   * Move a piece on the chessboard.
+   * @param start120 The 120 index start square.
+   * @param target120 The 120 index target square.
+   */
+  movePiece(start120: Index120, target120: Index120) {
+    const piece = this.pieceBoard[start120];
+    const pieceListIndex = this.pieceListIndex[start120];
+    this.pieceBoard[start120] = ColorPiece.Empty;
+    this.pieceBoard[target120] = piece;
+    this.pieceLists[piece][pieceListIndex] = target120;
+    this.pieceListIndex[start120] = -1;
+    this.pieceListIndex[target120] = pieceListIndex;
+  }
+
+  /**
+   * Remove a piece on the chessboard.
+   * @param index120 The 120 index of the piece.
+   */
+  removePiece(index120: Index120) {
+    const piece = this.pieceBoard[index120];
+    const pieceListIndex = this.pieceListIndex[index120];
+    const pieceListLastIndex = this.pieceCount[piece] - 1;
+    const lastIndex = this.pieceLists[piece][pieceListLastIndex];
+
+    this.pieceBoard[index120] = ColorPiece.Empty;
+    this.pieceLists[piece][pieceListIndex] =
+      this.pieceLists[piece][pieceListLastIndex];
+    this.pieceLists[piece].length--;
+    this.pieceListIndex[lastIndex] = pieceListIndex;
+    this.pieceListIndex[index120] = -1;
+    this.pieceCount[piece]--;
+  }
+
+  /**
+   * Switch the active color.
+   * @returns The updated next color to move.
+   */
+  switchColor(): Color {
+    return (this.activeColor ^= 1);
   }
 
   /**

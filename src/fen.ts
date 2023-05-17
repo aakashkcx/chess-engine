@@ -1,6 +1,6 @@
-import { Rank, File, rankFileTo120, stringTo120, string120 } from "./board";
+import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
 import { ChessGame } from "./game";
-import { ColorPiece, Color, PieceName } from "./piece";
+import { Color, ColorPiece, PieceName } from "./piece";
 import { CastleRight, NO_CASTLE_RIGHTS } from "./state";
 
 /**
@@ -32,7 +32,7 @@ export function getFEN(game: ChessGame): string {
   }
 
   // The active color.
-  let color = game.sideToMove === Color.White ? "w" : "b";
+  let color = game.activeColor === Color.White ? "w" : "b";
 
   // Set castling rights.
   let castlingRights = "";
@@ -100,8 +100,8 @@ export function setFEN(game: ChessGame, fen: string) {
 
   // Set active color.
   const sideToMove = fenArray[1];
-  if (sideToMove === "w") game.sideToMove = Color.White;
-  if (sideToMove === "b") game.sideToMove = Color.Black;
+  if (sideToMove === "w") game.activeColor = Color.White;
+  if (sideToMove === "b") game.activeColor = Color.Black;
 
   // Set castling rights.
   const castlingRights = fenArray[2];

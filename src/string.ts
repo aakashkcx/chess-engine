@@ -1,6 +1,6 @@
 import { FileName, string120 } from "./board";
 import { ChessGame } from "./game";
-import { PieceSymbol, PieceName, Color } from "./piece";
+import { Color, PieceName, PieceSymbol } from "./piece";
 import { CastleRight, NO_CASTLE_RIGHTS } from "./state";
 
 /**
@@ -30,8 +30,8 @@ export function toString(
   // Check if only printing out board.
   if (onlyBoard) return board;
 
-  // The side to move.
-  let side = game.sideToMove === Color.White ? "White" : "Black";
+  // The active color.
+  let side = game.activeColor === Color.White ? "White" : "Black";
 
   // The castling rights.
   let castlingRights = "";
