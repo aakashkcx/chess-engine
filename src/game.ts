@@ -61,7 +61,8 @@ export class ChessGame {
    * @param fen The starting Forsyth–Edwards Notation (FEN) string.
    */
   constructor(fen: string = STARTING_FEN) {
-    this.setFEN(fen);
+    if (fen) this.setFEN(fen);
+    else this.initBoard();
   }
 
   /**
@@ -88,7 +89,7 @@ export class ChessGame {
    */
   updatePieceLists() {
     this.pieceCount.fill(0);
-    this.pieceLists.fill([]).map(() => []);
+    this.pieceLists = this.pieceLists.map(() => []);
     this.pieceListIndex.fill(-1);
 
     for (let index64 = 0; index64 < 64; index64++) {
