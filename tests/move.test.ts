@@ -9,7 +9,6 @@ import {
   getTarget,
   isPromotion,
   moveString,
-  moveStringMin,
 } from "../src/move";
 import { ColorPiece } from "../src/piece";
 
@@ -104,8 +103,8 @@ describe("isPromotion() function", () => {
   });
 });
 
-describe("moveString() and moveStringMin() functions", () => {
-  test("should return correct full move string", () => {
+describe("moveString() function", () => {
+  test("should return correct move string", () => {
     let move = createMove(
       Square120.A5,
       Square120.B6,
@@ -117,15 +116,15 @@ describe("moveString() and moveStringMin() functions", () => {
     expect(moveString(move)).toBe("d8h4");
   });
 
-  test("should return correct minimal move string", () => {
+  test("should return correct move string with only squares", () => {
     let move = createMove(
       Square120.A5,
       Square120.B6,
       ColorPiece.WhitePawn,
       MoveFlag.EnPassant
     );
-    expect(moveStringMin(move)).toBe("a5b6");
+    expect(moveString(move, true)).toBe("a5b6");
     move = createMove(Square120.D8, Square120.H4);
-    expect(moveStringMin(move)).toBe("d8h4");
+    expect(moveString(move, true)).toBe("d8h4");
   });
 });
