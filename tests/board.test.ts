@@ -194,6 +194,11 @@ describe("stringTo64() function", () => {
     expect(stringTo64("d2")).toBe(Square64.D2);
     expect(stringTo64("b1")).toBe(Square64.B1);
   });
+
+  test("should throw Error", () => {
+    expect(() => stringTo64("aa")).toThrow();
+    expect(() => stringTo64("g ")).toThrow();
+  });
 });
 
 describe("stringTo120() function", () => {
@@ -206,6 +211,11 @@ describe("stringTo120() function", () => {
     expect(stringTo120("f3")).toBe(Square120.F3);
     expect(stringTo120("d2")).toBe(Square120.D2);
     expect(stringTo120("b1")).toBe(Square120.B1);
+  });
+
+  test("should throw Error", () => {
+    expect(() => stringTo120("aa")).toThrow();
+    expect(() => stringTo120("g ")).toThrow();
   });
 });
 
