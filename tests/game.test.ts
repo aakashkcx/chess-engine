@@ -221,9 +221,9 @@ describe("ChessGame class", () => {
   describe("print() method", () => {
     test("should print the chessboard", () => {
       const game = new ChessGame();
-      const spy = jest.spyOn(console, "log");
+      const spy = jest.spyOn(console, "log").mockImplementation();
       game.print();
-      expect(spy).toBeCalled();
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 });
