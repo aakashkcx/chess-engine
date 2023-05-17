@@ -2,7 +2,7 @@ import { Square120 } from "../src/board";
 import { STARTING_FEN } from "../src/fen";
 import { ChessGame } from "../src/game";
 import { Color, ColorPiece } from "../src/piece";
-import { ALL_CASTLE_RIGHTS, NO_CASTLE_RIGHTS } from "../src/state";
+import { ALL_CASTLE_RIGHTS, CastleRight, NO_CASTLE_RIGHTS } from "../src/state";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {
@@ -169,18 +169,61 @@ describe("ChessGame class", () => {
   });
 
   describe("getCastleRight() method", () => {
-    test("should ", () => {});
+    test("should return the correct castle right", () => {
+      let game = new ChessGame();
+      expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(true);
+      expect(game.getCastleRight(CastleRight.WhiteQueen)).toBe(true);
+      expect(game.getCastleRight(CastleRight.BlackKing)).toBe(true);
+      expect(game.getCastleRight(CastleRight.BlackQueen)).toBe(true);
+
+      game = new ChessGame("");
+      expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(false);
+      expect(game.getCastleRight(CastleRight.WhiteQueen)).toBe(false);
+      expect(game.getCastleRight(CastleRight.BlackKing)).toBe(false);
+      expect(game.getCastleRight(CastleRight.BlackQueen)).toBe(false);
+    });
   });
 
   describe("setCastleRight() method", () => {
-    test("should ", () => {});
+    test("should return correct castling rights when setting to false", () => {
+      let game = new ChessGame();
+      game.setCastleRight(CastleRight.WhiteKing, false);
+      expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(false);
+      game.setCastleRight(CastleRight.WhiteQueen, false);
+      expect(game.getCastleRight(CastleRight.WhiteQueen)).toBe(false);
+      game.setCastleRight(CastleRight.BlackKing, false);
+      expect(game.getCastleRight(CastleRight.BlackKing)).toBe(false);
+      game.setCastleRight(CastleRight.BlackQueen, false);
+      expect(game.getCastleRight(CastleRight.BlackQueen)).toBe(false);
+    });
+
+    test("should return correct castling rights when setting to true", () => {
+      let game = new ChessGame("");
+      game.setCastleRight(CastleRight.WhiteKing, true);
+      expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(true);
+      game.setCastleRight(CastleRight.WhiteQueen, true);
+      expect(game.getCastleRight(CastleRight.WhiteQueen)).toBe(true);
+      game.setCastleRight(CastleRight.BlackKing, true);
+      expect(game.getCastleRight(CastleRight.BlackKing)).toBe(true);
+      game.setCastleRight(CastleRight.BlackQueen, true);
+      expect(game.getCastleRight(CastleRight.BlackQueen)).toBe(true);
+    });
   });
 
   describe("toString() method", () => {
-    test("should ", () => {});
+    test("should return a string representation of the chess game", () => {
+      const game = new ChessGame();
+      const string = game.toString();
+      expect(string).toBeTruthy();
+    });
   });
 
   describe("print() method", () => {
-    test("should ", () => {});
+    test("should print the chessboard", () => {
+      const game = new ChessGame();
+      const spy = jest.spyOn(console, "log");
+      game.print();
+      expect(spy).toBeCalled();
+    });
   });
 });
