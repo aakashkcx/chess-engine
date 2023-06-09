@@ -1,6 +1,4 @@
 import { Index120, index64To120 } from "./board";
-import { STARTING_FEN, getFEN, setFEN } from "./fen";
-import { Color, ColorPiece } from "./piece";
 import {
   CastleRight,
   CastlingRights,
@@ -8,6 +6,10 @@ import {
   getCastleRight,
   setCastleRight,
 } from "./castlingrights";
+import { STARTING_FEN, getFEN, setFEN } from "./fen";
+import { Move } from "./move";
+import { generateMoves, isSquareAttacked } from "./movegen";
+import { Color, ColorPiece } from "./piece";
 import { toString } from "./string";
 
 export class ChessGame {
@@ -178,6 +180,14 @@ export class ChessGame {
       castleRight,
       value
     );
+  }
+
+  isSquareAttacked(index120: Index120): boolean {
+    return isSquareAttacked(this, index120);
+  }
+
+  generateMoves(): Move[] {
+    return generateMoves(this);
   }
 
   /**
