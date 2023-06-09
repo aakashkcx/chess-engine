@@ -4,7 +4,7 @@ import {
   NO_CASTLE_RIGHTS,
   getCastleRight,
   setCastleRight,
-} from "../src/state";
+} from "../src/castlingrights";
 
 describe("getCastleRight() function", () => {
   test("should return correct castle right", () => {

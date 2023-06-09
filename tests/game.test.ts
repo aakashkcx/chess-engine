@@ -2,7 +2,11 @@ import { Square120 } from "../src/board";
 import { STARTING_FEN } from "../src/fen";
 import { ChessGame } from "../src/game";
 import { Color, ColorPiece } from "../src/piece";
-import { ALL_CASTLE_RIGHTS, CastleRight, NO_CASTLE_RIGHTS } from "../src/state";
+import {
+  ALL_CASTLE_RIGHTS,
+  CastleRight,
+  NO_CASTLE_RIGHTS,
+} from "../src/castlingrights";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {
