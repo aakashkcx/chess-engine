@@ -7,10 +7,19 @@ import {
   setCastleRight,
 } from "./castlingrights";
 import { STARTING_FEN, getFEN, setFEN } from "./fen";
+import { makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
 import { Color, ColorPiece } from "./piece";
+import { State } from "./state";
 import { toString } from "./string";
+
+/*
+  TODO: Create enum GameState {}.
+
+  TODO: Create class Search {}.
+  - Link Game to singleton Search.
+*/
 
 export class ChessGame {
   /**
@@ -58,6 +67,12 @@ export class ChessGame {
    */
   fullMoves: number = 1;
 
+  ply: number = 0;
+
+  moveList: Move[] = [];
+
+  stateList: State[] = [];
+
   /**
    * Create a new chess game.
    * @param fen The starting Forsyth–Edwards Notation (FEN) string.
@@ -84,6 +99,9 @@ export class ChessGame {
     this.enPassant = 0;
     this.halfMoves = 0;
     this.fullMoves = 1;
+    this.ply = 0;
+    this.moveList = [];
+    this.stateList = [];
   }
 
   /**
@@ -188,6 +206,14 @@ export class ChessGame {
 
   generateMoves(): Move[] {
     return generateMoves(this);
+  }
+
+  makeMove(move: Move): boolean {
+    return makeMove(this, move);
+  }
+
+  takeBack() {
+    takeBack(this);
   }
 
   /**
