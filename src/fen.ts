@@ -1,7 +1,7 @@
 import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
+import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 import { ChessGame } from "./game";
 import { Color, ColorPiece, PieceName } from "./piece";
-import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 
 /**
  * The starting Forsyth–Edwards Notation (FEN) string.
