@@ -1,7 +1,7 @@
 import { FileName, string120 } from "./board";
 import { ChessGame } from "./game";
 import { Color, PieceName, PieceSymbol } from "./piece";
-import { CastleRight, NO_CASTLE_RIGHTS } from "./state";
+import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 
 /**
  * Get a string representation of a chess game.

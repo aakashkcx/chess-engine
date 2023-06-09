@@ -1,53 +1,56 @@
-/**
- * The castling availability of the chessboard.
- * Stored as a number with each castle right encoded as a bit.
- */
-export type CastlingRights = number;
+import { File } from "./board";
+import { CastlingRights } from "./castlingrights";
 
-/**
- * The types of castle rights of the chessboard.
- */
-export enum CastleRight {
-  WhiteKing,
-  WhiteQueen,
-  BlackKing,
-  BlackQueen,
+export type State = number;
+
+/*
+  =============== STATE ===============
+   7+ BITS ...0000000 = STATE VALUE
+  -------------------------------------
+   4  BITS ...0001111 = Castling Rights
+   3  BITS ...1110000 = En Passant File
+  ... BITS ...0000000 = Half Moves
+  =====================================
+*/
+
+const CASTLING_RIGHTS_MASK = 0b0001111;
+
+const CASTLING_RIGHTS_SHIFT = 0;
+
+const EN_PASSANT_FILE_MASK = 0b1110000;
+
+const EN_PASSANT_FILE_SHIFT = 4;
+
+const HALF_MOVES_SHIFT = 7;
+
+export function createState(
+  castlingRights: CastlingRights,
+  enPassantFile: File,
+  halfMoves: number
+): State {
+  return (
+    (castlingRights << CASTLING_RIGHTS_SHIFT) |
+    (enPassantFile << EN_PASSANT_FILE_SHIFT) |
+    (halfMoves << HALF_MOVES_SHIFT)
+  );
 }
 
-export const NO_CASTLE_RIGHTS = 0;
-
-export const ALL_CASTLE_RIGHTS =
-  (1 << CastleRight.WhiteKing) |
-  (1 << CastleRight.WhiteQueen) |
-  (1 << CastleRight.BlackKing) |
-  (1 << CastleRight.BlackQueen);
-
-/**
- * Get the castling availability of a castle right type.
- * @param castlingRights The castling rights.
- * @param castleRight The castle right type.
- * @returns The castling availability.
- */
-export function getCastleRight(
-  castlingRights: CastlingRights,
-  castleRight: CastleRight
-): boolean {
-  return (castlingRights & (1 << castleRight)) !== 0;
+export function getState(state: State): [CastlingRights, File, number] {
+  const castlingRights =
+    (state & CASTLING_RIGHTS_MASK) >> CASTLING_RIGHTS_SHIFT;
+  const enPassantFile = (state & EN_PASSANT_FILE_MASK) >> EN_PASSANT_FILE_SHIFT;
+  const halfMoves = state >> HALF_MOVES_SHIFT;
+  return [castlingRights, enPassantFile, halfMoves];
 }
 
-/**
- * Set the castling availability of a castle right type.
- * @param castlingRights The castling rights.
- * @param castleRight The castle right type.
- * @param value The castling availability.
- * @returns The new castling rights.
- */
-export function setCastleRight(
-  castlingRights: CastlingRights,
-  castleRight: CastleRight,
-  value: boolean
-): CastlingRights {
-  if (value) castlingRights |= 1 << castleRight;
-  else castlingRights &= ~(1 << castleRight);
-  return castlingRights;
+export function getCastlingRights(state: State): CastlingRights {
+  return (state & CASTLING_RIGHTS_MASK) >> CASTLING_RIGHTS_SHIFT;
+}
+
+export function getPassantFile(state: State): File {
+  return (state & EN_PASSANT_FILE_MASK) >> EN_PASSANT_FILE_SHIFT;
+}
+
+export function getHalfMoves(state: State): number {
+  return state >> HALF_MOVES_SHIFT;
 }

@@ -7,7 +7,7 @@ import {
   NO_CASTLE_RIGHTS,
   getCastleRight,
   setCastleRight,
-} from "./state";
+} from "./castlingrights";
 import { toString } from "./string";
 
 export class ChessGame {
