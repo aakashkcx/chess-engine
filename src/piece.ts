@@ -2,8 +2,8 @@
  * The colors of the chessboard.
  */
 export enum Color {
-  White,
-  Black,
+  White = 0,
+  Black = 1,
   None,
 }
 
