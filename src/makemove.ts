@@ -9,8 +9,11 @@ import { createState, getState } from "./state";
 export function makeMove(game: ChessGame, move: Move): boolean {
   const [start, target, captured, flag] = getMove(move);
 
-  const enPassantFile = getFile120(game.enPassant);
-  const state = createState(game.castlingRights, enPassantFile, game.halfMoves);
+  const state = createState(
+    game.castlingRights,
+    game.enPassant,
+    game.halfMoves
+  );
 
   game.moveList[game.ply] = move;
   game.stateList[game.ply] = state;
@@ -100,20 +103,15 @@ export function takeBack(game: ChessGame) {
   const state = game.moveList[game.ply];
 
   const [start, target, captured, flag] = getMove(move);
-  const [castlingRights, enPassantFile, halfMoves] = getState(state);
+  const [castlingRights, enPassant, halfMoves] = getState(state);
+
+  game.castlingRights = castlingRights;
+  game.enPassant = enPassant;
+  game.halfMoves = halfMoves;
 
   game.switchColor();
   const color = game.activeColor;
   const opponent = game.activeColor ^ 1;
-
-  // TODO: Add EN_PASSANT_FILE.
-  const enPassantSquare = enPassantFile
-    ? rankFileTo120(color === Color.White ? 5 : 2, enPassantFile)
-    : 0;
-
-  game.castlingRights = castlingRights;
-  game.enPassant = enPassantSquare;
-  game.halfMoves = halfMoves;
 
   if (color === Color.Black) game.fullMoves--;
 
