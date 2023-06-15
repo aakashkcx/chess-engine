@@ -19,6 +19,18 @@ describe("getCastleRight() function", () => {
     expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(true);
     expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(true);
     expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(true);
+
+    castlingRights = 0b1010;
+    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(false);
+    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(true);
+    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(false);
+    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(true);
+
+    castlingRights = 0b0101;
+    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(true);
+    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(false);
+    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(true);
+    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(false);
   });
 });
 
