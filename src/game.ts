@@ -76,6 +76,7 @@ export class ChessGame {
   /**
    * Create a new chess game.
    * @param fen The starting Forsyth–Edwards Notation (FEN) string.
+   *  If empty FEN string, game will start with empty board.
    */
   constructor(fen: string = STARTING_FEN) {
     if (fen) this.setFEN(fen);
