@@ -107,6 +107,7 @@ export class ChessGame {
 
   /**
    * Update the board representation.
+   * Fills in the piece lists based on {@link pieceBoard}.
    */
   updatePieceLists() {
     this.pieceCount.fill(0);
