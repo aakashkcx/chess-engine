@@ -69,12 +69,14 @@ const QUEEN_SIDE_RIGHT = [CastleRight.WhiteQueen, CastleRight.BlackQueen];
 /**
  * Generate pseudo-legal moves on the chessboard.
  * @param game The chess game.
+ * @param side The side from which to generate moves.
+ *  Defaults to the current active color of the game.
  * @returns An array of pseudo-legal moves.
  */
-export function generateMoves(game: ChessGame): Move[] {
+export function generateMoves(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
-  const color = game.activeColor;
+  const color = side === undefined ? game.activeColor : side;
   const opponent = color ^ 1;
 
   let piece: ColorPiece;
