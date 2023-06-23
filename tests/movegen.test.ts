@@ -1,6 +1,7 @@
 import { Index120, Square120, index64To120 } from "../src/board";
 import { ChessGame } from "../src/game";
-import { isSquareAttacked } from "../src/movegen";
+import { Move, MoveFlag, createMove } from "../src/move";
+import { generateMoves, isSquareAttacked } from "../src/movegen";
 import { Color, ColorPiece } from "../src/piece";
 
 describe("isSquareAttacked() function", () => {
@@ -397,4 +398,237 @@ describe("isSquareAttacked() function", () => {
       expect(attacked).toEqual([]);
     });
   });
+});
+
+describe("generateMoves() function", () => {
+  const game = new ChessGame("");
+
+  let expected: Move[];
+  let moves: Move[];
+  describe("pawn piece", () => {
+    describe("move", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.A4, ColorPiece.WhitePawn);
+        expected = [createMove(Square120.A4, Square120.A5)];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.H5, ColorPiece.BlackPawn);
+        expected = [createMove(Square120.H5, Square120.H4)];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("double move", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.B2, ColorPiece.WhitePawn);
+        expected = [
+          createMove(Square120.B2, Square120.B3),
+          createMove(Square120.B2, Square120.B4, 0, MoveFlag.PawnDouble),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.G7, ColorPiece.BlackPawn);
+        expected = [
+          createMove(Square120.G7, Square120.G6),
+          createMove(Square120.G7, Square120.G5, 0, MoveFlag.PawnDouble),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("promotion", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.C7, ColorPiece.WhitePawn);
+        expected = [
+          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteQueen),
+          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteKnight),
+          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteRook),
+          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteBishop),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.F2, ColorPiece.BlackPawn);
+        expected = [
+          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteQueen),
+          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteKnight),
+          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteRook),
+          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteBishop),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("capture", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.D5, ColorPiece.WhitePawn);
+        game.addPiece(Square120.C6, ColorPiece.BlackPawn);
+        game.addPiece(Square120.E6, ColorPiece.BlackPawn);
+        expected = [
+          createMove(Square120.D5, Square120.D6),
+          createMove(Square120.D5, Square120.C6, ColorPiece.BlackPawn),
+          createMove(Square120.D5, Square120.E6, ColorPiece.BlackPawn),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.E4, ColorPiece.BlackPawn);
+        game.addPiece(Square120.D3, ColorPiece.WhitePawn);
+        game.addPiece(Square120.F3, ColorPiece.WhitePawn);
+        expected = [
+          createMove(Square120.E4, Square120.E3),
+          createMove(Square120.E4, Square120.D3, ColorPiece.WhitePawn),
+          createMove(Square120.E4, Square120.F3, ColorPiece.WhitePawn),
+        ];
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("capture promotion", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.E7, ColorPiece.WhitePawn);
+        game.addPiece(Square120.D8, ColorPiece.BlackPawn);
+        game.addPiece(Square120.F8, ColorPiece.BlackPawn);
+        // prettier-ignore
+        expected = [
+          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteQueen),
+          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteKnight),
+          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteRook),
+          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteBishop),
+          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
+          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
+          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
+          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
+          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
+          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
+          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
+          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.D2, ColorPiece.BlackPawn);
+        game.addPiece(Square120.C1, ColorPiece.WhitePawn);
+        game.addPiece(Square120.E1, ColorPiece.WhitePawn);
+        // prettier-ignore
+        expected = [
+          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteQueen),
+          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteKnight),
+          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteRook),
+          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteBishop),
+          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
+          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
+          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
+          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
+          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
+          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
+          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
+          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("enPassant capture", () => {
+      test("white pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.F5, ColorPiece.WhitePawn);
+        game.addPiece(Square120.E5, ColorPiece.BlackPawn);
+        game.addPiece(Square120.G5, ColorPiece.BlackPawn);
+
+        game.enPassant = Square120.E6;
+        // prettier-ignore
+        expected = [
+          createMove(Square120.F5, Square120.F6),
+          createMove(Square120.F5, Square120.E6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+
+        game.enPassant = Square120.G6;
+        // prettier-ignore
+        expected = [
+          createMove(Square120.F5, Square120.F6),
+          createMove(Square120.F5, Square120.G6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black pawn piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.C4, ColorPiece.BlackPawn);
+        game.addPiece(Square120.B4, ColorPiece.WhitePawn);
+        game.addPiece(Square120.D4, ColorPiece.WhitePawn);
+
+        game.enPassant = Square120.B3;
+        // prettier-ignore
+        expected = [
+          createMove(Square120.C4, Square120.C3),
+          createMove(Square120.C4, Square120.B3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+
+        game.enPassant = Square120.D3;
+        // prettier-ignore
+        expected = [
+          createMove(Square120.C4, Square120.C3),
+          createMove(Square120.C4, Square120.D3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+  });
+
+  describe("knight piece", () => {});
+
+  describe("bishop piece", () => {});
+
+  describe("rook piece", () => {});
+
+  describe("queen piece", () => {});
+
+  describe("king piece", () => {});
 });
