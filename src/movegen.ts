@@ -162,8 +162,8 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     game.pieceBoard[start + 1] === ColorPiece.Empty &&
     game.pieceBoard[start + 2] === ColorPiece.Empty &&
     game.pieceBoard[start + 3] === createPiece(color, Piece.Rook) &&
-    !game.isSquareAttacked(start) &&
-    !game.isSquareAttacked(start + 1)
+    !game.isSquareAttacked(start, color) &&
+    !game.isSquareAttacked(start + 1, color)
   ) {
     moves.push(createMove(start, start + 2, 0, MoveFlag.Castle));
   }
@@ -174,8 +174,8 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     game.pieceBoard[start - 2] === ColorPiece.Empty &&
     game.pieceBoard[start - 3] === ColorPiece.Empty &&
     game.pieceBoard[start - 4] === createPiece(color, Piece.Rook) &&
-    !game.isSquareAttacked(start) &&
-    !game.isSquareAttacked(start - 1)
+    !game.isSquareAttacked(start, color) &&
+    !game.isSquareAttacked(start - 1, color)
   ) {
     moves.push(createMove(start, start - 2, 0, MoveFlag.Castle));
   }
@@ -188,7 +188,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
  * @param game The chess game.
  * @param index120 The index of the square to check.
  * @param side The side to check whether the opponent is attacking.
- *  Defaults to color of piece at index, or if empty, the current active color.
+ *  Defaults to color of piece at index, or if square empty, the current active color.
  * @returns Whether the square is attacked by the opponent.
  */
 export function isSquareAttacked(

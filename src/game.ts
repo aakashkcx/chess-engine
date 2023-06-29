@@ -202,12 +202,25 @@ export class ChessGame {
     );
   }
 
-  isSquareAttacked(index120: Index120): boolean {
-    return isSquareAttacked(this, index120);
+  /**
+   * Check whether a square is attacked by the opponent.
+   * @param index120 The index of the square to check.
+   * @param side The side to check whether the opponent is attacking.
+   *  Defaults to color of piece at index, or if square empty, the current active color.
+   * @returns Whether the square is attacked by the opponent.
+   */
+  isSquareAttacked(index120: Index120, side?: Color): boolean {
+    return isSquareAttacked(this, index120, side);
   }
 
-  generateMoves(): Move[] {
-    return generateMoves(this);
+  /**
+   * Generate pseudo-legal moves on the chessboard.
+   * @param side The side from which to generate moves.
+   *  Defaults to the current active color of the game.
+   * @returns An array of pseudo-legal moves.
+   */
+  generateMoves(side?: Color): Move[] {
+    return generateMoves(this, side);
   }
 
   makeMove(move: Move): boolean {
