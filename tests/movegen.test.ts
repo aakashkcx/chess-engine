@@ -405,8 +405,9 @@ describe("generateMoves() function", () => {
 
   let expected: Move[];
   let moves: Move[];
-  describe("pawn piece", () => {
-    describe("move", () => {
+
+  describe("should correctly generate pseudo-legal moves for pawn piece", () => {
+    describe("for a standard move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.A4, ColorPiece.WhitePawn);
@@ -426,7 +427,7 @@ describe("generateMoves() function", () => {
       });
     });
 
-    describe("double move", () => {
+    describe("for a double move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.B2, ColorPiece.WhitePawn);
@@ -452,7 +453,7 @@ describe("generateMoves() function", () => {
       });
     });
 
-    describe("promotion", () => {
+    describe("for a promotion move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.C7, ColorPiece.WhitePawn);
@@ -482,7 +483,7 @@ describe("generateMoves() function", () => {
       });
     });
 
-    describe("capture", () => {
+    describe("for a capture move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.D5, ColorPiece.WhitePawn);
@@ -513,7 +514,7 @@ describe("generateMoves() function", () => {
       });
     });
 
-    describe("capture promotion", () => {
+    describe("for a capture promotion move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.E7, ColorPiece.WhitePawn);
@@ -565,7 +566,7 @@ describe("generateMoves() function", () => {
       });
     });
 
-    describe("enPassant capture", () => {
+    describe("for an enPassant capture move", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.F5, ColorPiece.WhitePawn);
@@ -622,7 +623,117 @@ describe("generateMoves() function", () => {
     });
   });
 
-  describe("knight piece", () => {});
+  describe("should correctly generate pseudo-legal moves for knight piece", () => {
+    describe("for a standard move", () => {
+      test("white knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.D4, ColorPiece.WhiteKnight);
+        expected = [
+          createMove(Square120.D4, Square120.B5),
+          createMove(Square120.D4, Square120.C6),
+          createMove(Square120.D4, Square120.E6),
+          createMove(Square120.D4, Square120.F5),
+          createMove(Square120.D4, Square120.F3),
+          createMove(Square120.D4, Square120.E2),
+          createMove(Square120.D4, Square120.C2),
+          createMove(Square120.D4, Square120.B3),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.E5, ColorPiece.BlackKnight);
+        expected = [
+          createMove(Square120.E5, Square120.C6),
+          createMove(Square120.E5, Square120.D7),
+          createMove(Square120.E5, Square120.F7),
+          createMove(Square120.E5, Square120.G6),
+          createMove(Square120.E5, Square120.G4),
+          createMove(Square120.E5, Square120.F3),
+          createMove(Square120.E5, Square120.D3),
+          createMove(Square120.E5, Square120.C4),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("for a standard move near the edges", () => {
+      test("white knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.B2, ColorPiece.WhiteKnight);
+        expected = [
+          createMove(Square120.B2, Square120.A4),
+          createMove(Square120.B2, Square120.C4),
+          createMove(Square120.B2, Square120.D3),
+          createMove(Square120.B2, Square120.D1),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.H8, ColorPiece.BlackKnight);
+        expected = [
+          createMove(Square120.H8, Square120.G6),
+          createMove(Square120.H8, Square120.F7),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+
+    describe("for a capture move", () => {
+      test("white knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.E5, ColorPiece.WhiteKnight);
+        game.addPiece(Square120.D7, ColorPiece.BlackPawn);
+        game.addPiece(Square120.F3, ColorPiece.BlackPawn);
+        game.print();
+        expected = [
+          createMove(Square120.E5, Square120.C6),
+          createMove(Square120.E5, Square120.D7, ColorPiece.BlackPawn),
+          createMove(Square120.E5, Square120.F7),
+          createMove(Square120.E5, Square120.G6),
+          createMove(Square120.E5, Square120.G4),
+          createMove(Square120.E5, Square120.F3, ColorPiece.BlackPawn),
+          createMove(Square120.E5, Square120.D3),
+          createMove(Square120.E5, Square120.C4),
+        ];
+
+        moves = generateMoves(game, Color.White);
+        expect(moves).toEqual(expected);
+      });
+
+      test("black knight piece", () => {
+        game.initBoard();
+        game.addPiece(Square120.D4, ColorPiece.BlackKnight);
+        game.addPiece(Square120.F5, ColorPiece.WhitePawn);
+        game.addPiece(Square120.B3, ColorPiece.WhitePawn);
+        game.print();
+        expected = [
+          createMove(Square120.D4, Square120.B5),
+          createMove(Square120.D4, Square120.C6),
+          createMove(Square120.D4, Square120.E6),
+          createMove(Square120.D4, Square120.F5, ColorPiece.WhitePawn),
+          createMove(Square120.D4, Square120.F3),
+          createMove(Square120.D4, Square120.E2),
+          createMove(Square120.D4, Square120.C2),
+          createMove(Square120.D4, Square120.B3, ColorPiece.WhitePawn),
+        ];
+
+        moves = generateMoves(game, Color.Black);
+        expect(moves).toEqual(expected);
+      });
+    });
+  });
 
   describe("bishop piece", () => {});
 
