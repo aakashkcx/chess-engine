@@ -1,6 +1,7 @@
 import { Index120, Square120, index64To120 } from "../src/board";
+import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
 import { ChessGame } from "../src/game";
-import { Move, MoveFlag, createMove } from "../src/move";
+import { Move, MoveFlag, createMove, getStart } from "../src/move";
 import { generateMoves, isSquareAttacked } from "../src/movegen";
 import { Color, ColorPiece } from "../src/piece";
 
@@ -1080,12 +1081,21 @@ describe("generateMoves() function", () => {
     });
   });
 
-  describe.skip("should correctly generate pseudo-legal moves for king piece", () => {
+  describe("should correctly generate pseudo-legal moves for king piece", () => {
     describe("for a standard move", () => {
       test("white king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E5, ColorPiece.WhiteKing);
-        expected = [createMove(Square120.E5, Square120.B5)];
+        expected = [
+          createMove(Square120.E5, Square120.D6),
+          createMove(Square120.E5, Square120.E6),
+          createMove(Square120.E5, Square120.F6),
+          createMove(Square120.E5, Square120.F5),
+          createMove(Square120.E5, Square120.F4),
+          createMove(Square120.E5, Square120.E4),
+          createMove(Square120.E5, Square120.D4),
+          createMove(Square120.E5, Square120.D5),
+        ];
 
         moves = generateMoves(game, Color.White);
         expect(moves).toEqual(expected);
@@ -1093,8 +1103,17 @@ describe("generateMoves() function", () => {
 
       test("black king piece", () => {
         game.initBoard();
-        game.addPiece(Square120.E5, ColorPiece.BlackKing);
-        expected = [createMove(Square120.E5, Square120.C6)];
+        game.addPiece(Square120.E4, ColorPiece.BlackKing);
+        expected = [
+          createMove(Square120.E4, Square120.D5),
+          createMove(Square120.E4, Square120.E5),
+          createMove(Square120.E4, Square120.F5),
+          createMove(Square120.E4, Square120.F4),
+          createMove(Square120.E4, Square120.F3),
+          createMove(Square120.E4, Square120.E3),
+          createMove(Square120.E4, Square120.D3),
+          createMove(Square120.E4, Square120.D4),
+        ];
 
         moves = generateMoves(game, Color.Black);
         expect(moves).toEqual(expected);
@@ -1105,7 +1124,13 @@ describe("generateMoves() function", () => {
       test("white king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
-        expected = [createMove(Square120.E1, Square120.B5)];
+        expected = [
+          createMove(Square120.E1, Square120.D2),
+          createMove(Square120.E1, Square120.E2),
+          createMove(Square120.E1, Square120.F2),
+          createMove(Square120.E1, Square120.F1),
+          createMove(Square120.E1, Square120.D1),
+        ];
 
         moves = generateMoves(game, Color.White);
         expect(moves).toEqual(expected);
@@ -1114,7 +1139,13 @@ describe("generateMoves() function", () => {
       test("black king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
-        expected = [createMove(Square120.E8, Square120.C6)];
+        expected = [
+          createMove(Square120.E8, Square120.F8),
+          createMove(Square120.E8, Square120.F7),
+          createMove(Square120.E8, Square120.E7),
+          createMove(Square120.E8, Square120.D7),
+          createMove(Square120.E8, Square120.D8),
+        ];
 
         moves = generateMoves(game, Color.Black);
         expect(moves).toEqual(expected);
@@ -1125,7 +1156,19 @@ describe("generateMoves() function", () => {
       test("white king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E7, ColorPiece.WhiteKing);
-        expected = [createMove(Square120.E7, Square120.B5)];
+        game.addPiece(Square120.E8, ColorPiece.BlackPawn);
+        game.addPiece(Square120.F8, ColorPiece.BlackPawn);
+        game.addPiece(Square120.D7, ColorPiece.BlackPawn);
+        expected = [
+          createMove(Square120.E7, Square120.D8),
+          createMove(Square120.E7, Square120.E8, ColorPiece.BlackPawn),
+          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn),
+          createMove(Square120.E7, Square120.F7),
+          createMove(Square120.E7, Square120.F6),
+          createMove(Square120.E7, Square120.E6),
+          createMove(Square120.E7, Square120.D6),
+          createMove(Square120.E7, Square120.D7, ColorPiece.BlackPawn),
+        ];
 
         moves = generateMoves(game, Color.White);
         expect(moves).toEqual(expected);
@@ -1134,7 +1177,19 @@ describe("generateMoves() function", () => {
       test("black king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E2, ColorPiece.BlackKing);
-        expected = [createMove(Square120.E2, Square120.C6)];
+        game.addPiece(Square120.F2, ColorPiece.WhitePawn);
+        game.addPiece(Square120.E1, ColorPiece.WhitePawn);
+        game.addPiece(Square120.D1, ColorPiece.WhitePawn);
+        expected = [
+          createMove(Square120.E2, Square120.D3),
+          createMove(Square120.E2, Square120.E3),
+          createMove(Square120.E2, Square120.F3),
+          createMove(Square120.E2, Square120.F2, ColorPiece.WhitePawn),
+          createMove(Square120.E2, Square120.F1),
+          createMove(Square120.E2, Square120.E1, ColorPiece.WhitePawn),
+          createMove(Square120.E2, Square120.D1, ColorPiece.WhitePawn),
+          createMove(Square120.E2, Square120.D2),
+        ];
 
         moves = generateMoves(game, Color.Black);
         expect(moves).toEqual(expected);
@@ -1145,18 +1200,42 @@ describe("generateMoves() function", () => {
       test("white king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
-        expected = [createMove(Square120.E1, Square120.B5)];
+        game.addPiece(Square120.A1, ColorPiece.WhiteRook);
+        game.addPiece(Square120.H1, ColorPiece.WhiteRook);
+        game.castlingRights = ALL_CASTLE_RIGHTS;
+        expected = [
+          createMove(Square120.E1, Square120.D2),
+          createMove(Square120.E1, Square120.E2),
+          createMove(Square120.E1, Square120.F2),
+          createMove(Square120.E1, Square120.F1),
+          createMove(Square120.E1, Square120.D1),
+          createMove(Square120.E1, Square120.G1, 0, MoveFlag.Castle),
+          createMove(Square120.E1, Square120.C1, 0, MoveFlag.Castle),
+        ];
 
         moves = generateMoves(game, Color.White);
+        moves = moves.filter((move) => getStart(move) === Square120.E1);
         expect(moves).toEqual(expected);
       });
 
       test("black king piece", () => {
         game.initBoard();
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
-        expected = [createMove(Square120.E8, Square120.C6)];
+        game.addPiece(Square120.A8, ColorPiece.BlackRook);
+        game.addPiece(Square120.H8, ColorPiece.BlackRook);
+        game.castlingRights = ALL_CASTLE_RIGHTS;
+        expected = [
+          createMove(Square120.E8, Square120.F8),
+          createMove(Square120.E8, Square120.F7),
+          createMove(Square120.E8, Square120.E7),
+          createMove(Square120.E8, Square120.D7),
+          createMove(Square120.E8, Square120.D8),
+          createMove(Square120.E8, Square120.G8, 0, MoveFlag.Castle),
+          createMove(Square120.E8, Square120.C8, 0, MoveFlag.Castle),
+        ];
 
         moves = generateMoves(game, Color.Black);
+        moves = moves.filter((move) => getStart(move) === Square120.E8);
         expect(moves).toEqual(expected);
       });
     });
