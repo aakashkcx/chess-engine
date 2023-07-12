@@ -407,6 +407,56 @@ describe("generateMoves() function", () => {
   let expected: Move[];
   let moves: Move[];
 
+  describe("should generate moves from the correct side", () => {
+    test("when side specified", () => {
+      game.initBoard();
+      game.addPiece(Square120.D4, ColorPiece.WhitePawn);
+      expected = [createMove(Square120.D4, Square120.D5)];
+
+      moves = generateMoves(game, Color.White);
+      expect(moves).toEqual(expected);
+
+      moves = generateMoves(game, Color.Black);
+      expect(moves).toEqual([]);
+
+      game.initBoard();
+      game.addPiece(Square120.E5, ColorPiece.BlackPawn);
+      expected = [createMove(Square120.E5, Square120.E4)];
+
+      moves = generateMoves(game, Color.White);
+      expect(moves).toEqual([]);
+
+      moves = generateMoves(game, Color.Black);
+      expect(moves).toEqual(expected);
+    });
+
+    test("should side not specified", () => {
+      game.initBoard();
+      game.addPiece(Square120.E4, ColorPiece.WhitePawn);
+      expected = [createMove(Square120.E4, Square120.E5)];
+
+      moves = generateMoves(game);
+      expect(moves).toEqual(expected);
+
+      game.switchColor();
+
+      moves = generateMoves(game);
+      expect(moves).toEqual([]);
+
+      game.initBoard();
+      game.addPiece(Square120.D5, ColorPiece.BlackPawn);
+      expected = [createMove(Square120.D5, Square120.D4)];
+
+      moves = generateMoves(game);
+      expect(moves).toEqual([]);
+
+      game.switchColor();
+
+      moves = generateMoves(game);
+      expect(moves).toEqual(expected);
+    });
+  });
+
   describe("should correctly generate pseudo-legal moves for pawn piece", () => {
     describe("for a standard move", () => {
       test("white pawn piece", () => {
