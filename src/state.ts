@@ -41,7 +41,7 @@ const HALF_MOVES_SHIFT = 11;
  */
 export function createState(
   castlingRights: CastlingRights,
-  enPassant: Index120 = 0,
+  enPassant: Index120,
   halfMoves: number
 ): State {
   return (
