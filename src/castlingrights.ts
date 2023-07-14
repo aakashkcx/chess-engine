@@ -14,9 +14,15 @@ export enum CastleRight {
   BlackQueen,
 }
 
-export const NO_CASTLE_RIGHTS = 0;
+/**
+ * Represents castling rights with no castle rights.
+ */
+export const NO_CASTLE_RIGHTS: CastlingRights = 0;
 
-export const ALL_CASTLE_RIGHTS =
+/**
+ * Represents castling rights with all castle rights.
+ */
+export const ALL_CASTLE_RIGHTS: CastlingRights =
   (1 << CastleRight.WhiteKing) |
   (1 << CastleRight.WhiteQueen) |
   (1 << CastleRight.BlackKing) |

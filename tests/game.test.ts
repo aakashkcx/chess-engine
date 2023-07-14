@@ -1,26 +1,32 @@
 import { Square120 } from "../src/board";
-import { STARTING_FEN } from "../src/fen";
-import { ChessGame } from "../src/game";
-import { Color, ColorPiece } from "../src/piece";
 import {
   ALL_CASTLE_RIGHTS,
   CastleRight,
   NO_CASTLE_RIGHTS,
 } from "../src/castlingrights";
+import { STARTING_FEN } from "../src/fen";
+import { ChessGame } from "../src/game";
+import { generateHash } from "../src/hash";
+import { Color, ColorPiece, PIECES } from "../src/piece";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {
     test("should initialise starting chessboard", () => {
       const game = new ChessGame();
       expect(game.pieceBoard.length).toBe(120);
-      expect(game.pieceCount.length).toBe(13);
-      expect(game.pieceLists.length).toBe(13);
+      expect(game.pieceCount.length).toBe(PIECES.length);
+      expect(game.pieceLists.length).toBe(PIECES.length);
       expect(game.pieceListIndex.length).toBe(120);
       expect(game.activeColor).toBe(Color.White);
       expect(game.castlingRights).toBe(ALL_CASTLE_RIGHTS);
       expect(game.enPassant).toBe(0);
       expect(game.halfMoves).toBe(0);
       expect(game.fullMoves).toBe(1);
+      expect(game.ply).toBe(0);
+      expect(game.hash).toBe(generateHash(game));
+      expect(game.moveList.length).toBe(0);
+      expect(game.stateList.length).toBe(0);
+      expect(game.hashList.length).toBe(0);
       expect(game.getFEN()).toBe(STARTING_FEN);
     });
 
@@ -35,6 +41,11 @@ describe("ChessGame class", () => {
       expect(game.enPassant).toBe(0);
       expect(game.halfMoves).toBe(0);
       expect(game.fullMoves).toBe(1);
+      expect(game.ply).toBe(0);
+      expect(game.hash).toBe(0);
+      expect(game.moveList.length).toBe(0);
+      expect(game.stateList.length).toBe(0);
+      expect(game.hashList.length).toBe(0);
       expect(game.getFEN()).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
     });
   });
@@ -54,7 +65,7 @@ describe("ChessGame class", () => {
       expect(game.pieceListIndex[square1]).toBe(-1);
       expect(game.pieceListIndex[square2]).toBe(-1);
 
-      game.updatePieceLists();
+      game._updatePieceLists();
 
       expect(game.pieceCount[piece]).toBe(2);
       expect(game.pieceLists[piece]).toHaveLength(2);

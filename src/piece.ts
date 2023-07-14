@@ -11,7 +11,6 @@ export enum Color {
  * The chess pieces.
  */
 export enum Piece {
-  OffBoard = -1,
   Empty = 0,
   Pawn,
   Knight,
@@ -25,7 +24,6 @@ export enum Piece {
  * The chess pieces, with color.
  */
 export enum ColorPiece {
-  OffBoard = -1,
   Empty = 0,
   WhitePawn,
   WhiteKnight,
@@ -40,6 +38,24 @@ export enum ColorPiece {
   BlackQueen,
   BlackKing,
 }
+
+export const NO_PIECE: ColorPiece = ColorPiece.Empty;
+
+export const PIECES = [
+  ColorPiece.Empty,
+  ColorPiece.WhitePawn,
+  ColorPiece.WhiteKnight,
+  ColorPiece.WhiteBishop,
+  ColorPiece.WhiteRook,
+  ColorPiece.WhiteQueen,
+  ColorPiece.WhiteKing,
+  ColorPiece.BlackPawn,
+  ColorPiece.BlackKnight,
+  ColorPiece.BlackBishop,
+  ColorPiece.BlackRook,
+  ColorPiece.BlackQueen,
+  ColorPiece.BlackKing,
+];
 
 /** The value of a pawn piece. */
 export const PAWN_VALUE = 100;

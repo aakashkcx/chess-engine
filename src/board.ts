@@ -21,14 +21,24 @@ export const FileName = "abcdefgh";
 export const RankName = "12345678";
 
 /**
- * The 64 index of squares on the chessboard.
+ * A 64 index of the squares on the chessboard.
  */
 export type Index64 = number;
 
 /**
- * A 120 index of squares on the chessboard.
+ * A 120 index of the squares on the chessboard.
  */
 export type Index120 = number;
+
+/**
+ * Represents a null index on the chessboard.
+ */
+export const NO_SQUARE: Index120 | Index64 = 0;
+
+/**
+ * Represents a square that is off the 120 index chessboard.
+ */
+export const OFF_BOARD: Index120 = -1;
 
 /**
  * The squares of the chessboard in {@link Index64}.

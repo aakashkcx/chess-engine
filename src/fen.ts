@@ -1,7 +1,8 @@
 import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
 import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 import { ChessGame } from "./game";
-import { Color, ColorPiece, PieceName } from "./piece";
+import { generateHash } from "./hash";
+import { Color, ColorPiece, NO_PIECE, PieceName } from "./piece";
 
 /**
  * The starting Forsyth–Edwards Notation (FEN) string.
@@ -21,7 +22,7 @@ export function getFEN(game: ChessGame): string {
     let empty: number = 0;
     for (let file = 0; file < 8; file++) {
       const piece = game.pieceBoard[rankFileTo120(rank, file)];
-      if (piece) {
+      if (piece != NO_PIECE) {
         if (empty) pieces += empty;
         empty = 0;
         pieces += PieceName[piece];
@@ -96,7 +97,7 @@ export function setFEN(game: ChessGame, fen: string) {
   }
 
   // Update the piece representations.
-  game.updatePieceLists();
+  game._updatePieceLists();
 
   // Set active color.
   const sideToMove = fenArray[1];
@@ -125,4 +126,7 @@ export function setFEN(game: ChessGame, fen: string) {
   const fullMoves = parseInt(fenArray[5]);
   if (isNaN(fullMoves)) throw new Error();
   game.fullMoves = fullMoves;
+
+  // Generate the hash.
+  game.hash = generateHash(game);
 }

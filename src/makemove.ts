@@ -1,4 +1,4 @@
-import { Square120, getFile120, rankFileTo120 } from "./board";
+import { NO_SQUARE, Square120 } from "./board";
 import { CastleRight } from "./castlingrights";
 import { ChessGame } from "./game";
 import { Move, MoveFlag, getMove, isPromotion } from "./move";
@@ -6,8 +6,15 @@ import { PAWN_MOVE_OFFSET } from "./movegen";
 import { Color, Piece, createPiece, getPiece } from "./piece";
 import { createState, getState } from "./state";
 
+/**
+ * Make a move on the chessboard.
+ * @param game The chess game.
+ * @param move The move value.
+ * @returns Whether the move was legal and therefore completed.
+ */
 export function makeMove(game: ChessGame, move: Move): boolean {
   const [start, target, captured, flag] = getMove(move);
+  const piece = game.pieceBoard[start];
 
   const state = createState(
     game.castlingRights,
@@ -17,6 +24,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 
   game.moveList[game.ply] = move;
   game.stateList[game.ply] = state;
+  game.hashList[game.ply] = game.hash;
   game.ply++;
 
   const color = game.activeColor;
@@ -24,16 +32,16 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   game.halfMoves++;
   if (color === Color.Black) game.fullMoves++;
 
-  game.enPassant = 0;
+  game._setEnPassant(NO_SQUARE);
 
   if (captured) game.halfMoves = 0;
-  if (getPiece(game.pieceBoard[start]) === Piece.Pawn) game.halfMoves = 0;
+  if (getPiece(piece) === Piece.Pawn) game.halfMoves = 0;
 
   if (captured && flag !== MoveFlag.EnPassant) game.removePiece(target);
   game.movePiece(start, target);
 
   if (flag === MoveFlag.PawnDouble) {
-    game.enPassant = target - PAWN_MOVE_OFFSET[color];
+    game._setEnPassant(target - PAWN_MOVE_OFFSET[color]);
   } else if (flag === MoveFlag.EnPassant) {
     game.removePiece(target - PAWN_MOVE_OFFSET[color]);
   } else if (flag === MoveFlag.Castle) {
@@ -47,7 +55,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
       game.movePiece(Square120.H8, Square120.F8);
     }
   } else if (isPromotion(flag)) {
-    game.removePiece(target);
+    game.removePiece(target); // Remove pawn piece.
     if (flag === MoveFlag.PromoteKnight) {
       game.addPiece(target, createPiece(color, Piece.Knight));
     } else if (flag === MoveFlag.PromoteBishop) {
@@ -86,6 +94,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 
   game.switchColor();
 
+  // TODO: Create inCheck check.
   const kingIndex = game.pieceLists[createPiece(color, Piece.King)][0];
   if (game.isSquareAttacked(kingIndex)) {
     game.takeBack();
@@ -95,18 +104,22 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   return true;
 }
 
+/**
+ * Take back the last move made on the chessboard.
+ * @param game The chess game.
+ */
 export function takeBack(game: ChessGame) {
   if (game.ply === 0) throw new Error("Cannot take back!");
 
   game.ply--;
   const move = game.moveList[game.ply];
-  const state = game.moveList[game.ply];
+  const state = game.stateList[game.ply];
 
   const [start, target, captured, flag] = getMove(move);
   const [castlingRights, enPassant, halfMoves] = getState(state);
 
-  game.castlingRights = castlingRights;
-  game.enPassant = enPassant;
+  game._setCastlingRights(castlingRights);
+  game._setEnPassant(enPassant);
   game.halfMoves = halfMoves;
 
   game.switchColor();

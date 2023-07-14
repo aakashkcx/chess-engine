@@ -1,4 +1,4 @@
-import { Index120, index64To120 } from "./board";
+import { Index120, NO_SQUARE, OFF_BOARD, index64To120 } from "./board";
 import {
   CastleRight,
   CastlingRights,
@@ -7,10 +7,17 @@ import {
   setCastleRight,
 } from "./castlingrights";
 import { STARTING_FEN, getFEN, setFEN } from "./fen";
+import {
+  Hash,
+  hashCastlingRights,
+  hashColor,
+  hashEnPassant,
+  hashPiece,
+} from "./hash";
 import { makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
-import { Color, ColorPiece } from "./piece";
+import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
 import { State } from "./state";
 import { toString } from "./string";
 
@@ -55,7 +62,7 @@ export class ChessGame {
   /**
    * The possible en passant target square.
    */
-  enPassant: Index120 = 0;
+  enPassant: Index120 = NO_SQUARE;
 
   /**
    * The half move clock.
@@ -67,11 +74,30 @@ export class ChessGame {
    */
   fullMoves: number = 1;
 
+  /**
+   * The number of plies played.
+   */
   ply: number = 0;
 
+  /**
+   * The zobrist hash of the game.
+   */
+  hash: Hash = 0;
+
+  /**
+   * The history of moves made.
+   */
   moveList: Move[] = [];
 
+  /**
+   * The history of game state.
+   */
   stateList: State[] = [];
+
+  /**
+   * The history of zobrist hashes.
+   */
+  hashList: Hash[] = [];
 
   /**
    * Create a new chess game.
@@ -87,11 +113,11 @@ export class ChessGame {
    * Set the chess game to an empty board state and initialise board representation.
    */
   initBoard() {
-    this.pieceBoard = Array(120).fill(ColorPiece.OffBoard);
+    this.pieceBoard = Array(120).fill(OFF_BOARD);
     for (let index64 = 0; index64 < 64; index64++)
-      this.pieceBoard[index64To120(index64)] = ColorPiece.Empty;
-    this.pieceCount = Array(13).fill(0);
-    this.pieceLists = Array(13)
+      this.pieceBoard[index64To120(index64)] = NO_PIECE;
+    this.pieceCount = Array(PIECES.length).fill(0);
+    this.pieceLists = Array(PIECES.length)
       .fill([])
       .map(() => []);
     this.pieceListIndex = Array(120).fill(-1);
@@ -101,15 +127,17 @@ export class ChessGame {
     this.halfMoves = 0;
     this.fullMoves = 1;
     this.ply = 0;
+    this.hash = 0;
     this.moveList = [];
     this.stateList = [];
+    this.hashList = [];
   }
 
   /**
    * Update the board representation.
    * Fills in the piece lists based on {@link pieceBoard}.
    */
-  updatePieceLists() {
+  _updatePieceLists() {
     this.pieceCount.fill(0);
     this.pieceLists = this.pieceLists.map(() => []);
     this.pieceListIndex.fill(-1);
@@ -117,7 +145,7 @@ export class ChessGame {
     for (let index64 = 0; index64 < 64; index64++) {
       const index120 = index64To120(index64);
       const piece = this.pieceBoard[index120];
-      if (piece === ColorPiece.Empty) continue;
+      if (piece === NO_PIECE) continue;
       const pieceListIndex = this.pieceCount[piece];
       this.pieceLists[piece][pieceListIndex] = index120;
       this.pieceListIndex[index120] = pieceListIndex;
@@ -131,11 +159,17 @@ export class ChessGame {
    * @param piece The color piece.
    */
   addPiece(index120: Index120, piece: ColorPiece) {
+    if (this.pieceBoard[index120] !== NO_PIECE)
+      throw new Error("Cannot add piece to occupied square!");
+    if (piece === NO_PIECE) throw new Error("Cannot add empty piece!");
+
     const pieceListIndex = this.pieceCount[piece];
     this.pieceBoard[index120] = piece;
     this.pieceLists[piece][pieceListIndex] = index120;
     this.pieceListIndex[index120] = pieceListIndex;
     this.pieceCount[piece]++;
+
+    this.hash = hashPiece(this.hash, piece, index120);
   }
 
   /**
@@ -144,13 +178,22 @@ export class ChessGame {
    * @param target120 The 120 index target square.
    */
   movePiece(start120: Index120, target120: Index120) {
+    if (this.pieceBoard[start120] === NO_PIECE)
+      throw new Error("Cannot move piece from empty square!");
+    if (this.pieceBoard[target120] !== NO_PIECE)
+      throw new Error("Cannot move piece to occupied square!");
+
     const piece = this.pieceBoard[start120];
     const pieceListIndex = this.pieceListIndex[start120];
-    this.pieceBoard[start120] = ColorPiece.Empty;
+
+    this.pieceBoard[start120] = NO_PIECE;
     this.pieceBoard[target120] = piece;
     this.pieceLists[piece][pieceListIndex] = target120;
     this.pieceListIndex[start120] = -1;
     this.pieceListIndex[target120] = pieceListIndex;
+
+    this.hash = hashPiece(this.hash, piece, start120);
+    this.hash = hashPiece(this.hash, piece, target120);
   }
 
   /**
@@ -158,18 +201,23 @@ export class ChessGame {
    * @param index120 The 120 index of the piece.
    */
   removePiece(index120: Index120) {
+    if (this.pieceBoard[index120] === NO_PIECE)
+      throw new Error("Cannot remove piece from empty square!");
+
     const piece = this.pieceBoard[index120];
     const pieceListIndex = this.pieceListIndex[index120];
     const pieceListLastIndex = this.pieceCount[piece] - 1;
     const lastIndex = this.pieceLists[piece][pieceListLastIndex];
 
-    this.pieceBoard[index120] = ColorPiece.Empty;
+    this.pieceBoard[index120] = NO_PIECE;
     this.pieceLists[piece][pieceListIndex] =
       this.pieceLists[piece][pieceListLastIndex];
     this.pieceLists[piece].length--;
     this.pieceListIndex[lastIndex] = pieceListIndex;
     this.pieceListIndex[index120] = -1;
     this.pieceCount[piece]--;
+
+    this.hash = hashPiece(this.hash, piece, index120);
   }
 
   /**
@@ -177,6 +225,7 @@ export class ChessGame {
    * @returns The updated next color to move.
    */
   switchColor(): Color {
+    this.hash = hashColor(this.hash);
     return (this.activeColor ^= 1);
   }
 
@@ -195,11 +244,33 @@ export class ChessGame {
    * @param value The castling availability.
    */
   setCastleRight(castleRight: CastleRight, value: boolean) {
+    this.hash = hashCastlingRights(this.hash, this.castlingRights);
     this.castlingRights = setCastleRight(
       this.castlingRights,
       castleRight,
       value
     );
+    this.hash = hashCastlingRights(this.hash, this.castlingRights);
+  }
+
+  /**
+   * Set the castling rights value.
+   * @param castlingRights The castling rights.
+   */
+  _setCastlingRights(castlingRights: CastlingRights) {
+    this.hash = hashCastlingRights(this.hash, this.castlingRights);
+    this.castlingRights = castlingRights;
+    this.hash = hashCastlingRights(this.hash, this.castlingRights);
+  }
+
+  /**
+   * Set the en passant target square.
+   * @param index120 The en passant target square.
+   */
+  _setEnPassant(index120: Index120) {
+    this.hash = hashEnPassant(this.hash, this.enPassant);
+    this.enPassant = index120;
+    this.hash = hashEnPassant(this.hash, this.enPassant);
   }
 
   /**
@@ -223,10 +294,18 @@ export class ChessGame {
     return generateMoves(this, side);
   }
 
+  /**
+   * Make a move on the chessboard.
+   * @param move The move value.
+   * @returns Whether the move was legal and therefore completed.
+   */
   makeMove(move: Move): boolean {
     return makeMove(this, move);
   }
 
+  /**
+   * Take back the last move made on the chessboard.
+   */
   takeBack() {
     takeBack(this);
   }

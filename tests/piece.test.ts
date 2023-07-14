@@ -1,3 +1,4 @@
+import { OFF_BOARD } from "../src/board";
 import {
   BISHOP_VALUE,
   Color,
@@ -29,8 +30,8 @@ describe("createPiece() function", () => {
   test("should throw Error", () => {
     expect(() => createPiece(Color.White, Piece.Empty)).toThrow();
     expect(() => createPiece(Color.Black, Piece.Empty)).toThrow();
-    expect(() => createPiece(Color.White, Piece.OffBoard)).toThrow();
-    expect(() => createPiece(Color.Black, Piece.OffBoard)).toThrow();
+    expect(() => createPiece(Color.White, OFF_BOARD)).toThrow();
+    expect(() => createPiece(Color.Black, OFF_BOARD)).toThrow();
     expect(() => createPiece(Color.None, Piece.Pawn)).toThrow();
     expect(() => createPiece(Color.None, Piece.King)).toThrow();
   });
@@ -48,7 +49,7 @@ describe("getColor() function", () => {
 
   test("should return None", () => {
     expect(getColor(ColorPiece.Empty)).toBe(Color.None);
-    expect(getColor(ColorPiece.OffBoard)).toBe(Color.None);
+    expect(getColor(OFF_BOARD)).toBe(Color.None);
   });
 });
 
@@ -62,9 +63,9 @@ describe("getPiece() function", () => {
     expect(getPiece(ColorPiece.BlackKing)).toBe(Piece.King);
   });
 
-  test("should return Empty and OffBoard", () => {
+  test("should return Empty and OFF_BOARD", () => {
     expect(getPiece(ColorPiece.Empty)).toBe(Piece.Empty);
-    expect(getPiece(ColorPiece.OffBoard)).toBe(Piece.OffBoard);
+    expect(getPiece(OFF_BOARD)).toBe(OFF_BOARD);
   });
 });
 
@@ -80,7 +81,7 @@ describe("getValue() function", () => {
 
   test("should return zero value", () => {
     expect(getValue(Piece.Empty)).toBe(0);
-    expect(getValue(Piece.OffBoard)).toBe(0);
+    expect(getValue(OFF_BOARD)).toBe(0);
   });
 });
 

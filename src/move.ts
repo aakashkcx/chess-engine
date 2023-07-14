@@ -1,5 +1,5 @@
 import { Index120, string120 } from "./board";
-import { ColorPiece, PieceName } from "./piece";
+import { ColorPiece, NO_PIECE, PieceName } from "./piece";
 
 /**
  * A move that can be made on the chessboard.
@@ -67,7 +67,7 @@ const FLAG_SHIFT = 18;
 export function createMove(
   start: Index120,
   target: Index120,
-  captured: ColorPiece = ColorPiece.Empty,
+  captured: ColorPiece = NO_PIECE,
   flag: MoveFlag = MoveFlag.None
 ): Move {
   return (
