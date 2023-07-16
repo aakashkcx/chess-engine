@@ -33,7 +33,7 @@ export type Index120 = number;
 /**
  * Represents a null index on the chessboard.
  */
-export const NO_SQUARE: Index120 | Index64 = 0;
+export const NO_SQUARE: Index120 = 0;
 
 /**
  * Represents a square that is off the 120 index chessboard.
