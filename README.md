@@ -2,4 +2,4 @@
 
 A chess engine built in TypeScript.
 
-_Based of my final year project in University._
+_Based off my final year project in University._
