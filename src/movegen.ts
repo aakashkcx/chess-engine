@@ -181,6 +181,81 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 }
 
 /**
+ * Generate pseudo-legal capture moves on the chessboard - for quiescence search.
+ * @param game The chess game.
+ * @param side The side from which to generate capture moves.
+ *  Defaults to the current active color of the game.
+ * @returns An array of pseudo-legal capture moves.
+ */
+export function generateCaptures(game: ChessGame, side?: Color): Move[] {
+  const moves: Move[] = [];
+
+  const color = side === undefined ? game.activeColor : side;
+  const opponent = color ^ 1;
+
+  let piece: ColorPiece;
+  let start: Index120;
+  let target: Index120;
+  let captured: ColorPiece;
+
+  piece = createPiece(color, Piece.Pawn);
+  for (let i = 0; i < game.pieceCount[piece]; i++) {
+    start = game.pieceLists[piece][i];
+    target = start + PAWN_MOVE_OFFSET[color];
+    captured = game.pieceBoard[target];
+    for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
+      target = start + captureOffset;
+      captured = game.pieceBoard[target];
+      if (getColor(captured) === opponent) {
+        if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
+          for (const promotionFlag of PAWN_PROMOTION_FLAGS)
+            moves.push(createMove(start, target, captured, promotionFlag));
+        } else moves.push(createMove(start, target, captured));
+      }
+      if (target === game.enPassant) {
+        captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
+        moves.push(createMove(start, target, captured, MoveFlag.EnPassant));
+      }
+    }
+  }
+
+  for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
+    piece = createPiece(color, pieceType);
+    for (let i = 0; i < game.pieceCount[piece]; i++) {
+      start = game.pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game.pieceBoard[target];
+        if (getColor(captured) === opponent)
+          moves.push(createMove(start, target, captured));
+      }
+    }
+  }
+
+  for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
+    piece = createPiece(color, pieceType);
+    for (let i = 0; i < game.pieceCount[piece]; i++) {
+      start = game.pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game.pieceBoard[target];
+        while (captured !== OFF_BOARD) {
+          if (captured !== NO_PIECE) {
+            if (getColor(captured) === opponent)
+              moves.push(createMove(start, target, captured));
+            break;
+          }
+          target += offset;
+          captured = game.pieceBoard[target];
+        }
+      }
+    }
+  }
+
+  return moves;
+}
+
+/**
  * Check whether a square is attacked by the opponent.
  * @param game The chess game.
  * @param index120 The index of the square to check.
