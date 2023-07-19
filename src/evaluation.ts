@@ -13,20 +13,27 @@ import {
 
 // TODO: Change endgame from boolean to coefficient.
 
+/** The material value where endgame starts. */
 const ENDGAME_START_VALUE =
   4 * PAWN_VALUE + 2 * BISHOP_VALUE + 2 * ROOK_VALUE + KING_VALUE;
 
+/**
+ * Calculate an evaluation score for the chessboard.
+ * @param game The chess game.
+ * @param side The side to evaluate from.
+ * @returns An evaluation score.
+ */
 export function evaluate(game: ChessGame, side?: Color): number {
   const color = side === undefined ? game.activeColor : side;
 
-  const whiteMaterial = getMaterialValue(game, Color.White);
-  const blackMaterial = getMaterialValue(game, Color.Black);
+  const whiteMaterial = materialValue(game, Color.White);
+  const blackMaterial = materialValue(game, Color.Black);
 
   const whiteEndgame = whiteMaterial < ENDGAME_START_VALUE;
   const blackEndgame = blackMaterial < ENDGAME_START_VALUE;
 
-  const whitePosition = getPositionValue(game, Color.White, whiteEndgame);
-  const blackPosition = getPositionValue(game, Color.Black, blackEndgame);
+  const whitePosition = positionValue(game, Color.White, whiteEndgame);
+  const blackPosition = positionValue(game, Color.Black, blackEndgame);
 
   const whiteEvaluation = whiteMaterial + whitePosition;
   const blackEvaluation = blackMaterial + blackPosition;
@@ -37,7 +44,13 @@ export function evaluate(game: ChessGame, side?: Color): number {
   return evaluation * perspective;
 }
 
-function getMaterialValue(game: ChessGame, side: Color): number {
+/**
+ * Calculate the value of material on the chessboard.
+ * @param game The chess game.
+ * @param side The side to evaluate from.
+ * @returns The value of material.
+ */
+function materialValue(game: ChessGame, side: Color): number {
   let value = 0;
 
   if (side === Color.White) {
@@ -59,11 +72,14 @@ function getMaterialValue(game: ChessGame, side: Color): number {
   return value;
 }
 
-function getPositionValue(
-  game: ChessGame,
-  side: Color,
-  endgame: boolean = false
-) {
+/**
+ * Calculate the value of piece positions on the chessboard.
+ * @param game The chess game.
+ * @param side The side to evaluate from.
+ * @param endgame Whether the game has reached endgame.
+ * @returns The value of piece positions.
+ */
+function positionValue(game: ChessGame, side: Color, endgame: boolean = false) {
   let value = 0;
 
   const KING_TABLE = endgame ? KING_END_TABLE : KING_MID_TABLE;
