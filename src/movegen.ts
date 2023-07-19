@@ -85,6 +85,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   let target: Index120;
   let captured: ColorPiece;
 
+  /* Pawn Moves */
   piece = createPiece(color, Piece.Pawn);
   for (let i = 0; i < game.pieceCount[piece]; i++) {
     start = game.pieceLists[piece][i];
@@ -116,6 +117,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     }
   }
 
+  /* Non-Sliding Piece Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
     piece = createPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
@@ -130,6 +132,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     }
   }
 
+  /* Sliding Piece Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
     piece = createPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
@@ -151,6 +154,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     }
   }
 
+  /* King Castle Moves */
   piece = createPiece(color, Piece.King);
   start = KING_SQUARE[color];
   if (
@@ -198,6 +202,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   let target: Index120;
   let captured: ColorPiece;
 
+  /* Pawn Capture Moves */
   piece = createPiece(color, Piece.Pawn);
   for (let i = 0; i < game.pieceCount[piece]; i++) {
     start = game.pieceLists[piece][i];
@@ -219,6 +224,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
     }
   }
 
+  /* Non-Sliding Piece Capture Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
     piece = createPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
@@ -232,6 +238,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
     }
   }
 
+  /* Sliding Piece Capture Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
     piece = createPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
@@ -276,18 +283,21 @@ export function isSquareAttacked(
         : game.activeColor
       : side;
 
+  /* Pawn Attacks */
   for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
     const attacker = game.pieceBoard[index120 + captureOffset];
     if (getPiece(attacker) === Piece.Pawn && getColor(attacker) !== color)
       return true;
   }
 
+  /* Knight Attacks */
   for (const offset of KNIGHT_OFFSETS) {
     const attacker = game.pieceBoard[index120 + offset];
     if (getPiece(attacker) === Piece.Knight && getColor(attacker) !== color)
       return true;
   }
 
+  /* Diagonal Attacks (Bishop, Queen, King) */
   for (const offset of BISHOP_OFFSETS) {
     let target = index120 + offset;
     let attacker = game.pieceBoard[target];
@@ -306,6 +316,7 @@ export function isSquareAttacked(
     }
   }
 
+  /* Horizontal Attacks (Rook, Queen, King) */
   for (const offset of ROOK_OFFSETS) {
     let target = index120 + offset;
     let attacker = game.pieceBoard[target];
