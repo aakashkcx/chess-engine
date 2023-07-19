@@ -18,11 +18,12 @@ import { makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
 import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
+import { Search } from "./search";
 import { State } from "./state";
 import { toString } from "./string";
 
 /*
-  TODO: Create enum GameState {}.
+  TODO: Create enum GameState { Check, Checkmate, Stalemate }.
 
   TODO: Create class Search {}.
   - Link Game to singleton Search.
@@ -98,6 +99,11 @@ export class ChessGame {
    * The history of zobrist hashes.
    */
   hashList: Hash[] = [];
+
+  /**
+   * The search controller.
+   */
+  _search?: Search;
 
   /**
    * Create a new chess game.
@@ -308,6 +314,16 @@ export class ChessGame {
    */
   takeBack() {
     takeBack(this);
+  }
+
+  /**
+   * Search for the best move.
+   * @param depth The search depth.
+   * @returns The best move.
+   */
+  search(depth: number = 3): Move {
+    if (!this._search) this._search = new Search(this);
+    return this._search.search(depth);
   }
 
   /**
