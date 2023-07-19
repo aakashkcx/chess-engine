@@ -11,14 +11,19 @@ import {
   ROOK_VALUE,
 } from "./piece";
 
+// TODO: Change endgame from boolean to coefficient.
+
+const ENDGAME_START_VALUE =
+  4 * PAWN_VALUE + 2 * BISHOP_VALUE + 2 * ROOK_VALUE + KING_VALUE;
+
 export function evaluate(game: ChessGame, side?: Color): number {
   const color = side === undefined ? game.activeColor : side;
 
   const whiteMaterial = getMaterialValue(game, Color.White);
   const blackMaterial = getMaterialValue(game, Color.Black);
 
-  const whiteEndgame = false;
-  const blackEndgame = false;
+  const whiteEndgame = whiteMaterial < ENDGAME_START_VALUE;
+  const blackEndgame = blackMaterial < ENDGAME_START_VALUE;
 
   const whitePosition = getPositionValue(game, Color.White, whiteEndgame);
   const blackPosition = getPositionValue(game, Color.Black, blackEndgame);
