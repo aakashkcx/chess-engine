@@ -32,12 +32,12 @@ function getMaterialValue(game: ChessGame, side: Color): number {
     material += QUEEN_VALUE * game.pieceCount[ColorPiece.WhiteQueen];
     material += KING_VALUE * game.pieceCount[ColorPiece.WhiteKing];
   } else {
-    material += PAWN_VALUE * game.pieceCount[ColorPiece.WhitePawn];
-    material += KNIGHT_VALUE * game.pieceCount[ColorPiece.WhiteKnight];
-    material += BISHOP_VALUE * game.pieceCount[ColorPiece.WhiteBishop];
-    material += ROOK_VALUE * game.pieceCount[ColorPiece.WhiteRook];
-    material += QUEEN_VALUE * game.pieceCount[ColorPiece.WhiteQueen];
-    material += KING_VALUE * game.pieceCount[ColorPiece.WhiteKing];
+    material += PAWN_VALUE * game.pieceCount[ColorPiece.BlackPawn];
+    material += KNIGHT_VALUE * game.pieceCount[ColorPiece.BlackKnight];
+    material += BISHOP_VALUE * game.pieceCount[ColorPiece.BlackBishop];
+    material += ROOK_VALUE * game.pieceCount[ColorPiece.BlackRook];
+    material += QUEEN_VALUE * game.pieceCount[ColorPiece.BlackQueen];
+    material += KING_VALUE * game.pieceCount[ColorPiece.BlackKing];
   }
   return material;
 }
