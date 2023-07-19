@@ -35,6 +35,11 @@ export class Search {
   nodes: number = 0;
 
   /**
+   * The starting game ply.
+   */
+  startPly: number = 0;
+
+  /**
    * The principal variation table.
    * Key: A zobrist hash value for a board position.
    * Value: The best move found.
@@ -60,6 +65,7 @@ export class Search {
     this.bestMove = NO_MOVE;
     this.bestScore = 0;
     this.nodes = 0;
+    this.startPly = game.ply;
     this.pvTable.clear();
 
     const score = this.alphaBeta(depth, -Infinity, Infinity);
@@ -83,6 +89,8 @@ export class Search {
     if (depth === 0) return this.quiescence(alpha, beta);
 
     this.nodes++;
+
+    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
     const moves = generateMoves(game);
 
@@ -117,6 +125,8 @@ export class Search {
     const { game } = this;
 
     this.nodes++;
+
+    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
     const standScore = evaluate(game);
     if (standScore >= beta) return beta;
