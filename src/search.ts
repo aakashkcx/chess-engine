@@ -74,4 +74,14 @@ export class Search {
 
     return this.bestScore;
   }
+
+  /**
+   * Perform a quiescence search.
+   * @param alpha The alpha value (minimum score).
+   * @param beta The beta value (maximum score).
+   * @returns The best score.
+   */
+  quiescence(alpha: number, beta: number): number {
+    return 0;
+  }
 }
