@@ -85,11 +85,14 @@ export class Search {
     this.nodes++;
 
     const moves = generateMoves(game);
+
     for (const move of moves) {
       const valid = game.makeMove(move);
       if (!valid) continue;
 
       const score = -this.alphaBeta(depth - 1, -beta, -alpha);
+
+      game.takeBack();
 
       // Fail hard beta-cutoff (move is too good).
       if (score >= beta) return beta;
@@ -99,8 +102,6 @@ export class Search {
         alpha = score;
         this.pvTable.set(game.hash, move);
       }
-
-      game.takeBack();
     }
 
     return alpha;
