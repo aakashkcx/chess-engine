@@ -18,7 +18,7 @@ import { makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
 import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
-import { Search } from "./search";
+import { Search } from "./search/search";
 import { State } from "./state";
 import { toString } from "./string";
 
