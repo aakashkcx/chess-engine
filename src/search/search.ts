@@ -5,8 +5,14 @@ import { generateCaptures, generateMoves } from "../movegen";
 import { evaluate } from "./evaluation";
 import { orderMoves } from "./moveordering";
 
+/** The default search time in milliseconds. */
+const DEFAULT_TIME_MS = 1000;
+
 /** The maximum search depth. */
 const MAX_DEPTH = 32;
+
+/** The number of nodes to evaluate between time checks (^2 - 1). */
+const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
 /** The value of a checkmate. */
 const CHECKMATE_VALUE = 100000;
@@ -36,9 +42,24 @@ export class Search {
   nodes: number = 0;
 
   /**
+   * The search time in milliseconds.
+   */
+  timeMS: number = DEFAULT_TIME_MS;
+
+  /**
+   * The stop search flag.
+   */
+  stop: boolean = true;
+
+  /**
    * The starting game ply.
    */
   startPly: number = 0;
+
+  /**
+   * The search starting time in milliseconds.
+   */
+  startTimeMS: number = 0;
 
   /**
    * The principal variation table.
@@ -57,10 +78,10 @@ export class Search {
 
   /**
    * Search for the best move.
-   * @param depth The search depth.
+   * @param timeMS The search time in milliseconds, default 1000 ms.
    * @returns The best move.
    */
-  search(depth: number = 3): Move {
+  search(timeMS: number = DEFAULT_TIME_MS): Move {
     const { game } = this;
 
     this.bestMove = NO_MOVE;
@@ -69,10 +90,23 @@ export class Search {
     this.startPly = game.ply;
     this.pvTable.clear();
 
-    const score = this.alphaBeta(depth, -Infinity, Infinity);
-    this.bestScore = score;
-    const move = this.pvTable.get(game.hash);
-    if (move) this.bestMove = move;
+    this.timeMS = timeMS;
+    this.startTimeMS = performance.now();
+
+    this.stop = false;
+
+    for (let depth = 0; depth <= MAX_DEPTH; depth++) {
+      const score = this.alphaBeta(depth, -Infinity, Infinity);
+
+      // If search stopped, ignore partial answer.
+      if (this.stop) break;
+
+      this.bestScore = score;
+      const move = this.pvTable.get(game.hash);
+      if (move) this.bestMove = move;
+    }
+
+    this.stop = true;
 
     return this.bestMove;
   }
@@ -86,6 +120,9 @@ export class Search {
    */
   alphaBeta(depth: number, alpha: number, beta: number): number {
     const { game } = this;
+
+    this._checkTime();
+    if (this.stop) return 0;
 
     if (depth === 0) return this.quiescence(alpha, beta);
 
@@ -105,6 +142,8 @@ export class Search {
       const score = -this.alphaBeta(depth - 1, -beta, -alpha);
 
       game.takeBack();
+
+      if (this.stop) return 0;
 
       // Fail hard beta-cutoff (move is too good).
       if (score >= beta) return beta;
@@ -128,6 +167,9 @@ export class Search {
   quiescence(alpha: number, beta: number): number {
     const { game } = this;
 
+    this._checkTime();
+    if (this.stop) return 0;
+
     this.nodes++;
 
     if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
@@ -149,6 +191,8 @@ export class Search {
 
       game.takeBack();
 
+      if (this.stop) return 0;
+
       // Fail hard beta-cutoff (move is too good).
       if (score >= beta) return beta;
 
@@ -160,5 +204,11 @@ export class Search {
     }
 
     return alpha;
+  }
+
+  _checkTime() {
+    if (this.nodes & NUM_NODES_TIME_CHECK) return;
+    // If elapsed time > search time, set stop search flag.
+    if (performance.now() - this.startTimeMS > this.timeMS) this.stop = true;
   }
 }

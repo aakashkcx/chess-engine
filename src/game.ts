@@ -318,12 +318,12 @@ export class ChessGame {
 
   /**
    * Search for the best move.
-   * @param depth The search depth.
+   * @param timeMS The search time in milliseconds, default 1000 ms.
    * @returns The best move.
    */
-  search(depth: number = 3): Move {
+  search(timeMS?: number): Move {
     if (!this._search) this._search = new Search(this);
-    return this._search.search(depth);
+    return this._search.search(timeMS);
   }
 
   /**
