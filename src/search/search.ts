@@ -1,8 +1,9 @@
+import { ChessGame } from "../game";
+import { Hash } from "../hash";
+import { Move, NO_MOVE } from "../move";
+import { generateCaptures, generateMoves } from "../movegen";
 import { evaluate } from "./evaluation";
-import { ChessGame } from "./game";
-import { Hash } from "./hash";
-import { Move, NO_MOVE } from "./move";
-import { generateCaptures, generateMoves } from "./movegen";
+import { orderMoves } from "./moveordering";
 
 /** The maximum search depth. */
 const MAX_DEPTH = 32;
@@ -94,6 +95,9 @@ export class Search {
 
     const moves = generateMoves(game);
 
+    const pvMove = this.pvTable.get(game.hash);
+    orderMoves(game, moves, pvMove);
+
     for (const move of moves) {
       const valid = game.makeMove(move);
       if (!valid) continue;
@@ -133,6 +137,9 @@ export class Search {
     if (standScore > alpha) alpha = standScore;
 
     const moves = generateCaptures(game);
+
+    const pvMove = this.pvTable.get(game.hash);
+    orderMoves(game, moves, pvMove);
 
     for (const move of moves) {
       const valid = game.makeMove(move);

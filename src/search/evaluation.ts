@@ -1,5 +1,5 @@
-import { index120To64, mirror120 } from "./board";
-import { ChessGame } from "./game";
+import { index120To64, mirror120 } from "../board";
+import { ChessGame } from "../game";
 import {
   BISHOP_VALUE,
   Color,
@@ -9,7 +9,7 @@ import {
   PAWN_VALUE,
   QUEEN_VALUE,
   ROOK_VALUE,
-} from "./piece";
+} from "../piece";
 
 // TODO: Change endgame from boolean to coefficient.
 
