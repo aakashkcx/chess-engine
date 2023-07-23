@@ -1,6 +1,6 @@
 import { ChessGame } from "../game";
 import { Hash } from "../hash";
-import { Move, NO_MOVE } from "../move";
+import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
 import { generateCaptures, generateMoves } from "../movegen";
 import { evaluate } from "./evaluation";
 import { orderMoves } from "./moveordering";
@@ -19,6 +19,8 @@ const CHECKMATE_VALUE = 100000;
 
 /** The value of a stalemate. */
 const STALEMATE_VALUE = 0;
+
+// TODO: Rename valid to legal.
 
 export class Search {
   /**
@@ -95,7 +97,9 @@ export class Search {
 
     this.stop = false;
 
-    for (let depth = 0; depth <= MAX_DEPTH; depth++) {
+    this._logStart(timeMS);
+
+    for (let depth = 1; depth <= MAX_DEPTH; depth++) {
       const score = this.alphaBeta(depth, -Infinity, Infinity);
 
       // If search stopped, ignore partial answer.
@@ -104,9 +108,13 @@ export class Search {
       this.bestScore = score;
       const move = this.pvTable.get(game.hash);
       if (move) this.bestMove = move;
+
+      this._logIteration(depth);
     }
 
     this.stop = true;
+
+    this._logEnd();
 
     return this.bestMove;
   }
@@ -210,5 +218,42 @@ export class Search {
     if (this.nodes & NUM_NODES_TIME_CHECK) return;
     // If elapsed time > search time, set stop search flag.
     if (performance.now() - this.startTimeMS > this.timeMS) this.stop = true;
+  }
+
+  _getMoveList(depth: number): Move[] {
+    const { game } = this;
+    const moves: Move[] = [];
+
+    for (let i = 0; i < depth; i++) {
+      const move = this.pvTable.get(game.hash);
+      if (!move) break;
+      const valid = game.makeMove(move);
+      if (!valid) break;
+      moves[i] = move;
+    }
+
+    while (game.ply > this.startPly) game.takeBack();
+
+    console.log;
+
+    return moves;
+  }
+
+  _logStart(timeMS: number) {
+    const output = `Searching (${timeMS} ms) ...`;
+    console.log(output);
+  }
+
+  _logIteration(depth: number) {
+    const moveList = this._getMoveList(depth).map(moveStringMin);
+    const bestMove = moveString(this.bestMove);
+    const output = `Depth ${depth}: ${bestMove} / ${this.bestScore}\t(${this.nodes} nodes)\t${moveList} `;
+    console.log(output);
+  }
+
+  _logEnd() {
+    const bestMove = moveString(this.bestMove);
+    const output = `Best Move: ${bestMove}, Best Score: ${this.bestScore}, Total Nodes: ${this.nodes}`;
+    console.log(output);
   }
 }

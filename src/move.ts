@@ -141,16 +141,16 @@ export function isPromotion(flag: MoveFlag): boolean {
   return (flag & MoveFlag.PromoteKnight) !== 0;
 }
 
+// TODO: UPDATE TESTS
+
 /**
  * Get a string representation of a move.
  * @param move The move value.
- * @param onlySquares Whether to include only the squares or other move properties.
  * @returns The string representation.
  */
-export function moveString(move: Move, onlySquares: boolean = false): string {
+export function moveString(move: Move): string {
   const start = (move & START_MASK) >> START_SHIFT;
   const target = (move & TARGET_MASK) >> TARGET_SHIFT;
-  if (onlySquares) return string120(start) + string120(target);
   const captured = (move & CAPTURED_MASK) >> CAPTURED_SHIFT;
   const flag = (move & FLAG_MASK) >> FLAG_SHIFT;
   return (
@@ -159,4 +159,15 @@ export function moveString(move: Move, onlySquares: boolean = false): string {
     (captured ? PieceName[captured] : "") +
     (flag ? MoveFlag[flag] : "")
   );
+}
+
+/**
+ * Get a minimal string representation of a move.
+ * @param move The move value.
+ * @returns The minimal string representation.
+ */
+export function moveStringMin(move: Move): string {
+  const start = (move & START_MASK) >> START_SHIFT;
+  const target = (move & TARGET_MASK) >> TARGET_SHIFT;
+  return string120(start) + string120(target);
 }
