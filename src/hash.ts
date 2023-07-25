@@ -4,34 +4,26 @@ import { ChessGame } from "./game";
 import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
 
 /**
- * The largest possible integer for bitwise operations.
- */
-const LARGEST_INT = 2147483647; // 2 ** 31 - 1
-
-/**
  * A zobrist hash value for a chess game.
  */
 export type Hash = number;
 
-/**
- * An array of hash values for each color piece and index on the board.
- */
+/** The largest possible integer for bitwise operations. */
+const LARGEST_INT = 2147483647; // 2 ** 31 - 1
+
+/** An array of hash values for each color piece and index on the board. */
 let PIECE_INDEX_HASH: Hash[][] = [];
 
-/**
- * A hash value for the black color to move.
- */
+/** A hash value for the black color to move. */
 let COLOR_HASH: Hash = 0;
 
-/**
- * An array of hash values for each castling right.
- */
+/** An array of hash values for each castling right. */
 let CASTLING_RIGHTS_HASH: Hash[] = [];
 
-/**
- * An array of hash values for each en passant target square.
- */
+/** An array of hash values for each en passant target square. */
 let EN_PASSANT_HASH: Hash[] = [];
+
+initHashes();
 
 /**
  * Update the zobrist hash value for a color piece and index.
@@ -72,8 +64,6 @@ export function hashCastlingRights(hash: Hash, castlingRights: CastlingRights) {
 export function hashEnPassant(hash: Hash, index120: Index120) {
   return (hash ^= EN_PASSANT_HASH[index120]);
 }
-
-initHashes();
 
 /**
  * Initialise the zobrist hash values.

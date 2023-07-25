@@ -39,8 +39,14 @@ export enum ColorPiece {
   BlackKing,
 }
 
+/**
+ * Represents a null chess piece.
+ */
 export const NO_PIECE: ColorPiece = ColorPiece.Empty;
 
+/**
+ * All the chess pieces, with color.
+ */
 export const PIECES = [
   ColorPiece.Empty,
   ColorPiece.WhitePawn,

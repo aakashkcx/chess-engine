@@ -11,7 +11,7 @@ const DEFAULT_TIME_MS = 1000;
 /** The maximum search depth. */
 const MAX_DEPTH = 32;
 
-/** The number of nodes to evaluate between time checks (^2 - 1). */
+/** The number of nodes to evaluate between time checks (2 ** n - 1). */
 const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
 /** The value of a checkmate. */
@@ -20,6 +20,7 @@ const CHECKMATE_VALUE = 100000;
 /** The value of a stalemate. */
 const STALEMATE_VALUE = 0;
 
+/** A search controller. */
 export class Search {
   /**
    * The chess game.
@@ -37,7 +38,7 @@ export class Search {
   bestScore: number = 0;
 
   /**
-   * The number of nodes searched.
+   * The number of nodes evaluated.
    */
   nodes: number = 0;
 
@@ -212,12 +213,21 @@ export class Search {
     return alpha;
   }
 
+  /**
+   * Check if the search time has elapsed.
+   * Only performs the check after evaluating a certain number of nodes.
+   */
   _checkTime() {
     if (this.nodes & NUM_NODES_TIME_CHECK) return;
     // If elapsed time > search time, set stop search flag.
     if (performance.now() - this.startTimeMS > this.timeMS) this.stop = true;
   }
 
+  /**
+   * Get the list of best moves found.
+   * @param depth The depth of the move list.
+   * @returns A list of moves.
+   */
   _getMoveList(depth: number): Move[] {
     const { game } = this;
     const moves: Move[] = [];
@@ -237,11 +247,19 @@ export class Search {
     return moves;
   }
 
+  /**
+   * Log info at the start of search.
+   * @param timeMS The search time in milliseconds.
+   */
   _logStart(timeMS: number) {
     const output = `Searching (${timeMS} ms) ...`;
     console.log(output);
   }
 
+  /**
+   * Log info after completing an iteration.
+   * @param depth The search depth.
+   */
   _logIteration(depth: number) {
     const moveList = this._getMoveList(depth).map(moveStringMin);
     const bestMove = moveString(this.bestMove);
@@ -249,6 +267,9 @@ export class Search {
     console.log(output);
   }
 
+  /**
+   * Log info at the end of search.
+   */
   _logEnd() {
     const bestMove = moveString(this.bestMove);
     const time = (performance.now() - this.startTimeMS).toFixed(3);

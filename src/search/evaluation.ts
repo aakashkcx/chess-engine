@@ -31,7 +31,6 @@ export function evaluate(game: ChessGame, side?: Color): number {
 
   const whiteEndgame = whiteMaterial < ENDGAME_START_VALUE;
   const blackEndgame = blackMaterial < ENDGAME_START_VALUE;
-
   const whitePosition = positionValue(game, Color.White, whiteEndgame);
   const blackPosition = positionValue(game, Color.Black, blackEndgame);
 
