@@ -141,8 +141,6 @@ export function isPromotion(flag: MoveFlag): boolean {
   return (flag & MoveFlag.PromoteKnight) !== 0;
 }
 
-// TODO: UPDATE TESTS
-
 /**
  * Get a string representation of a move.
  * @param move The move value.
