@@ -29,6 +29,22 @@ export const ALL_CASTLE_RIGHTS: CastlingRights =
   (1 << CastleRight.BlackQueen);
 
 /**
+ * The castling rights on the king size.
+ */
+export const KING_SIDE_CASTLE_RIGHT = [
+  CastleRight.WhiteKing,
+  CastleRight.BlackKing,
+];
+
+/**
+ * The castling rights on the queen size.
+ */
+export const QUEEN_SIDE_CASTLE_RIGHT = [
+  CastleRight.WhiteQueen,
+  CastleRight.BlackQueen,
+];
+
+/**
  * Get the castling availability of a castle right type.
  * @param castlingRights The castling rights.
  * @param castleRight The castle right type.

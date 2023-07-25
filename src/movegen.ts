@@ -1,7 +1,17 @@
-import { Index120, OFF_BOARD, Square120, getRank120 } from "./board";
-import { CastleRight } from "./castlingrights";
+import {
+  Index120,
+  KING_SQUARE,
+  OFF_BOARD,
+  PAWN_PROMOTION_RANK,
+  PAWN_START_RANK,
+  getRank120,
+} from "./board";
+import {
+  KING_SIDE_CASTLE_RIGHT,
+  QUEEN_SIDE_CASTLE_RIGHT,
+} from "./castlingrights";
 import { ChessGame } from "./game";
-import { Move, MoveFlag, createMove } from "./move";
+import { Move, MoveFlag, PROMOTION_FLAGS, createMove } from "./move";
 import {
   Color,
   ColorPiece,
@@ -13,15 +23,34 @@ import {
 } from "./piece";
 
 /** The knight piece move offsets. */
-const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12];
+export const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12];
+
 /** The bishop piece move offsets. */
-const BISHOP_OFFSETS = [9, 11, -9, -11];
+export const BISHOP_OFFSETS = [9, 11, -9, -11];
+
 /** The rook piece move offsets. */
-const ROOK_OFFSETS = [10, 1, -10, -1];
+export const ROOK_OFFSETS = [10, 1, -10, -1];
+
 /** The queen piece move offsets. */
-const QUEEN_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+export const QUEEN_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+
 /** The king piece move offsets. */
-const KING_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+export const KING_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+
+/** The pawn piece move offsets. */
+export const PAWN_MOVE_OFFSET = [10, -10];
+
+/** The pawn piece behind offsets. */
+export const PAWN_BEHIND_OFFSET = [-10, 10];
+
+/** The pawn piece double move offsets. */
+export const PAWN_DOUBLE_OFFSET = [20, -20];
+
+/** The pawn piece capture move offsets. */
+export const PAWN_CAPTURE_OFFSETS = [
+  [9, 11],
+  [-11, -9],
+];
 
 /** The non sliding pieces move offsets (knight & king). */
 const NON_SLIDING_PIECES_OFFSETS: [Piece, number[]][] = [
@@ -35,37 +64,6 @@ const SLIDING_PIECES_OFFSETS: [Piece, number[]][] = [
   [Piece.Rook, ROOK_OFFSETS],
   [Piece.Queen, QUEEN_OFFSETS],
 ];
-
-/** The pawn piece move offsets. */
-export const PAWN_MOVE_OFFSET = [10, -10];
-/** The pawn piece behind offsets. */
-const PAWN_BEHIND_OFFSET = [-10, 10];
-/** The pawn piece double move offsets. */
-const PAWN_DOUBLE_OFFSET = [20, -20];
-/** The pawn piece capture move offsets. */
-const PAWN_CAPTURE_OFFSETS = [
-  [9, 11],
-  [-11, -9],
-];
-
-/** The pawn piece starting rank. */
-const PAWN_START_RANK = [1, 6];
-/** The pawn piece promotion rank. */
-const PAWN_PROMOTION_RANK = [6, 1];
-/** The pawn piece promotion flags. */
-const PAWN_PROMOTION_FLAGS = [
-  MoveFlag.PromoteQueen,
-  MoveFlag.PromoteKnight,
-  MoveFlag.PromoteRook,
-  MoveFlag.PromoteBishop,
-];
-
-/** The king piece staring square index. */
-const KING_SQUARE = [Square120.E1, Square120.E8];
-/** The castling rights on the king size. */
-const KING_SIDE_RIGHT = [CastleRight.WhiteKing, CastleRight.BlackKing];
-/** The castling rights on the queen size. */
-const QUEEN_SIDE_RIGHT = [CastleRight.WhiteQueen, CastleRight.BlackQueen];
 
 /**
  * Generate pseudo-legal moves on the chessboard.
@@ -93,7 +91,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     captured = game.pieceBoard[target];
     if (captured === NO_PIECE) {
       if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-        for (const promotionFlag of PAWN_PROMOTION_FLAGS)
+        for (const promotionFlag of PROMOTION_FLAGS)
           moves.push(createMove(start, target, NO_PIECE, promotionFlag));
       } else moves.push(createMove(start, target));
       target = start + PAWN_DOUBLE_OFFSET[color];
@@ -106,7 +104,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
       captured = game.pieceBoard[target];
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-          for (const promotionFlag of PAWN_PROMOTION_FLAGS)
+          for (const promotionFlag of PROMOTION_FLAGS)
             moves.push(createMove(start, target, captured, promotionFlag));
         } else moves.push(createMove(start, target, captured));
       }
@@ -158,7 +156,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   piece = createPiece(color, Piece.King);
   start = KING_SQUARE[color];
   if (
-    game.getCastleRight(KING_SIDE_RIGHT[color]) &&
+    game.getCastleRight(KING_SIDE_CASTLE_RIGHT[color]) &&
     game.pieceBoard[start] === piece &&
     game.pieceBoard[start + 1] === NO_PIECE &&
     game.pieceBoard[start + 2] === NO_PIECE &&
@@ -169,7 +167,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     moves.push(createMove(start, start + 2, NO_PIECE, MoveFlag.Castle));
   }
   if (
-    game.getCastleRight(QUEEN_SIDE_RIGHT[color]) &&
+    game.getCastleRight(QUEEN_SIDE_CASTLE_RIGHT[color]) &&
     game.pieceBoard[start] === piece &&
     game.pieceBoard[start - 1] === NO_PIECE &&
     game.pieceBoard[start - 2] === NO_PIECE &&
@@ -213,7 +211,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
       captured = game.pieceBoard[target];
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-          for (const promotionFlag of PAWN_PROMOTION_FLAGS)
+          for (const promotionFlag of PROMOTION_FLAGS)
             moves.push(createMove(start, target, captured, promotionFlag));
         } else moves.push(createMove(start, target, captured));
       }

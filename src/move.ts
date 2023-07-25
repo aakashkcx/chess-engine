@@ -32,7 +32,20 @@ export enum MoveFlag {
   PromoteQueen,
 }
 
+/**
+ * Represents a null move.
+ */
 export const NO_MOVE: Move = 0;
+
+/**
+ * The promotion move flags.
+ */
+export const PROMOTION_FLAGS = [
+  MoveFlag.PromoteQueen,
+  MoveFlag.PromoteKnight,
+  MoveFlag.PromoteRook,
+  MoveFlag.PromoteBishop,
+];
 
 /** The move value binary mask for the start square 120 index (7 bits). */
 const START_MASK = 0b000000000000001111111;

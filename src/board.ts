@@ -71,6 +71,21 @@ export enum Square120 {
 }
 
 /**
+ * The king piece staring square.
+ */
+export const KING_SQUARE = [Square120.E1, Square120.E8];
+
+/**
+ * The pawn piece starting rank.
+ */
+export const PAWN_START_RANK = [1, 6];
+
+/**
+ * The pawn piece promotion rank.
+ */
+export const PAWN_PROMOTION_RANK = [6, 1];
+
+/**
  * Convert a 64 index to a 120 index.
  * @param index64 The 64 index.
  * @returns The 120 index.
