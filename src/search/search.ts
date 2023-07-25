@@ -251,7 +251,8 @@ export class Search {
 
   _logEnd() {
     const bestMove = moveString(this.bestMove);
-    const output = `Best Move: ${bestMove}, Best Score: ${this.bestScore}, Total Nodes: ${this.nodes}`;
+    const time = (performance.now() - this.startTimeMS).toFixed(3);
+    const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${this.bestScore}`;
     console.log(output);
   }
 }
