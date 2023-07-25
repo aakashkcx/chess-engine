@@ -20,8 +20,6 @@ const CHECKMATE_VALUE = 100000;
 /** The value of a stalemate. */
 const STALEMATE_VALUE = 0;
 
-// TODO: Rename valid to legal.
-
 export class Search {
   /**
    * The chess game.
@@ -144,8 +142,8 @@ export class Search {
     orderMoves(game, moves, pvMove);
 
     for (const move of moves) {
-      const valid = game.makeMove(move);
-      if (!valid) continue;
+      const legal = game.makeMove(move);
+      if (!legal) continue;
 
       const score = -this.alphaBeta(depth - 1, -beta, -alpha);
 
@@ -192,8 +190,8 @@ export class Search {
     orderMoves(game, moves, pvMove);
 
     for (const move of moves) {
-      const valid = game.makeMove(move);
-      if (!valid) continue;
+      const legal = game.makeMove(move);
+      if (!legal) continue;
 
       const score = -this.quiescence(-beta, -alpha);
 
@@ -227,8 +225,8 @@ export class Search {
     for (let i = 0; i < depth; i++) {
       const move = this.pvTable.get(game.hash);
       if (!move) break;
-      const valid = game.makeMove(move);
-      if (!valid) break;
+      const legal = game.makeMove(move);
+      if (!legal) break;
       moves[i] = move;
     }
 

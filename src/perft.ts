@@ -7,8 +7,8 @@ export function perft(game: ChessGame, depth: number): number {
   let nodes = 0;
   for (const move of moves) {
     try {
-      const valid = game.makeMove(move);
-      if (!valid) continue;
+      const legal = game.makeMove(move);
+      if (!legal) continue;
       nodes += perft(game, depth - 1);
       game.takeBack();
     } catch (error) {
@@ -26,8 +26,8 @@ export function perftDivide(game: ChessGame, depth: number): number {
   let nodes = 0;
   for (const move of moves) {
     try {
-      const valid = game.makeMove(move);
-      if (!valid) continue;
+      const legal = game.makeMove(move);
+      if (!legal) continue;
       const newNodes = perft(game, depth - 1);
       nodes += newNodes;
       game.takeBack();
