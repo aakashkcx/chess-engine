@@ -14,7 +14,7 @@ import {
   hashEnPassant,
   hashPiece,
 } from "./hash";
-import { makeMove, takeBack } from "./makemove";
+import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
 import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
@@ -26,6 +26,7 @@ import { toString } from "./string";
   TODO: Create enum GameState { Check, Checkmate, Stalemate }.
 */
 
+/** A chess game. */
 export class ChessGame {
   /**
    * A 10*12 array storing the occupancy of each square on the board.
@@ -288,13 +289,23 @@ export class ChessGame {
   }
 
   /**
-   * Generate pseudo-legal moves on the chessboard.
+   * Generate all legal or pseudo-legal moves on the chessboard.
    * @param side The side from which to generate moves.
-   *  Defaults to the current active color of the game.
-   * @returns An array of pseudo-legal moves.
+   * @param legal Whether to generate only legal moves or all pseudo-legal moves.
+   * @returns An array of moves.
    */
-  generateMoves(side?: Color): Move[] {
-    return generateMoves(this, side);
+  generateMoves(side?: Color, legal: boolean = true): Move[] {
+    const moves = generateMoves(this, side);
+    return legal ? moves.filter(this.isLegalMove, this) : moves;
+  }
+
+  /**
+   * Check whether a move is legal.
+   * @param move The move value.
+   * @returns Whether the move is legal.
+   */
+  isLegalMove(move: Move): boolean {
+    return isLegalMove(this, move);
   }
 
   /**
