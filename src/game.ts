@@ -24,9 +24,6 @@ import { toString } from "./string";
 
 /*
   TODO: Create enum GameState { Check, Checkmate, Stalemate }.
-
-  TODO: Create class Search {}.
-  - Link Game to singleton Search.
 */
 
 export class ChessGame {
