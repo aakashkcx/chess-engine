@@ -1,5 +1,5 @@
 import { ChessGame } from "./game";
-import { moveString } from "./move";
+import { moveString, moveStringMin } from "./move";
 import { generateMoves } from "./movegen";
 
 export function perft(game: ChessGame, depth: number): number {
@@ -32,7 +32,7 @@ export function perftDivide(game: ChessGame, depth: number): number {
       const newNodes = perft(game, depth - 1);
       nodes += newNodes;
       game.takeBack();
-      console.log(`${moveString(move, true)}: ${newNodes}`);
+      console.log(`${moveStringMin(move)}: ${newNodes}`);
     } catch (error) {
       console.log(depth, moveString(move));
       throw error;
