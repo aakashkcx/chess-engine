@@ -20,6 +20,14 @@ const CHECKMATE_VALUE = 100000;
 /** The value of a stalemate. */
 const STALEMATE_VALUE = 0;
 
+/* 
+  TODO: Add Checkmate, Stalemate, Draw
+  TODO: Check for repetitions, transpositions
+  TODO: Count legal moves
+  TODO: If in check, increase search depth
+  TODO: Add score till checkmate
+*/
+
 /** A search controller. */
 export class Search {
   /**
