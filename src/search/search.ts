@@ -107,6 +107,7 @@ export class Search {
       this.bestScore = score;
       const move = this.pvTable.get(game.hash);
       if (move) this.bestMove = move;
+      else break;
 
       this._logIteration(depth);
     }
