@@ -23,6 +23,7 @@ let CASTLING_RIGHTS_HASH: Hash[] = [];
 /** An array of hash values for each en passant target square. */
 let EN_PASSANT_HASH: Hash[] = [];
 
+// Initialise the hash values.
 initHashes();
 
 /**
@@ -66,27 +67,6 @@ export function hashEnPassant(hash: Hash, index120: Index120) {
 }
 
 /**
- * Initialise the zobrist hash values.
- */
-export function initHashes() {
-  PIECE_INDEX_HASH = PIECES.map(() => Array(120).fill(0));
-  COLOR_HASH = randomBits();
-  CASTLING_RIGHTS_HASH = Array(16).fill(0);
-  EN_PASSANT_HASH = Array(120).fill(0);
-
-  for (let i = 0; i < 16; i++) CASTLING_RIGHTS_HASH[i] = randomBits();
-  CASTLING_RIGHTS_HASH[NO_CASTLE_RIGHTS] = 0;
-
-  for (let index64 = 0; index64 < 64; index64++) {
-    const index120 = index64To120(index64);
-    for (const piece of PIECES)
-      PIECE_INDEX_HASH[piece][index120] = randomBits();
-    EN_PASSANT_HASH[index120] = randomBits();
-  }
-  EN_PASSANT_HASH[NO_SQUARE] = 0;
-}
-
-/**
  * Generate a zobrist hash value for a chess game.
  * @param game The chess game.
  * @returns The zobrist hash value for the chess game.
@@ -108,6 +88,27 @@ export function generateHash(game: ChessGame): Hash {
   hash ^= EN_PASSANT_HASH[game.enPassant];
 
   return hash;
+}
+
+/**
+ * Initialise the zobrist hash values.
+ */
+export function initHashes() {
+  PIECE_INDEX_HASH = PIECES.map(() => Array(120).fill(0));
+  COLOR_HASH = randomBits();
+  CASTLING_RIGHTS_HASH = Array(16).fill(0);
+  EN_PASSANT_HASH = Array(120).fill(0);
+
+  for (let i = 0; i < 16; i++) CASTLING_RIGHTS_HASH[i] = randomBits();
+  CASTLING_RIGHTS_HASH[NO_CASTLE_RIGHTS] = 0;
+
+  for (let index64 = 0; index64 < 64; index64++) {
+    const index120 = index64To120(index64);
+    for (const piece of PIECES)
+      PIECE_INDEX_HASH[piece][index120] = randomBits();
+    EN_PASSANT_HASH[index120] = randomBits();
+  }
+  EN_PASSANT_HASH[NO_SQUARE] = 0;
 }
 
 /**
