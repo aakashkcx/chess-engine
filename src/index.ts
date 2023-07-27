@@ -24,7 +24,6 @@ export {
   stringTo120,
   stringTo64,
 } from "./board";
-export { CastleRight } from "./castlingrights";
 export { ChessGame } from "./game";
 export {
   Move,
