@@ -2,7 +2,14 @@ import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
 import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 import { ChessGame } from "./game";
 import { generateHash } from "./hash";
-import { Color, ColorPiece, NO_PIECE, PieceName } from "./piece";
+import {
+  Color,
+  ColorPiece,
+  NO_PIECE,
+  Piece,
+  PieceName,
+  createPiece,
+} from "./piece";
 
 /**
  * The starting Forsyth–Edwards Notation (FEN) string.
@@ -129,4 +136,9 @@ export function setFEN(game: ChessGame, fen: string) {
 
   // Generate the hash.
   game.hash = generateHash(game);
+
+  // Check whether the king is in check.
+  const king = createPiece(game.activeColor, Piece.King);
+  const kingIndex = game.pieceLists[king][0];
+  game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
 }

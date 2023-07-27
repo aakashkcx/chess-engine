@@ -40,6 +40,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   game.ply++;
 
   const color = game.activeColor;
+  const opponent = game.activeColor ^ 1;
 
   game.halfMoves++;
   if (color === Color.Black) game.fullMoves++;
@@ -106,12 +107,16 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 
   game.switchColor();
 
-  // TODO: Create inCheck check.
-  const kingIndex = game.pieceLists[createPiece(color, Piece.King)][0];
-  if (game.isSquareAttacked(kingIndex)) {
+  const king = createPiece(color, Piece.King);
+  const kingIndex = game.pieceLists[king][0];
+  if (game.isSquareAttacked(kingIndex, color)) {
     game.takeBack();
     return false;
   }
+
+  const opponentKing = createPiece(opponent, Piece.King);
+  const opponentKingIndex = game.pieceLists[opponentKing][0];
+  game.inCheck = game.isSquareAttacked(opponentKingIndex, opponent);
 
   return true;
 }
@@ -163,4 +168,8 @@ export function takeBack(game: ChessGame) {
     game.removePiece(start);
     game.addPiece(start, createPiece(color, Piece.Pawn));
   }
+
+  const king = createPiece(color, Piece.King);
+  const kingIndex = game.pieceLists[king][0];
+  game.inCheck = game.isSquareAttacked(kingIndex, color);
 }

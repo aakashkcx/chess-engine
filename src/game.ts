@@ -74,6 +74,11 @@ export class ChessGame {
   fullMoves: number = 1;
 
   /**
+   * Whether the king of the active color is in check.
+   */
+  inCheck: boolean = false;
+
+  /**
    * The number of plies played.
    */
   ply: number = 0;
@@ -130,6 +135,7 @@ export class ChessGame {
     this.enPassant = 0;
     this.halfMoves = 0;
     this.fullMoves = 1;
+    this.inCheck = false;
     this.ply = 0;
     this.hash = 0;
     this.moveList = [];
