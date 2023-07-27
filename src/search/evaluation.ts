@@ -13,6 +13,12 @@ import {
 
 // TODO: Change endgame from boolean to coefficient.
 
+/** The value of a checkmate. */
+export const CHECKMATE_VALUE = 100000;
+
+/** The value of a stalemate. */
+export const STALEMATE_VALUE = 0;
+
 /** The material value where endgame starts. */
 const ENDGAME_START_VALUE =
   4 * PAWN_VALUE + 2 * BISHOP_VALUE + 2 * ROOK_VALUE + KING_VALUE;

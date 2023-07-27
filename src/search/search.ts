@@ -2,7 +2,7 @@ import { ChessGame } from "../game";
 import { Hash } from "../hash";
 import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
 import { generateCaptures, generateMoves } from "../movegen";
-import { evaluate } from "./evaluation";
+import { CHECKMATE_VALUE, STALEMATE_VALUE, evaluate } from "./evaluation";
 import { orderMoves } from "./moveordering";
 
 /** The default search time in milliseconds. */
@@ -14,18 +14,9 @@ const MAX_DEPTH = 32;
 /** The number of nodes to evaluate between time checks (2 ** n - 1). */
 const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
-/** The value of a checkmate. */
-const CHECKMATE_VALUE = 100000;
-
-/** The value of a stalemate. */
-const STALEMATE_VALUE = 0;
-
 /* 
-  TODO: Add Checkmate, Stalemate, Draw
   TODO: Check for repetitions, transpositions
-  TODO: Count legal moves
-  TODO: If in check, increase search depth
-  TODO: Add score till checkmate
+  TODO: Check 50-move rule.
 */
 
 /** A search controller. */
@@ -106,6 +97,7 @@ export class Search {
 
     this._logStart(timeMS);
 
+    // Iterative deepening strategy.
     for (let depth = 1; depth <= MAX_DEPTH; depth++) {
       const score = this.alphaBeta(depth, -Infinity, Infinity);
 
@@ -139,21 +131,30 @@ export class Search {
     this._checkTime();
     if (this.stop) return 0;
 
+    // Evaluate quiet positions.
     if (depth === 0) return this.quiescence(alpha, beta);
 
     this.nodes++;
 
+    // Check if max search depth reached.
     if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
-    const moves = generateMoves(game);
+    // If in check, increase search depth.
+    if (game.inCheck) depth++;
 
+    // Generate and order moves.
+    const moves = generateMoves(game);
     const pvMove = this.pvTable.get(game.hash);
     orderMoves(game, moves, pvMove);
+
+    let mate = true;
 
     for (const move of moves) {
       const legal = game.makeMove(move);
       if (!legal) continue;
+      mate = false;
 
+      // Negamax algorithm.
       const score = -this.alphaBeta(depth - 1, -beta, -alpha);
 
       game.takeBack();
@@ -168,6 +169,13 @@ export class Search {
         alpha = score;
         this.pvTable.set(game.hash, move);
       }
+    }
+
+    // No legal moves, checkmate or stalemate.
+    if (mate) {
+      const plies = game.ply - this.startPly;
+      if (game.inCheck) return -CHECKMATE_VALUE + plies;
+      return -STALEMATE_VALUE - plies;
     }
 
     return alpha;
@@ -187,20 +195,24 @@ export class Search {
 
     this.nodes++;
 
+    // Check if max search depth reached.
     if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
+    // Standing pat score.
     const standScore = evaluate(game);
     if (standScore >= beta) return beta;
     if (standScore > alpha) alpha = standScore;
 
+    // Generate and order moves.
     const moves = generateCaptures(game);
-
     const pvMove = this.pvTable.get(game.hash);
     orderMoves(game, moves, pvMove);
 
     for (const move of moves) {
       const legal = game.makeMove(move);
       if (!legal) continue;
+
+      // Negamax algorithm.
 
       const score = -this.quiescence(-beta, -alpha);
 
@@ -279,6 +291,7 @@ export class Search {
    * Log info at the end of search.
    */
   _logEnd() {
+    // TODO: Fix when no move.
     const bestMove = moveString(this.bestMove);
     const time = (performance.now() - this.startTimeMS).toFixed(3);
     const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${this.bestScore}`;
