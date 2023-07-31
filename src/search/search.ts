@@ -2,7 +2,12 @@ import { ChessGame } from "../game";
 import { Hash } from "../hash";
 import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
 import { generateCaptures, generateMoves } from "../movegen";
-import { CHECKMATE_VALUE, STALEMATE_VALUE, evaluate } from "./evaluation";
+import {
+  CHECKMATE_VALUE,
+  DRAW_VALUE,
+  STALEMATE_VALUE,
+  evaluate,
+} from "./evaluation";
 import { orderMoves } from "./moveordering";
 
 /** The default search time in milliseconds. */
@@ -14,9 +19,12 @@ const MAX_DEPTH = 32;
 /** The number of nodes to evaluate between time checks (2 ** n - 1). */
 const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
-/*
-  TODO: Check for repetitions, transpositions
-  TODO: Check 50-move rule.
+/* 
+  TODO: Check for 50-move rule for draw.
+  TODO: Check for threefold repetition for draw.
+  TODO: Check for insufficient material for draw.
+  TODO: Check for transpositions in search.
+  TODO: Add transposition table (hash, bestMove, depth, score, type)
 */
 
 /** A search controller. */
@@ -178,6 +186,9 @@ export class Search {
       if (game.inCheck) return -CHECKMATE_VALUE + plies;
       return -STALEMATE_VALUE - plies;
     }
+
+    // Fifty-move rule.
+    if (game.halfMoves >= 100) return DRAW_VALUE;
 
     return alpha;
   }

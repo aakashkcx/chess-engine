@@ -16,8 +16,11 @@ import {
 /** The value of a checkmate. */
 export const CHECKMATE_VALUE = 100000;
 
+/** The value of a draw. */
+export const DRAW_VALUE = 0;
+
 /** The value of a stalemate. */
-export const STALEMATE_VALUE = 0;
+export const STALEMATE_VALUE = DRAW_VALUE;
 
 /** The material value where endgame starts. */
 const ENDGAME_START_VALUE =
