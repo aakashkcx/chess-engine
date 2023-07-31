@@ -216,12 +216,12 @@ export class Search {
     if (standScore > alpha) alpha = standScore;
 
     // Generate and order moves.
-    const moves = generateCaptures(game);
+    const captures = generateCaptures(game);
     const pvMove = this.pvTable.get(game.hash);
-    orderMoves(game, moves, pvMove);
+    orderMoves(game, captures, pvMove);
 
-    for (const move of moves) {
-      const legal = game.makeMove(move);
+    for (const capture of captures) {
+      const legal = game.makeMove(capture);
       if (!legal) continue;
 
       // Negamax algorithm.
@@ -238,7 +238,7 @@ export class Search {
       // Update alpha (better move found).
       if (score > alpha) {
         alpha = score;
-        this.pvTable.set(game.hash, move);
+        this.pvTable.set(game.hash, capture);
       }
     }
 
