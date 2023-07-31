@@ -14,7 +14,7 @@ const MAX_DEPTH = 32;
 /** The number of nodes to evaluate between time checks (2 ** n - 1). */
 const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
-/* 
+/*
   TODO: Check for repetitions, transpositions
   TODO: Check 50-move rule.
 */
@@ -292,7 +292,6 @@ export class Search {
    * Log info at the end of search.
    */
   _logEnd() {
-    // TODO: Fix when no move.
     const bestMove = moveString(this.bestMove);
     const time = (performance.now() - this.startTimeMS).toFixed(3);
     const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${this.bestScore}`;

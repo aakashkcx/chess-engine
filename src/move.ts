@@ -160,6 +160,8 @@ export function isPromotion(flag: MoveFlag): boolean {
  * @returns The string representation.
  */
 export function moveString(move: Move): string {
+  // TODO: Add coverage
+  if (move === NO_MOVE) return "-";
   const start = (move & START_MASK) >> START_SHIFT;
   const target = (move & TARGET_MASK) >> TARGET_SHIFT;
   const captured = (move & CAPTURED_MASK) >> CAPTURED_SHIFT;
