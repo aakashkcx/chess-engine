@@ -39,7 +39,7 @@ const HALF_MOVES_SHIFT = 11;
  * @param halfMoves The half move counter.
  * @returns The state value.
  */
-export function createState(
+export function State(
   castlingRights: CastlingRights,
   enPassant: Index120,
   halfMoves: number

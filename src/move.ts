@@ -79,7 +79,7 @@ const FLAG_SHIFT = 18;
  * @param flag The move flag.
  * @returns The move value.
  */
-export function createMove(
+export function Move(
   start: Index120,
   target: Index120,
   captured: ColorPiece = NO_PIECE,

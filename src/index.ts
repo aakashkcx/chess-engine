@@ -30,7 +30,6 @@ export {
   MoveFlag,
   NO_MOVE,
   PROMOTION_FLAGS,
-  createMove,
   getCaptured,
   getFlag,
   getMove,

@@ -1,7 +1,7 @@
 import { Index120, Square120, index64To120 } from "../src/board";
 import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
 import { ChessGame } from "../src/game";
-import { Move, MoveFlag, createMove, getStart } from "../src/move";
+import { Move, MoveFlag, getStart } from "../src/move";
 import { generateMoves, isSquareAttacked } from "../src/movegen";
 import { Color, ColorPiece } from "../src/piece";
 
@@ -411,7 +411,7 @@ describe("generateMoves() function", () => {
     test("when side specified", () => {
       game.initBoard();
       game.addPiece(Square120.D4, ColorPiece.WhitePawn);
-      expected = [createMove(Square120.D4, Square120.D5)];
+      expected = [Move(Square120.D4, Square120.D5)];
 
       moves = generateMoves(game, Color.White);
       expect(moves).toEqual(expected);
@@ -421,7 +421,7 @@ describe("generateMoves() function", () => {
 
       game.initBoard();
       game.addPiece(Square120.E5, ColorPiece.BlackPawn);
-      expected = [createMove(Square120.E5, Square120.E4)];
+      expected = [Move(Square120.E5, Square120.E4)];
 
       moves = generateMoves(game, Color.White);
       expect(moves).toEqual([]);
@@ -433,7 +433,7 @@ describe("generateMoves() function", () => {
     test("should side not specified", () => {
       game.initBoard();
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
-      expected = [createMove(Square120.E4, Square120.E5)];
+      expected = [Move(Square120.E4, Square120.E5)];
 
       moves = generateMoves(game);
       expect(moves).toEqual(expected);
@@ -445,7 +445,7 @@ describe("generateMoves() function", () => {
 
       game.initBoard();
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
-      expected = [createMove(Square120.D5, Square120.D4)];
+      expected = [Move(Square120.D5, Square120.D4)];
 
       moves = generateMoves(game);
       expect(moves).toEqual([]);
@@ -462,7 +462,7 @@ describe("generateMoves() function", () => {
       test("white pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.A4, ColorPiece.WhitePawn);
-        expected = [createMove(Square120.A4, Square120.A5)];
+        expected = [Move(Square120.A4, Square120.A5)];
 
         moves = generateMoves(game, Color.White);
         expect(moves).toEqual(expected);
@@ -471,7 +471,7 @@ describe("generateMoves() function", () => {
       test("black pawn piece", () => {
         game.initBoard();
         game.addPiece(Square120.H5, ColorPiece.BlackPawn);
-        expected = [createMove(Square120.H5, Square120.H4)];
+        expected = [Move(Square120.H5, Square120.H4)];
 
         moves = generateMoves(game, Color.Black);
         expect(moves).toEqual(expected);
@@ -483,8 +483,8 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.B2, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.B2, Square120.B3),
-          createMove(Square120.B2, Square120.B4, 0, MoveFlag.PawnDouble),
+          Move(Square120.B2, Square120.B3),
+          Move(Square120.B2, Square120.B4, 0, MoveFlag.PawnDouble),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -495,8 +495,8 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.G7, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.G7, Square120.G6),
-          createMove(Square120.G7, Square120.G5, 0, MoveFlag.PawnDouble),
+          Move(Square120.G7, Square120.G6),
+          Move(Square120.G7, Square120.G5, 0, MoveFlag.PawnDouble),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -509,10 +509,10 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.C7, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteQueen),
-          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteKnight),
-          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteRook),
-          createMove(Square120.C7, Square120.C8, 0, MoveFlag.PromoteBishop),
+          Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteQueen),
+          Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteKnight),
+          Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteRook),
+          Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteBishop),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -523,10 +523,10 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.F2, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteQueen),
-          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteKnight),
-          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteRook),
-          createMove(Square120.F2, Square120.F1, 0, MoveFlag.PromoteBishop),
+          Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteQueen),
+          Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteKnight),
+          Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteRook),
+          Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteBishop),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -541,9 +541,9 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.C6, ColorPiece.BlackPawn);
         game.addPiece(Square120.E6, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.D5, Square120.D6),
-          createMove(Square120.D5, Square120.C6, ColorPiece.BlackPawn),
-          createMove(Square120.D5, Square120.E6, ColorPiece.BlackPawn),
+          Move(Square120.D5, Square120.D6),
+          Move(Square120.D5, Square120.C6, ColorPiece.BlackPawn),
+          Move(Square120.D5, Square120.E6, ColorPiece.BlackPawn),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -556,9 +556,9 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.D3, ColorPiece.WhitePawn);
         game.addPiece(Square120.F3, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.E4, Square120.E3),
-          createMove(Square120.E4, Square120.D3, ColorPiece.WhitePawn),
-          createMove(Square120.E4, Square120.F3, ColorPiece.WhitePawn),
+          Move(Square120.E4, Square120.E3),
+          Move(Square120.E4, Square120.D3, ColorPiece.WhitePawn),
+          Move(Square120.E4, Square120.F3, ColorPiece.WhitePawn),
         ];
         moves = generateMoves(game, Color.Black);
         expect(moves).toEqual(expected);
@@ -573,18 +573,18 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F8, ColorPiece.BlackPawn);
         // prettier-ignore
         expected = [
-          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteQueen),
-          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteKnight),
-          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteRook),
-          createMove(Square120.E7, Square120.E8, 0, MoveFlag.PromoteBishop),
-          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
-          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
-          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
-          createMove(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
-          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
-          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
-          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
-          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
+          Move(Square120.E7, Square120.E8, 0, MoveFlag.PromoteQueen),
+          Move(Square120.E7, Square120.E8, 0, MoveFlag.PromoteKnight),
+          Move(Square120.E7, Square120.E8, 0, MoveFlag.PromoteRook),
+          Move(Square120.E7, Square120.E8, 0, MoveFlag.PromoteBishop),
+          Move(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
+          Move(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
+          Move(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
+          Move(Square120.E7, Square120.D8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
+          Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteQueen),
+          Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteKnight),
+          Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteRook),
+          Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -598,18 +598,18 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.E1, ColorPiece.WhitePawn);
         // prettier-ignore
         expected = [
-          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteQueen),
-          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteKnight),
-          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteRook),
-          createMove(Square120.D2, Square120.D1, 0, MoveFlag.PromoteBishop),
-          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
-          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
-          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
-          createMove(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
-          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
-          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
-          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
-          createMove(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
+          Move(Square120.D2, Square120.D1, 0, MoveFlag.PromoteQueen),
+          Move(Square120.D2, Square120.D1, 0, MoveFlag.PromoteKnight),
+          Move(Square120.D2, Square120.D1, 0, MoveFlag.PromoteRook),
+          Move(Square120.D2, Square120.D1, 0, MoveFlag.PromoteBishop),
+          Move(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
+          Move(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
+          Move(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
+          Move(Square120.D2, Square120.C1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
+          Move(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteQueen),
+          Move(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteKnight),
+          Move(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteRook),
+          Move(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -627,8 +627,8 @@ describe("generateMoves() function", () => {
         game.enPassant = Square120.E6;
         // prettier-ignore
         expected = [
-          createMove(Square120.F5, Square120.F6),
-          createMove(Square120.F5, Square120.E6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
+          Move(Square120.F5, Square120.F6),
+          Move(Square120.F5, Square120.E6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -637,8 +637,8 @@ describe("generateMoves() function", () => {
         game.enPassant = Square120.G6;
         // prettier-ignore
         expected = [
-          createMove(Square120.F5, Square120.F6),
-          createMove(Square120.F5, Square120.G6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
+          Move(Square120.F5, Square120.F6),
+          Move(Square120.F5, Square120.G6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -654,8 +654,8 @@ describe("generateMoves() function", () => {
         game.enPassant = Square120.B3;
         // prettier-ignore
         expected = [
-          createMove(Square120.C4, Square120.C3),
-          createMove(Square120.C4, Square120.B3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
+          Move(Square120.C4, Square120.C3),
+          Move(Square120.C4, Square120.B3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -664,8 +664,8 @@ describe("generateMoves() function", () => {
         game.enPassant = Square120.D3;
         // prettier-ignore
         expected = [
-          createMove(Square120.C4, Square120.C3),
-          createMove(Square120.C4, Square120.D3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
+          Move(Square120.C4, Square120.C3),
+          Move(Square120.C4, Square120.D3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -680,14 +680,14 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.D4, ColorPiece.WhiteKnight);
         expected = [
-          createMove(Square120.D4, Square120.B5),
-          createMove(Square120.D4, Square120.C6),
-          createMove(Square120.D4, Square120.E6),
-          createMove(Square120.D4, Square120.F5),
-          createMove(Square120.D4, Square120.F3),
-          createMove(Square120.D4, Square120.E2),
-          createMove(Square120.D4, Square120.C2),
-          createMove(Square120.D4, Square120.B3),
+          Move(Square120.D4, Square120.B5),
+          Move(Square120.D4, Square120.C6),
+          Move(Square120.D4, Square120.E6),
+          Move(Square120.D4, Square120.F5),
+          Move(Square120.D4, Square120.F3),
+          Move(Square120.D4, Square120.E2),
+          Move(Square120.D4, Square120.C2),
+          Move(Square120.D4, Square120.B3),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -698,14 +698,14 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E5, ColorPiece.BlackKnight);
         expected = [
-          createMove(Square120.E5, Square120.C6),
-          createMove(Square120.E5, Square120.D7),
-          createMove(Square120.E5, Square120.F7),
-          createMove(Square120.E5, Square120.G6),
-          createMove(Square120.E5, Square120.G4),
-          createMove(Square120.E5, Square120.F3),
-          createMove(Square120.E5, Square120.D3),
-          createMove(Square120.E5, Square120.C4),
+          Move(Square120.E5, Square120.C6),
+          Move(Square120.E5, Square120.D7),
+          Move(Square120.E5, Square120.F7),
+          Move(Square120.E5, Square120.G6),
+          Move(Square120.E5, Square120.G4),
+          Move(Square120.E5, Square120.F3),
+          Move(Square120.E5, Square120.D3),
+          Move(Square120.E5, Square120.C4),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -718,10 +718,10 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.B2, ColorPiece.WhiteKnight);
         expected = [
-          createMove(Square120.B2, Square120.A4),
-          createMove(Square120.B2, Square120.C4),
-          createMove(Square120.B2, Square120.D3),
-          createMove(Square120.B2, Square120.D1),
+          Move(Square120.B2, Square120.A4),
+          Move(Square120.B2, Square120.C4),
+          Move(Square120.B2, Square120.D3),
+          Move(Square120.B2, Square120.D1),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -732,8 +732,8 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.H8, ColorPiece.BlackKnight);
         expected = [
-          createMove(Square120.H8, Square120.G6),
-          createMove(Square120.H8, Square120.F7),
+          Move(Square120.H8, Square120.G6),
+          Move(Square120.H8, Square120.F7),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -748,14 +748,14 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.D7, ColorPiece.BlackPawn);
         game.addPiece(Square120.F3, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.E5, Square120.C6),
-          createMove(Square120.E5, Square120.D7, ColorPiece.BlackPawn),
-          createMove(Square120.E5, Square120.F7),
-          createMove(Square120.E5, Square120.G6),
-          createMove(Square120.E5, Square120.G4),
-          createMove(Square120.E5, Square120.F3, ColorPiece.BlackPawn),
-          createMove(Square120.E5, Square120.D3),
-          createMove(Square120.E5, Square120.C4),
+          Move(Square120.E5, Square120.C6),
+          Move(Square120.E5, Square120.D7, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.F7),
+          Move(Square120.E5, Square120.G6),
+          Move(Square120.E5, Square120.G4),
+          Move(Square120.E5, Square120.F3, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.D3),
+          Move(Square120.E5, Square120.C4),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -768,14 +768,14 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F5, ColorPiece.WhitePawn);
         game.addPiece(Square120.B3, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.D4, Square120.B5),
-          createMove(Square120.D4, Square120.C6),
-          createMove(Square120.D4, Square120.E6),
-          createMove(Square120.D4, Square120.F5, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.F3),
-          createMove(Square120.D4, Square120.E2),
-          createMove(Square120.D4, Square120.C2),
-          createMove(Square120.D4, Square120.B3, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.B5),
+          Move(Square120.D4, Square120.C6),
+          Move(Square120.D4, Square120.E6),
+          Move(Square120.D4, Square120.F5, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.F3),
+          Move(Square120.D4, Square120.E2),
+          Move(Square120.D4, Square120.C2),
+          Move(Square120.D4, Square120.B3, ColorPiece.WhitePawn),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -790,19 +790,19 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.D5, ColorPiece.WhiteBishop);
         expected = [
-          createMove(Square120.D5, Square120.C6),
-          createMove(Square120.D5, Square120.B7),
-          createMove(Square120.D5, Square120.A8),
-          createMove(Square120.D5, Square120.E6),
-          createMove(Square120.D5, Square120.F7),
-          createMove(Square120.D5, Square120.G8),
-          createMove(Square120.D5, Square120.E4),
-          createMove(Square120.D5, Square120.F3),
-          createMove(Square120.D5, Square120.G2),
-          createMove(Square120.D5, Square120.H1),
-          createMove(Square120.D5, Square120.C4),
-          createMove(Square120.D5, Square120.B3),
-          createMove(Square120.D5, Square120.A2),
+          Move(Square120.D5, Square120.C6),
+          Move(Square120.D5, Square120.B7),
+          Move(Square120.D5, Square120.A8),
+          Move(Square120.D5, Square120.E6),
+          Move(Square120.D5, Square120.F7),
+          Move(Square120.D5, Square120.G8),
+          Move(Square120.D5, Square120.E4),
+          Move(Square120.D5, Square120.F3),
+          Move(Square120.D5, Square120.G2),
+          Move(Square120.D5, Square120.H1),
+          Move(Square120.D5, Square120.C4),
+          Move(Square120.D5, Square120.B3),
+          Move(Square120.D5, Square120.A2),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -813,19 +813,19 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E4, ColorPiece.BlackBishop);
         expected = [
-          createMove(Square120.E4, Square120.D5),
-          createMove(Square120.E4, Square120.C6),
-          createMove(Square120.E4, Square120.B7),
-          createMove(Square120.E4, Square120.A8),
-          createMove(Square120.E4, Square120.F5),
-          createMove(Square120.E4, Square120.G6),
-          createMove(Square120.E4, Square120.H7),
-          createMove(Square120.E4, Square120.F3),
-          createMove(Square120.E4, Square120.G2),
-          createMove(Square120.E4, Square120.H1),
-          createMove(Square120.E4, Square120.D3),
-          createMove(Square120.E4, Square120.C2),
-          createMove(Square120.E4, Square120.B1),
+          Move(Square120.E4, Square120.D5),
+          Move(Square120.E4, Square120.C6),
+          Move(Square120.E4, Square120.B7),
+          Move(Square120.E4, Square120.A8),
+          Move(Square120.E4, Square120.F5),
+          Move(Square120.E4, Square120.G6),
+          Move(Square120.E4, Square120.H7),
+          Move(Square120.E4, Square120.F3),
+          Move(Square120.E4, Square120.G2),
+          Move(Square120.E4, Square120.H1),
+          Move(Square120.E4, Square120.D3),
+          Move(Square120.E4, Square120.C2),
+          Move(Square120.E4, Square120.B1),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -842,16 +842,16 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.H2, ColorPiece.BlackPawn);
         game.addPiece(Square120.A1, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.E5, Square120.D6, ColorPiece.BlackPawn),
-          createMove(Square120.E5, Square120.F6),
-          createMove(Square120.E5, Square120.G7, ColorPiece.BlackPawn),
-          createMove(Square120.E5, Square120.F4),
-          createMove(Square120.E5, Square120.G3),
-          createMove(Square120.E5, Square120.H2, ColorPiece.BlackPawn),
-          createMove(Square120.E5, Square120.D4),
-          createMove(Square120.E5, Square120.C3),
-          createMove(Square120.E5, Square120.B2),
-          createMove(Square120.E5, Square120.A1, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.D6, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.F6),
+          Move(Square120.E5, Square120.G7, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.F4),
+          Move(Square120.E5, Square120.G3),
+          Move(Square120.E5, Square120.H2, ColorPiece.BlackPawn),
+          Move(Square120.E5, Square120.D4),
+          Move(Square120.E5, Square120.C3),
+          Move(Square120.E5, Square120.B2),
+          Move(Square120.E5, Square120.A1, ColorPiece.BlackPawn),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -866,16 +866,16 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F2, ColorPiece.WhitePawn);
         game.addPiece(Square120.C3, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.D4, Square120.C5),
-          createMove(Square120.D4, Square120.B6),
-          createMove(Square120.D4, Square120.A7, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.E5),
-          createMove(Square120.D4, Square120.F6),
-          createMove(Square120.D4, Square120.G7),
-          createMove(Square120.D4, Square120.H8, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.E3),
-          createMove(Square120.D4, Square120.F2, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.C3, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.C5),
+          Move(Square120.D4, Square120.B6),
+          Move(Square120.D4, Square120.A7, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.E5),
+          Move(Square120.D4, Square120.F6),
+          Move(Square120.D4, Square120.G7),
+          Move(Square120.D4, Square120.H8, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.E3),
+          Move(Square120.D4, Square120.F2, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.C3, ColorPiece.WhitePawn),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -890,20 +890,20 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.F4, ColorPiece.WhiteRook);
         expected = [
-          createMove(Square120.F4, Square120.F5),
-          createMove(Square120.F4, Square120.F6),
-          createMove(Square120.F4, Square120.F7),
-          createMove(Square120.F4, Square120.F8),
-          createMove(Square120.F4, Square120.G4),
-          createMove(Square120.F4, Square120.H4),
-          createMove(Square120.F4, Square120.F3),
-          createMove(Square120.F4, Square120.F2),
-          createMove(Square120.F4, Square120.F1),
-          createMove(Square120.F4, Square120.E4),
-          createMove(Square120.F4, Square120.D4),
-          createMove(Square120.F4, Square120.C4),
-          createMove(Square120.F4, Square120.B4),
-          createMove(Square120.F4, Square120.A4),
+          Move(Square120.F4, Square120.F5),
+          Move(Square120.F4, Square120.F6),
+          Move(Square120.F4, Square120.F7),
+          Move(Square120.F4, Square120.F8),
+          Move(Square120.F4, Square120.G4),
+          Move(Square120.F4, Square120.H4),
+          Move(Square120.F4, Square120.F3),
+          Move(Square120.F4, Square120.F2),
+          Move(Square120.F4, Square120.F1),
+          Move(Square120.F4, Square120.E4),
+          Move(Square120.F4, Square120.D4),
+          Move(Square120.F4, Square120.C4),
+          Move(Square120.F4, Square120.B4),
+          Move(Square120.F4, Square120.A4),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -914,20 +914,20 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.F5, ColorPiece.BlackRook);
         expected = [
-          createMove(Square120.F5, Square120.F6),
-          createMove(Square120.F5, Square120.F7),
-          createMove(Square120.F5, Square120.F8),
-          createMove(Square120.F5, Square120.G5),
-          createMove(Square120.F5, Square120.H5),
-          createMove(Square120.F5, Square120.F4),
-          createMove(Square120.F5, Square120.F3),
-          createMove(Square120.F5, Square120.F2),
-          createMove(Square120.F5, Square120.F1),
-          createMove(Square120.F5, Square120.E5),
-          createMove(Square120.F5, Square120.D5),
-          createMove(Square120.F5, Square120.C5),
-          createMove(Square120.F5, Square120.B5),
-          createMove(Square120.F5, Square120.A5),
+          Move(Square120.F5, Square120.F6),
+          Move(Square120.F5, Square120.F7),
+          Move(Square120.F5, Square120.F8),
+          Move(Square120.F5, Square120.G5),
+          Move(Square120.F5, Square120.H5),
+          Move(Square120.F5, Square120.F4),
+          Move(Square120.F5, Square120.F3),
+          Move(Square120.F5, Square120.F2),
+          Move(Square120.F5, Square120.F1),
+          Move(Square120.F5, Square120.E5),
+          Move(Square120.F5, Square120.D5),
+          Move(Square120.F5, Square120.C5),
+          Move(Square120.F5, Square120.B5),
+          Move(Square120.F5, Square120.A5),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -942,15 +942,15 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F5, ColorPiece.BlackPawn);
         game.addPiece(Square120.C1, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.F1, Square120.F2),
-          createMove(Square120.F1, Square120.F3),
-          createMove(Square120.F1, Square120.F4),
-          createMove(Square120.F1, Square120.F5, ColorPiece.BlackPawn),
-          createMove(Square120.F1, Square120.G1),
-          createMove(Square120.F1, Square120.H1),
-          createMove(Square120.F1, Square120.E1),
-          createMove(Square120.F1, Square120.D1),
-          createMove(Square120.F1, Square120.C1, ColorPiece.BlackPawn),
+          Move(Square120.F1, Square120.F2),
+          Move(Square120.F1, Square120.F3),
+          Move(Square120.F1, Square120.F4),
+          Move(Square120.F1, Square120.F5, ColorPiece.BlackPawn),
+          Move(Square120.F1, Square120.G1),
+          Move(Square120.F1, Square120.H1),
+          Move(Square120.F1, Square120.E1),
+          Move(Square120.F1, Square120.D1),
+          Move(Square120.F1, Square120.C1, ColorPiece.BlackPawn),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -963,15 +963,15 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F4, ColorPiece.WhitePawn);
         game.addPiece(Square120.C8, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.F8, Square120.G8),
-          createMove(Square120.F8, Square120.H8),
-          createMove(Square120.F8, Square120.F7),
-          createMove(Square120.F8, Square120.F6),
-          createMove(Square120.F8, Square120.F5),
-          createMove(Square120.F8, Square120.F4, ColorPiece.WhitePawn),
-          createMove(Square120.F8, Square120.E8),
-          createMove(Square120.F8, Square120.D8),
-          createMove(Square120.F8, Square120.C8, ColorPiece.WhitePawn),
+          Move(Square120.F8, Square120.G8),
+          Move(Square120.F8, Square120.H8),
+          Move(Square120.F8, Square120.F7),
+          Move(Square120.F8, Square120.F6),
+          Move(Square120.F8, Square120.F5),
+          Move(Square120.F8, Square120.F4, ColorPiece.WhitePawn),
+          Move(Square120.F8, Square120.E8),
+          Move(Square120.F8, Square120.D8),
+          Move(Square120.F8, Square120.C8, ColorPiece.WhitePawn),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -986,33 +986,33 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.D4, ColorPiece.WhiteQueen);
         expected = [
-          createMove(Square120.D4, Square120.C5),
-          createMove(Square120.D4, Square120.B6),
-          createMove(Square120.D4, Square120.A7),
-          createMove(Square120.D4, Square120.D5),
-          createMove(Square120.D4, Square120.D6),
-          createMove(Square120.D4, Square120.D7),
-          createMove(Square120.D4, Square120.D8),
-          createMove(Square120.D4, Square120.E5),
-          createMove(Square120.D4, Square120.F6),
-          createMove(Square120.D4, Square120.G7),
-          createMove(Square120.D4, Square120.H8),
-          createMove(Square120.D4, Square120.E4),
-          createMove(Square120.D4, Square120.F4),
-          createMove(Square120.D4, Square120.G4),
-          createMove(Square120.D4, Square120.H4),
-          createMove(Square120.D4, Square120.E3),
-          createMove(Square120.D4, Square120.F2),
-          createMove(Square120.D4, Square120.G1),
-          createMove(Square120.D4, Square120.D3),
-          createMove(Square120.D4, Square120.D2),
-          createMove(Square120.D4, Square120.D1),
-          createMove(Square120.D4, Square120.C3),
-          createMove(Square120.D4, Square120.B2),
-          createMove(Square120.D4, Square120.A1),
-          createMove(Square120.D4, Square120.C4),
-          createMove(Square120.D4, Square120.B4),
-          createMove(Square120.D4, Square120.A4),
+          Move(Square120.D4, Square120.C5),
+          Move(Square120.D4, Square120.B6),
+          Move(Square120.D4, Square120.A7),
+          Move(Square120.D4, Square120.D5),
+          Move(Square120.D4, Square120.D6),
+          Move(Square120.D4, Square120.D7),
+          Move(Square120.D4, Square120.D8),
+          Move(Square120.D4, Square120.E5),
+          Move(Square120.D4, Square120.F6),
+          Move(Square120.D4, Square120.G7),
+          Move(Square120.D4, Square120.H8),
+          Move(Square120.D4, Square120.E4),
+          Move(Square120.D4, Square120.F4),
+          Move(Square120.D4, Square120.G4),
+          Move(Square120.D4, Square120.H4),
+          Move(Square120.D4, Square120.E3),
+          Move(Square120.D4, Square120.F2),
+          Move(Square120.D4, Square120.G1),
+          Move(Square120.D4, Square120.D3),
+          Move(Square120.D4, Square120.D2),
+          Move(Square120.D4, Square120.D1),
+          Move(Square120.D4, Square120.C3),
+          Move(Square120.D4, Square120.B2),
+          Move(Square120.D4, Square120.A1),
+          Move(Square120.D4, Square120.C4),
+          Move(Square120.D4, Square120.B4),
+          Move(Square120.D4, Square120.A4),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1023,33 +1023,33 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.D5, ColorPiece.BlackQueen);
         expected = [
-          createMove(Square120.D5, Square120.C6),
-          createMove(Square120.D5, Square120.B7),
-          createMove(Square120.D5, Square120.A8),
-          createMove(Square120.D5, Square120.D6),
-          createMove(Square120.D5, Square120.D7),
-          createMove(Square120.D5, Square120.D8),
-          createMove(Square120.D5, Square120.E6),
-          createMove(Square120.D5, Square120.F7),
-          createMove(Square120.D5, Square120.G8),
-          createMove(Square120.D5, Square120.E5),
-          createMove(Square120.D5, Square120.F5),
-          createMove(Square120.D5, Square120.G5),
-          createMove(Square120.D5, Square120.H5),
-          createMove(Square120.D5, Square120.E4),
-          createMove(Square120.D5, Square120.F3),
-          createMove(Square120.D5, Square120.G2),
-          createMove(Square120.D5, Square120.H1),
-          createMove(Square120.D5, Square120.D4),
-          createMove(Square120.D5, Square120.D3),
-          createMove(Square120.D5, Square120.D2),
-          createMove(Square120.D5, Square120.D1),
-          createMove(Square120.D5, Square120.C4),
-          createMove(Square120.D5, Square120.B3),
-          createMove(Square120.D5, Square120.A2),
-          createMove(Square120.D5, Square120.C5),
-          createMove(Square120.D5, Square120.B5),
-          createMove(Square120.D5, Square120.A5),
+          Move(Square120.D5, Square120.C6),
+          Move(Square120.D5, Square120.B7),
+          Move(Square120.D5, Square120.A8),
+          Move(Square120.D5, Square120.D6),
+          Move(Square120.D5, Square120.D7),
+          Move(Square120.D5, Square120.D8),
+          Move(Square120.D5, Square120.E6),
+          Move(Square120.D5, Square120.F7),
+          Move(Square120.D5, Square120.G8),
+          Move(Square120.D5, Square120.E5),
+          Move(Square120.D5, Square120.F5),
+          Move(Square120.D5, Square120.G5),
+          Move(Square120.D5, Square120.H5),
+          Move(Square120.D5, Square120.E4),
+          Move(Square120.D5, Square120.F3),
+          Move(Square120.D5, Square120.G2),
+          Move(Square120.D5, Square120.H1),
+          Move(Square120.D5, Square120.D4),
+          Move(Square120.D5, Square120.D3),
+          Move(Square120.D5, Square120.D2),
+          Move(Square120.D5, Square120.D1),
+          Move(Square120.D5, Square120.C4),
+          Move(Square120.D5, Square120.B3),
+          Move(Square120.D5, Square120.A2),
+          Move(Square120.D5, Square120.C5),
+          Move(Square120.D5, Square120.B5),
+          Move(Square120.D5, Square120.A5),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -1065,28 +1065,28 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.G5, ColorPiece.BlackPawn);
         game.addPiece(Square120.D3, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.D5, Square120.C6, ColorPiece.BlackPawn),
-          createMove(Square120.D5, Square120.D6),
-          createMove(Square120.D5, Square120.D7),
-          createMove(Square120.D5, Square120.D8),
-          createMove(Square120.D5, Square120.E6),
-          createMove(Square120.D5, Square120.F7),
-          createMove(Square120.D5, Square120.G8),
-          createMove(Square120.D5, Square120.E5),
-          createMove(Square120.D5, Square120.F5),
-          createMove(Square120.D5, Square120.G5, ColorPiece.BlackPawn),
-          createMove(Square120.D5, Square120.E4),
-          createMove(Square120.D5, Square120.F3),
-          createMove(Square120.D5, Square120.G2),
-          createMove(Square120.D5, Square120.H1),
-          createMove(Square120.D5, Square120.D4),
-          createMove(Square120.D5, Square120.D3, ColorPiece.BlackPawn),
-          createMove(Square120.D5, Square120.C4),
-          createMove(Square120.D5, Square120.B3),
-          createMove(Square120.D5, Square120.A2),
-          createMove(Square120.D5, Square120.C5),
-          createMove(Square120.D5, Square120.B5),
-          createMove(Square120.D5, Square120.A5),
+          Move(Square120.D5, Square120.C6, ColorPiece.BlackPawn),
+          Move(Square120.D5, Square120.D6),
+          Move(Square120.D5, Square120.D7),
+          Move(Square120.D5, Square120.D8),
+          Move(Square120.D5, Square120.E6),
+          Move(Square120.D5, Square120.F7),
+          Move(Square120.D5, Square120.G8),
+          Move(Square120.D5, Square120.E5),
+          Move(Square120.D5, Square120.F5),
+          Move(Square120.D5, Square120.G5, ColorPiece.BlackPawn),
+          Move(Square120.D5, Square120.E4),
+          Move(Square120.D5, Square120.F3),
+          Move(Square120.D5, Square120.G2),
+          Move(Square120.D5, Square120.H1),
+          Move(Square120.D5, Square120.D4),
+          Move(Square120.D5, Square120.D3, ColorPiece.BlackPawn),
+          Move(Square120.D5, Square120.C4),
+          Move(Square120.D5, Square120.B3),
+          Move(Square120.D5, Square120.A2),
+          Move(Square120.D5, Square120.C5),
+          Move(Square120.D5, Square120.B5),
+          Move(Square120.D5, Square120.A5),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1100,29 +1100,29 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.E3, ColorPiece.WhitePawn);
         game.addPiece(Square120.A4, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.D4, Square120.C5),
-          createMove(Square120.D4, Square120.B6),
-          createMove(Square120.D4, Square120.A7),
-          createMove(Square120.D4, Square120.D5),
-          createMove(Square120.D4, Square120.D6),
-          createMove(Square120.D4, Square120.D7),
-          createMove(Square120.D4, Square120.D8),
-          createMove(Square120.D4, Square120.E5),
-          createMove(Square120.D4, Square120.F6, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.E4),
-          createMove(Square120.D4, Square120.F4),
-          createMove(Square120.D4, Square120.G4),
-          createMove(Square120.D4, Square120.H4),
-          createMove(Square120.D4, Square120.E3, ColorPiece.WhitePawn),
-          createMove(Square120.D4, Square120.D3),
-          createMove(Square120.D4, Square120.D2),
-          createMove(Square120.D4, Square120.D1),
-          createMove(Square120.D4, Square120.C3),
-          createMove(Square120.D4, Square120.B2),
-          createMove(Square120.D4, Square120.A1),
-          createMove(Square120.D4, Square120.C4),
-          createMove(Square120.D4, Square120.B4),
-          createMove(Square120.D4, Square120.A4, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.C5),
+          Move(Square120.D4, Square120.B6),
+          Move(Square120.D4, Square120.A7),
+          Move(Square120.D4, Square120.D5),
+          Move(Square120.D4, Square120.D6),
+          Move(Square120.D4, Square120.D7),
+          Move(Square120.D4, Square120.D8),
+          Move(Square120.D4, Square120.E5),
+          Move(Square120.D4, Square120.F6, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.E4),
+          Move(Square120.D4, Square120.F4),
+          Move(Square120.D4, Square120.G4),
+          Move(Square120.D4, Square120.H4),
+          Move(Square120.D4, Square120.E3, ColorPiece.WhitePawn),
+          Move(Square120.D4, Square120.D3),
+          Move(Square120.D4, Square120.D2),
+          Move(Square120.D4, Square120.D1),
+          Move(Square120.D4, Square120.C3),
+          Move(Square120.D4, Square120.B2),
+          Move(Square120.D4, Square120.A1),
+          Move(Square120.D4, Square120.C4),
+          Move(Square120.D4, Square120.B4),
+          Move(Square120.D4, Square120.A4, ColorPiece.WhitePawn),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -1137,14 +1137,14 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E5, ColorPiece.WhiteKing);
         expected = [
-          createMove(Square120.E5, Square120.D6),
-          createMove(Square120.E5, Square120.E6),
-          createMove(Square120.E5, Square120.F6),
-          createMove(Square120.E5, Square120.F5),
-          createMove(Square120.E5, Square120.F4),
-          createMove(Square120.E5, Square120.E4),
-          createMove(Square120.E5, Square120.D4),
-          createMove(Square120.E5, Square120.D5),
+          Move(Square120.E5, Square120.D6),
+          Move(Square120.E5, Square120.E6),
+          Move(Square120.E5, Square120.F6),
+          Move(Square120.E5, Square120.F5),
+          Move(Square120.E5, Square120.F4),
+          Move(Square120.E5, Square120.E4),
+          Move(Square120.E5, Square120.D4),
+          Move(Square120.E5, Square120.D5),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1155,14 +1155,14 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E4, ColorPiece.BlackKing);
         expected = [
-          createMove(Square120.E4, Square120.D5),
-          createMove(Square120.E4, Square120.E5),
-          createMove(Square120.E4, Square120.F5),
-          createMove(Square120.E4, Square120.F4),
-          createMove(Square120.E4, Square120.F3),
-          createMove(Square120.E4, Square120.E3),
-          createMove(Square120.E4, Square120.D3),
-          createMove(Square120.E4, Square120.D4),
+          Move(Square120.E4, Square120.D5),
+          Move(Square120.E4, Square120.E5),
+          Move(Square120.E4, Square120.F5),
+          Move(Square120.E4, Square120.F4),
+          Move(Square120.E4, Square120.F3),
+          Move(Square120.E4, Square120.E3),
+          Move(Square120.E4, Square120.D3),
+          Move(Square120.E4, Square120.D4),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -1175,11 +1175,11 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
         expected = [
-          createMove(Square120.E1, Square120.D2),
-          createMove(Square120.E1, Square120.E2),
-          createMove(Square120.E1, Square120.F2),
-          createMove(Square120.E1, Square120.F1),
-          createMove(Square120.E1, Square120.D1),
+          Move(Square120.E1, Square120.D2),
+          Move(Square120.E1, Square120.E2),
+          Move(Square120.E1, Square120.F2),
+          Move(Square120.E1, Square120.F1),
+          Move(Square120.E1, Square120.D1),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1190,11 +1190,11 @@ describe("generateMoves() function", () => {
         game.initBoard();
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
         expected = [
-          createMove(Square120.E8, Square120.F8),
-          createMove(Square120.E8, Square120.F7),
-          createMove(Square120.E8, Square120.E7),
-          createMove(Square120.E8, Square120.D7),
-          createMove(Square120.E8, Square120.D8),
+          Move(Square120.E8, Square120.F8),
+          Move(Square120.E8, Square120.F7),
+          Move(Square120.E8, Square120.E7),
+          Move(Square120.E8, Square120.D7),
+          Move(Square120.E8, Square120.D8),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -1210,14 +1210,14 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.F8, ColorPiece.BlackPawn);
         game.addPiece(Square120.D7, ColorPiece.BlackPawn);
         expected = [
-          createMove(Square120.E7, Square120.D8),
-          createMove(Square120.E7, Square120.E8, ColorPiece.BlackPawn),
-          createMove(Square120.E7, Square120.F8, ColorPiece.BlackPawn),
-          createMove(Square120.E7, Square120.F7),
-          createMove(Square120.E7, Square120.F6),
-          createMove(Square120.E7, Square120.E6),
-          createMove(Square120.E7, Square120.D6),
-          createMove(Square120.E7, Square120.D7, ColorPiece.BlackPawn),
+          Move(Square120.E7, Square120.D8),
+          Move(Square120.E7, Square120.E8, ColorPiece.BlackPawn),
+          Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn),
+          Move(Square120.E7, Square120.F7),
+          Move(Square120.E7, Square120.F6),
+          Move(Square120.E7, Square120.E6),
+          Move(Square120.E7, Square120.D6),
+          Move(Square120.E7, Square120.D7, ColorPiece.BlackPawn),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1231,14 +1231,14 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.E1, ColorPiece.WhitePawn);
         game.addPiece(Square120.D1, ColorPiece.WhitePawn);
         expected = [
-          createMove(Square120.E2, Square120.D3),
-          createMove(Square120.E2, Square120.E3),
-          createMove(Square120.E2, Square120.F3),
-          createMove(Square120.E2, Square120.F2, ColorPiece.WhitePawn),
-          createMove(Square120.E2, Square120.F1),
-          createMove(Square120.E2, Square120.E1, ColorPiece.WhitePawn),
-          createMove(Square120.E2, Square120.D1, ColorPiece.WhitePawn),
-          createMove(Square120.E2, Square120.D2),
+          Move(Square120.E2, Square120.D3),
+          Move(Square120.E2, Square120.E3),
+          Move(Square120.E2, Square120.F3),
+          Move(Square120.E2, Square120.F2, ColorPiece.WhitePawn),
+          Move(Square120.E2, Square120.F1),
+          Move(Square120.E2, Square120.E1, ColorPiece.WhitePawn),
+          Move(Square120.E2, Square120.D1, ColorPiece.WhitePawn),
+          Move(Square120.E2, Square120.D2),
         ];
 
         moves = generateMoves(game, Color.Black);
@@ -1254,13 +1254,13 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.H1, ColorPiece.WhiteRook);
         game.castlingRights = ALL_CASTLE_RIGHTS;
         expected = [
-          createMove(Square120.E1, Square120.D2),
-          createMove(Square120.E1, Square120.E2),
-          createMove(Square120.E1, Square120.F2),
-          createMove(Square120.E1, Square120.F1),
-          createMove(Square120.E1, Square120.D1),
-          createMove(Square120.E1, Square120.G1, 0, MoveFlag.Castle),
-          createMove(Square120.E1, Square120.C1, 0, MoveFlag.Castle),
+          Move(Square120.E1, Square120.D2),
+          Move(Square120.E1, Square120.E2),
+          Move(Square120.E1, Square120.F2),
+          Move(Square120.E1, Square120.F1),
+          Move(Square120.E1, Square120.D1),
+          Move(Square120.E1, Square120.G1, 0, MoveFlag.Castle),
+          Move(Square120.E1, Square120.C1, 0, MoveFlag.Castle),
         ];
 
         moves = generateMoves(game, Color.White);
@@ -1275,13 +1275,13 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.H8, ColorPiece.BlackRook);
         game.castlingRights = ALL_CASTLE_RIGHTS;
         expected = [
-          createMove(Square120.E8, Square120.F8),
-          createMove(Square120.E8, Square120.F7),
-          createMove(Square120.E8, Square120.E7),
-          createMove(Square120.E8, Square120.D7),
-          createMove(Square120.E8, Square120.D8),
-          createMove(Square120.E8, Square120.G8, 0, MoveFlag.Castle),
-          createMove(Square120.E8, Square120.C8, 0, MoveFlag.Castle),
+          Move(Square120.E8, Square120.F8),
+          Move(Square120.E8, Square120.F7),
+          Move(Square120.E8, Square120.E7),
+          Move(Square120.E8, Square120.D7),
+          Move(Square120.E8, Square120.D8),
+          Move(Square120.E8, Square120.G8, 0, MoveFlag.Castle),
+          Move(Square120.E8, Square120.C8, 0, MoveFlag.Castle),
         ];
 
         moves = generateMoves(game, Color.Black);

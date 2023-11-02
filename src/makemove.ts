@@ -4,7 +4,7 @@ import { ChessGame } from "./game";
 import { Move, MoveFlag, getMove, isPromotion } from "./move";
 import { PAWN_MOVE_OFFSET } from "./movegen";
 import { Color, Piece, createPiece, getPiece } from "./piece";
-import { createState, getState } from "./state";
+import { State, getState } from "./state";
 
 /**
  * Check whether a move is legal.
@@ -28,11 +28,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   const [start, target, captured, flag] = getMove(move);
   const piece = game.pieceBoard[start];
 
-  const state = createState(
-    game.castlingRights,
-    game.enPassant,
-    game.halfMoves
-  );
+  const state = State(game.castlingRights, game.enPassant, game.halfMoves);
 
   game.moveList[game.ply] = move;
   game.stateList[game.ply] = state;

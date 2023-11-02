@@ -11,7 +11,7 @@ import {
   QUEEN_SIDE_CASTLE_RIGHT,
 } from "./castlingrights";
 import { ChessGame } from "./game";
-import { Move, MoveFlag, PROMOTION_FLAGS, createMove } from "./move";
+import { Move, MoveFlag, PROMOTION_FLAGS } from "./move";
 import {
   Color,
   ColorPiece,
@@ -92,12 +92,12 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     if (captured === NO_PIECE) {
       if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
         for (const promotionFlag of PROMOTION_FLAGS)
-          moves.push(createMove(start, target, NO_PIECE, promotionFlag));
-      } else moves.push(createMove(start, target));
+          moves.push(Move(start, target, NO_PIECE, promotionFlag));
+      } else moves.push(Move(start, target));
       target = start + PAWN_DOUBLE_OFFSET[color];
       captured = game.pieceBoard[target];
       if (captured === NO_PIECE && getRank120(start) === PAWN_START_RANK[color])
-        moves.push(createMove(start, target, NO_PIECE, MoveFlag.PawnDouble));
+        moves.push(Move(start, target, NO_PIECE, MoveFlag.PawnDouble));
     }
     for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
       target = start + captureOffset;
@@ -105,12 +105,12 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
           for (const promotionFlag of PROMOTION_FLAGS)
-            moves.push(createMove(start, target, captured, promotionFlag));
-        } else moves.push(createMove(start, target, captured));
+            moves.push(Move(start, target, captured, promotionFlag));
+        } else moves.push(Move(start, target, captured));
       }
       if (target === game.enPassant) {
         captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
-        moves.push(createMove(start, target, captured, MoveFlag.EnPassant));
+        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
       }
     }
   }
@@ -123,9 +123,9 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
       for (const offset of offsets) {
         target = start + offset;
         captured = game.pieceBoard[target];
-        if (captured === NO_PIECE) moves.push(createMove(start, target));
+        if (captured === NO_PIECE) moves.push(Move(start, target));
         else if (getColor(captured) === opponent)
-          moves.push(createMove(start, target, captured));
+          moves.push(Move(start, target, captured));
       }
     }
   }
@@ -141,10 +141,10 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
         while (captured !== OFF_BOARD) {
           if (captured !== NO_PIECE) {
             if (getColor(captured) === opponent)
-              moves.push(createMove(start, target, captured));
+              moves.push(Move(start, target, captured));
             break;
           }
-          moves.push(createMove(start, target));
+          moves.push(Move(start, target));
           target += offset;
           captured = game.pieceBoard[target];
         }
@@ -164,7 +164,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start + 1, color)
   ) {
-    moves.push(createMove(start, start + 2, NO_PIECE, MoveFlag.Castle));
+    moves.push(Move(start, start + 2, NO_PIECE, MoveFlag.Castle));
   }
   if (
     game.getCastleRight(QUEEN_SIDE_CASTLE_RIGHT[color]) &&
@@ -176,7 +176,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start - 1, color)
   ) {
-    moves.push(createMove(start, start - 2, NO_PIECE, MoveFlag.Castle));
+    moves.push(Move(start, start - 2, NO_PIECE, MoveFlag.Castle));
   }
 
   return moves;
@@ -212,12 +212,12 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
           for (const promotionFlag of PROMOTION_FLAGS)
-            moves.push(createMove(start, target, captured, promotionFlag));
-        } else moves.push(createMove(start, target, captured));
+            moves.push(Move(start, target, captured, promotionFlag));
+        } else moves.push(Move(start, target, captured));
       }
       if (target === game.enPassant) {
         captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
-        moves.push(createMove(start, target, captured, MoveFlag.EnPassant));
+        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
       }
     }
   }
@@ -231,7 +231,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
         target = start + offset;
         captured = game.pieceBoard[target];
         if (getColor(captured) === opponent)
-          moves.push(createMove(start, target, captured));
+          moves.push(Move(start, target, captured));
       }
     }
   }
@@ -247,7 +247,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
         while (captured !== OFF_BOARD) {
           if (captured !== NO_PIECE) {
             if (getColor(captured) === opponent)
-              moves.push(createMove(start, target, captured));
+              moves.push(Move(start, target, captured));
             break;
           }
           target += offset;
