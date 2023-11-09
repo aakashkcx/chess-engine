@@ -8,7 +8,7 @@ import {
   NO_PIECE,
   Piece,
   PieceName,
-  createPiece,
+  colorPiece,
 } from "./piece";
 
 /**
@@ -77,8 +77,8 @@ export function setFEN(game: ChessGame, fen: string) {
   if (pieceArray.length !== 8)
     throw new Error("Invalid FEN piece placement string!");
 
-  const setPiece = (rank: Rank, file: File, colorPiece: ColorPiece) => {
-    game.pieceBoard[rankFileTo120(rank, file)] = colorPiece;
+  const setPiece = (rank: Rank, file: File, piece: ColorPiece) => {
+    game.pieceBoard[rankFileTo120(rank, file)] = piece;
   };
 
   // Iterate through piece placement strings and set pieces.
@@ -138,7 +138,7 @@ export function setFEN(game: ChessGame, fen: string) {
   game.hash = generateHash(game);
 
   // Check whether the king is in check.
-  const king = createPiece(game.activeColor, Piece.King);
+  const king = colorPiece(game.activeColor, Piece.King);
   const kingIndex = game.pieceLists[king][0];
   game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
 }

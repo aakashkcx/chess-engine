@@ -1,12 +1,12 @@
 import { ChessGame, NO_MOVE } from "../src";
 
-const FEN =
-  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+const FEN = "rnbqkbnr/ppppp2p/5p2/6p1/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
 const game = new ChessGame(FEN);
 game.print();
 
 while (true) {
-  const move = game.search(3000);
+  const move = game.search();
+  // const move = game.search(3000);
   if (move !== NO_MOVE) {
     game.makeMove(move);
     game.print();

@@ -3,7 +3,7 @@ import { CastleRight } from "./castlingrights";
 import { ChessGame } from "./game";
 import { Move, MoveFlag, getMove, isPromotion } from "./move";
 import { PAWN_MOVE_OFFSET } from "./movegen";
-import { Color, Piece, createPiece, getPiece } from "./piece";
+import { Color, Piece, colorPiece, getPiece } from "./piece";
 import { State, getState } from "./state";
 
 /**
@@ -66,13 +66,13 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   } else if (isPromotion(flag)) {
     game.removePiece(target); // Remove pawn piece.
     if (flag === MoveFlag.PromoteKnight) {
-      game.addPiece(target, createPiece(color, Piece.Knight));
+      game.addPiece(target, colorPiece(color, Piece.Knight));
     } else if (flag === MoveFlag.PromoteBishop) {
-      game.addPiece(target, createPiece(color, Piece.Bishop));
+      game.addPiece(target, colorPiece(color, Piece.Bishop));
     } else if (flag === MoveFlag.PromoteRook) {
-      game.addPiece(target, createPiece(color, Piece.Rook));
+      game.addPiece(target, colorPiece(color, Piece.Rook));
     } else if (flag === MoveFlag.PromoteQueen) {
-      game.addPiece(target, createPiece(color, Piece.Queen));
+      game.addPiece(target, colorPiece(color, Piece.Queen));
     }
   }
 
@@ -103,14 +103,14 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 
   game.switchColor();
 
-  const king = createPiece(color, Piece.King);
+  const king = colorPiece(color, Piece.King);
   const kingIndex = game.pieceLists[king][0];
   if (game.isSquareAttacked(kingIndex, color)) {
     game.takeBack();
     return false;
   }
 
-  const opponentKing = createPiece(opponent, Piece.King);
+  const opponentKing = colorPiece(opponent, Piece.King);
   const opponentKingIndex = game.pieceLists[opponentKing][0];
   game.inCheck = game.isSquareAttacked(opponentKingIndex, opponent);
 
@@ -148,7 +148,7 @@ export function takeBack(game: ChessGame) {
   if (flag === MoveFlag.EnPassant) {
     game.addPiece(
       target - PAWN_MOVE_OFFSET[color],
-      createPiece(opponent, Piece.Pawn)
+      colorPiece(opponent, Piece.Pawn)
     );
   } else if (flag === MoveFlag.Castle) {
     if (target === Square120.C1) {
@@ -162,10 +162,10 @@ export function takeBack(game: ChessGame) {
     }
   } else if (isPromotion(flag)) {
     game.removePiece(start);
-    game.addPiece(start, createPiece(color, Piece.Pawn));
+    game.addPiece(start, colorPiece(color, Piece.Pawn));
   }
 
-  const king = createPiece(color, Piece.King);
+  const king = colorPiece(color, Piece.King);
   const kingIndex = game.pieceLists[king][0];
   game.inCheck = game.isSquareAttacked(kingIndex, color);
 }

@@ -99,7 +99,7 @@ export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
  * @param piece The piece type.
  * @returns The color piece.
  */
-export function createPiece(color: Color, piece: Piece): ColorPiece {
+export function colorPiece(color: Color, piece: Piece): ColorPiece {
   if (piece <= Piece.Empty) throw new Error();
   if (color === Color.White) return piece as number as ColorPiece;
   if (color === Color.Black) return piece + ColorPiece.WhiteKing;
@@ -108,24 +108,23 @@ export function createPiece(color: Color, piece: Piece): ColorPiece {
 
 /**
  * Get the color of a color piece.
- * @param colorPiece The color piece.
+ * @param piece The color piece.
  * @returns The color.
  */
-export function getColor(colorPiece: ColorPiece): Color {
-  if (colorPiece >= ColorPiece.BlackPawn) return Color.Black;
-  if (colorPiece >= ColorPiece.WhitePawn) return Color.White;
+export function getColor(piece: ColorPiece): Color {
+  if (piece >= ColorPiece.BlackPawn) return Color.Black;
+  if (piece >= ColorPiece.WhitePawn) return Color.White;
   return Color.None;
 }
 
 /**
  * Get the piece type of a color piece.
- * @param colorPiece The color piece.
+ * @param piece The color piece.
  * @returns The piece type.
  */
-export function getPiece(colorPiece: ColorPiece): Piece {
-  if (colorPiece > ColorPiece.WhiteKing)
-    return colorPiece - ColorPiece.WhiteKing;
-  return colorPiece as number;
+export function getPiece(piece: ColorPiece): Piece {
+  if (piece > ColorPiece.WhiteKing) return piece - ColorPiece.WhiteKing;
+  return piece as number;
 }
 
 /**

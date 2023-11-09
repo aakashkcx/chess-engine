@@ -48,7 +48,7 @@ export {
   Piece,
   PieceName,
   PieceSymbol,
-  createPiece,
+  colorPiece,
   getColor,
   getPiece,
 } from "./piece";

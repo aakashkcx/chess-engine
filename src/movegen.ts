@@ -17,7 +17,7 @@ import {
   ColorPiece,
   NO_PIECE,
   Piece,
-  createPiece,
+  colorPiece,
   getColor,
   getPiece,
 } from "./piece";
@@ -84,7 +84,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   let captured: ColorPiece;
 
   /* Pawn Moves */
-  piece = createPiece(color, Piece.Pawn);
+  piece = colorPiece(color, Piece.Pawn);
   for (let i = 0; i < game.pieceCount[piece]; i++) {
     start = game.pieceLists[piece][i];
     target = start + PAWN_MOVE_OFFSET[color];
@@ -117,7 +117,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 
   /* Non-Sliding Piece Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
-    piece = createPiece(color, pieceType);
+    piece = colorPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
       start = game.pieceLists[piece][i];
       for (const offset of offsets) {
@@ -132,7 +132,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 
   /* Sliding Piece Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
-    piece = createPiece(color, pieceType);
+    piece = colorPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
       start = game.pieceLists[piece][i];
       for (const offset of offsets) {
@@ -153,14 +153,14 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   }
 
   /* King Castle Moves */
-  piece = createPiece(color, Piece.King);
+  piece = colorPiece(color, Piece.King);
   start = KING_SQUARE[color];
   if (
     game.getCastleRight(KING_SIDE_CASTLE_RIGHT[color]) &&
     game.pieceBoard[start] === piece &&
     game.pieceBoard[start + 1] === NO_PIECE &&
     game.pieceBoard[start + 2] === NO_PIECE &&
-    game.pieceBoard[start + 3] === createPiece(color, Piece.Rook) &&
+    game.pieceBoard[start + 3] === colorPiece(color, Piece.Rook) &&
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start + 1, color)
   ) {
@@ -172,7 +172,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
     game.pieceBoard[start - 1] === NO_PIECE &&
     game.pieceBoard[start - 2] === NO_PIECE &&
     game.pieceBoard[start - 3] === NO_PIECE &&
-    game.pieceBoard[start - 4] === createPiece(color, Piece.Rook) &&
+    game.pieceBoard[start - 4] === colorPiece(color, Piece.Rook) &&
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start - 1, color)
   ) {
@@ -201,7 +201,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   let captured: ColorPiece;
 
   /* Pawn Capture Moves */
-  piece = createPiece(color, Piece.Pawn);
+  piece = colorPiece(color, Piece.Pawn);
   for (let i = 0; i < game.pieceCount[piece]; i++) {
     start = game.pieceLists[piece][i];
     target = start + PAWN_MOVE_OFFSET[color];
@@ -224,7 +224,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
 
   /* Non-Sliding Piece Capture Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
-    piece = createPiece(color, pieceType);
+    piece = colorPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
       start = game.pieceLists[piece][i];
       for (const offset of offsets) {
@@ -238,7 +238,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
 
   /* Sliding Piece Capture Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
-    piece = createPiece(color, pieceType);
+    piece = colorPiece(color, pieceType);
     for (let i = 0; i < game.pieceCount[piece]; i++) {
       start = game.pieceLists[piece][i];
       for (const offset of offsets) {
