@@ -11,7 +11,7 @@ import {
   getValue,
 } from "../piece";
 
-/** The multiplier used for victims in MMV-LVA. */
+/** The multiplier used for victims in MVV-LVA. */
 const VICTIM_MULTIPLIER = 100;
 
 /** The multiplier used for promotion moves. */
@@ -35,7 +35,7 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
 
     let value = 0;
 
-    value += mmvlvaValue(piece, captured);
+    value += mvvlvaValue(piece, captured);
     value += promotionValue(flag);
 
     if (move === pvMove) value += PV_VALUE;
@@ -50,9 +50,9 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
  * The MVV-LVA (Most Valuable Victim - Least Valuable Aggressor) value.
  * @param piece The aggressor piece.
  * @param captured The victim piece.
- * @returns The MMV-LVA value.
+ * @returns The MVV-LVA value.
  */
-function mmvlvaValue(piece: ColorPiece, captured: ColorPiece): number {
+function mvvlvaValue(piece: ColorPiece, captured: ColorPiece): number {
   if (captured === NO_PIECE) return 0;
 
   const victim = getPiece(captured);
