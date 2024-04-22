@@ -23,7 +23,7 @@ import { State } from "./state";
 import { toString } from "./string";
 
 /*
-  TODO: Create enum GameState { Check, Checkmate, Stalemate }.
+  TODO: Add threefold repetition and insufficient material.
 */
 
 /** A chess game. */
@@ -283,6 +283,30 @@ export class ChessGame {
     this.hash = hashEnPassant(this.hash, this.enPassant);
     this.enPassant = index120;
     this.hash = hashEnPassant(this.hash, this.enPassant);
+  }
+
+  /**
+   * Check whether the active color has been checkmated.
+   * @returns Whether the current side is in checkmate.
+   */
+  isCheckmate(): boolean {
+    return this.inCheck && this.generateMoves().length == 0;
+  }
+
+  /**
+   * Check whether the active color has been stalemated.
+   * @returns Whether the current side is in stalemate.
+   */
+  isStalemate(): boolean {
+    return !this.inCheck && this.generateMoves().length == 0;
+  }
+
+  /**
+   * Check whether the game is over.
+   * @returns Whether the game has ended.
+   */
+  isGameEnd(): boolean {
+    return this.isCheckmate() || this.isStalemate();
   }
 
   /**
