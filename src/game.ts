@@ -141,6 +141,7 @@ export class ChessGame {
     this.moveList = [];
     this.stateList = [];
     this.hashList = [];
+    this._search = undefined;
   }
 
   /**
