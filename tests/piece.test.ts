@@ -17,6 +17,7 @@ import {
   getColor,
   getPiece,
   getValue,
+  swapColor,
 } from "../src/piece";
 
 describe("colorPiece() function", () => {
@@ -36,6 +37,17 @@ describe("colorPiece() function", () => {
     expect(() => colorPiece(Color.Black, OFF_BOARD)).toThrow();
     expect(() => colorPiece(Color.None, Piece.Pawn)).toThrow();
     expect(() => colorPiece(Color.None, Piece.King)).toThrow();
+  });
+});
+
+describe("swapColor() function", () => {
+  test("should return opposite Color", () => {
+    expect(swapColor(Color.White)).toBe(Color.Black);
+    expect(swapColor(Color.Black)).toBe(Color.White);
+  });
+
+  test("should throw Error", () => {
+    expect(() => swapColor(Color.None)).toThrow();
   });
 });
 

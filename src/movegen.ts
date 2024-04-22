@@ -20,6 +20,7 @@ import {
   colorPiece,
   getColor,
   getPiece,
+  swapColor,
 } from "./piece";
 
 /** The knight piece move offsets. */
@@ -76,7 +77,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side === undefined ? game.activeColor : side;
-  const opponent = color ^ 1;
+  const opponent = swapColor(color);
 
   let piece: ColorPiece;
   let start: Index120;
@@ -193,7 +194,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side === undefined ? game.activeColor : side;
-  const opponent = color ^ 1;
+  const opponent = swapColor(color);
 
   let piece: ColorPiece;
   let start: Index120;

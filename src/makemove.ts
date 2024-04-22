@@ -3,7 +3,7 @@ import { CastleRight } from "./castlingrights";
 import { ChessGame } from "./game";
 import { Move, MoveFlag, getMove, isPromotion } from "./move";
 import { PAWN_MOVE_OFFSET } from "./movegen";
-import { Color, Piece, colorPiece, getPiece } from "./piece";
+import { Color, Piece, colorPiece, getPiece, swapColor } from "./piece";
 import { State, getState } from "./state";
 
 /**
@@ -36,7 +36,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   game.ply++;
 
   const color = game.activeColor;
-  const opponent = game.activeColor ^ 1;
+  const opponent = swapColor(game.activeColor);
 
   game.halfMoves++;
   if (color === Color.Black) game.fullMoves++;
@@ -137,7 +137,7 @@ export function takeBack(game: ChessGame) {
 
   game.switchColor();
   const color = game.activeColor;
-  const opponent = game.activeColor ^ 1;
+  const opponent = swapColor(game.activeColor);
 
   if (color === Color.Black) game.fullMoves--;
 

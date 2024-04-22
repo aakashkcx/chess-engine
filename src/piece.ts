@@ -107,6 +107,16 @@ export function colorPiece(color: Color, piece: Piece): ColorPiece {
 }
 
 /**
+ * Swap a color to its opposite color.
+ * @param color The color.
+ * @returns The opposite color.
+ */
+export function swapColor(color: Color): Color {
+  if (color === Color.None) throw new Error();
+  return color ^ 1;
+}
+
+/**
  * Get the color of a color piece.
  * @param piece The color piece.
  * @returns The color.

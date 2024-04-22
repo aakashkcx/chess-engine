@@ -17,7 +17,7 @@ import {
 import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
-import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
+import { Color, ColorPiece, NO_PIECE, PIECES, swapColor } from "./piece";
 import { Search } from "./search/search";
 import { State } from "./state";
 import { toString } from "./string";
@@ -236,7 +236,8 @@ export class ChessGame {
    */
   switchColor(): Color {
     this.hash = hashColor(this.hash);
-    return (this.activeColor ^= 1);
+    this.activeColor = swapColor(this.activeColor);
+    return this.activeColor;
   }
 
   /**
