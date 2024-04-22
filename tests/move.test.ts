@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import { Square120 } from "../src/board";
 import {
   Move,

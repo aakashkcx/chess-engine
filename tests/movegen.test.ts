@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import { Index120, Square120, index64To120 } from "../src/board";
 import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
 import { ChessGame } from "../src/game";

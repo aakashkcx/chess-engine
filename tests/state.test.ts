@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import { Square120 } from "../src/board";
 import { ALL_CASTLE_RIGHTS, NO_CASTLE_RIGHTS } from "../src/castlingrights";
 import {

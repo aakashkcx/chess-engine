@@ -1,3 +1,5 @@
+import { describe, expect, test, vi } from "vitest";
+
 import { Square120 } from "../src/board";
 import {
   ALL_CASTLE_RIGHTS,
@@ -236,7 +238,7 @@ describe("ChessGame class", () => {
   describe("print() method", () => {
     test("should print the chessboard", () => {
       const game = new ChessGame();
-      const spy = jest.spyOn(console, "log").mockImplementation();
+      const spy = vi.spyOn(console, "log").mockImplementation(() => undefined);
       game.print();
       expect(spy).toHaveBeenCalledTimes(1);
     });

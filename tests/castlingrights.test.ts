@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import {
   ALL_CASTLE_RIGHTS,
   CastleRight,

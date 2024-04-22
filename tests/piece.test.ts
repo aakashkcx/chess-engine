@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import { OFF_BOARD } from "../src/board";
 import {
   BISHOP_VALUE,

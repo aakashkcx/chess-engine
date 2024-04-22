@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import { STARTING_FEN, getFEN } from "../src/fen";
 import { ChessGame } from "../src/game";
 
