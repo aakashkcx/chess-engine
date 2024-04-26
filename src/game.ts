@@ -383,6 +383,16 @@ export class ChessGame {
   }
 
   /**
+   * Get the chess board indexed 0-63.
+   * @returns The chess board, of length 64.
+   */
+  getBoard(): ColorPiece[] {
+    const board: ColorPiece[] = Array(64);
+    for (let i = 0; i < 64; i++) board[i] = this.pieceBoard[index64To120(i)];
+    return board;
+  }
+
+  /**
    * Get a string representation of the chess game.
    * @param onlyBoard Whether to print only the board.
    * @param useSymbols Whether to use symbols or letters to represent pieces.
