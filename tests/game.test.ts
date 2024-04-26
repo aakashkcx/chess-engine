@@ -227,6 +227,60 @@ describe("ChessGame class", () => {
     });
   });
 
+  describe("isCheckmate()", () => {
+    test("should return true if checkmated", () => {
+      // Fool's mate
+      let game = new ChessGame(
+        "rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w - - 0 1"
+      );
+      expect(game.isCheckmate()).toBe(true);
+      // King-queen mate
+      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
+      expect(game.isCheckmate()).toBe(true);
+      // Back-rank mate
+      game = new ChessGame("3R2k1/5ppp/8/8/8/8/8/4K3 b - - 0 1");
+      expect(game.isCheckmate()).toBe(true);
+    });
+
+    test("should return false if not checkmated", () => {
+      // Starting position
+      let game = new ChessGame();
+      expect(game.isCheckmate()).toBe(false);
+      // Stalemate
+      game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+      expect(game.isCheckmate()).toBe(false);
+    });
+  });
+
+  describe("isStalemate()", () => {
+    test("should return true if stalemated", () => {
+      let game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+      expect(game.isStalemate()).toBe(true);
+      game = new ChessGame("5k2/5P2/5K2/8/8/8/8/8 b - - 0 1");
+      expect(game.isStalemate()).toBe(true);
+    });
+
+    test("should return false if not stalemated", () => {
+      let game = new ChessGame();
+      expect(game.isStalemate()).toBe(false);
+      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
+      expect(game.isStalemate()).toBe(false);
+    });
+  });
+
+  describe("isLegalMove()", () => {
+    test("should return true if the move is legal", () => {});
+
+    test("should return false if the move is illegal", () => {});
+  });
+
+  describe("getBoard()", () => {
+    test("should return a chess board of length 64", () => {
+      const game = new ChessGame(STARTING_FEN);
+      expect(game.getBoard().length).toBe(64);
+    });
+  });
+
   describe("toString() method", () => {
     test("should return a string representation of the chess game", () => {
       const game = new ChessGame();
