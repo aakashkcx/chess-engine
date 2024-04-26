@@ -1,10 +1,14 @@
 {
   "name": "@aakashkcx/chess-engine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A chess engine.",
   "author": "Aakash Kc <aakashkcx@gmail.com>",
   "keywords": [
-    "chess"
+    "typescript",
+    "chess-engine",
+    "chess",
+    "ai",
+    "artificial-intelligence"
   ],
   "license": "MIT",
   "homepage": "https://github.com/aakashkcx/chess-engine#readme",
