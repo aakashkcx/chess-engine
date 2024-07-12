@@ -51,4 +51,5 @@ export {
   colorPiece,
   getColor,
   getPiece,
+  swapColor,
 } from "./piece";
