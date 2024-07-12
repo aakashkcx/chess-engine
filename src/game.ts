@@ -112,6 +112,7 @@ export class ChessGame {
    * Create a new chess game.
    * @param fen The starting Forsyth–Edwards Notation (FEN) string.
    *  If empty FEN string, game will start with empty board.
+   * @throws {Error} If FEN string is invalid.
    */
   constructor(fen: string = STARTING_FEN) {
     if (fen) this.setFEN(fen);
@@ -356,6 +357,7 @@ export class ChessGame {
 
   /**
    * Take back the last move made on the chessboard.
+   * @throws {Error} If take back not possible.
    */
   takeBack() {
     takeBack(this);
@@ -382,6 +384,7 @@ export class ChessGame {
   /**
    * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
    * @param fen The Forsyth–Edwards Notation (FEN) string.
+   * @throws {Error} If FEN string is invalid.
    */
   setFEN(fen: string) {
     setFEN(this, fen);
