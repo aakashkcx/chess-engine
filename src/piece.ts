@@ -98,21 +98,25 @@ export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
  * @param color The piece color.
  * @param piece The piece type.
  * @returns The color piece.
+ * @throws {Error} If piece is empty.
+ * @throws {Error} If color is none.
  */
 export function colorPiece(color: Color, piece: Piece): ColorPiece {
-  if (piece <= Piece.Empty) throw new Error();
+  if (piece <= Piece.Empty)
+    throw new Error("Cannot create color piece with empty piece!");
   if (color === Color.White) return piece as number as ColorPiece;
   if (color === Color.Black) return piece + ColorPiece.WhiteKing;
-  throw new Error();
+  throw new Error("Cannot create color piece with no color!");
 }
 
 /**
- * Swap a color to its opposite color.
+ * Change a color to its opposite color.
  * @param color The color.
  * @returns The opposite color.
+ * @throws {Error} If color is none.
  */
 export function swapColor(color: Color): Color {
-  if (color === Color.None) throw new Error();
+  if (color === Color.None) throw new Error("Cannot change color of none!");
   return color ^ 1;
 }
 

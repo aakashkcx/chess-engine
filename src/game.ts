@@ -168,11 +168,13 @@ export class ChessGame {
    * Add a piece to the chessboard.
    * @param index120 The 120 index.
    * @param piece The color piece.
+   * @throws {Error} If square is occupied.
+   * @throws {Error} If chess piece is null.
    */
   addPiece(index120: Index120, piece: ColorPiece) {
     if (this.pieceBoard[index120] !== NO_PIECE)
       throw new Error("Cannot add piece to occupied square!");
-    if (piece === NO_PIECE) throw new Error("Cannot add empty piece!");
+    if (piece === NO_PIECE) throw new Error("Cannot add null chess piece!");
 
     const pieceListIndex = this.pieceCount[piece];
     this.pieceBoard[index120] = piece;
@@ -187,6 +189,8 @@ export class ChessGame {
    * Move a piece on the chessboard.
    * @param start120 The 120 index start square.
    * @param target120 The 120 index target square.
+   * @throws {Error} If start square is empty.
+   * @throws {Error} If target square is occupied.
    */
   movePiece(start120: Index120, target120: Index120) {
     if (this.pieceBoard[start120] === NO_PIECE)
@@ -210,6 +214,7 @@ export class ChessGame {
   /**
    * Remove a piece on the chessboard.
    * @param index120 The 120 index of the piece.
+   * @throws {Error} If square is empty.
    */
   removePiece(index120: Index120) {
     if (this.pieceBoard[index120] === NO_PIECE)

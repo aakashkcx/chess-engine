@@ -63,6 +63,7 @@ export function getFEN(game: ChessGame): string {
  * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
  * @param game The chess game.
  * @param fen The Forsyth–Edwards Notation (FEN) string.
+ * @throws {Error} If FEN string is invalid.
  */
 export function setFEN(game: ChessGame, fen: string) {
   // Reset the board.
@@ -126,12 +127,12 @@ export function setFEN(game: ChessGame, fen: string) {
 
   // Set half move clock.
   const halfMoves = parseInt(fenArray[4]);
-  if (isNaN(halfMoves)) throw new Error();
+  if (isNaN(halfMoves)) throw new Error("Invalid FEN half move clock!");
   game.halfMoves = halfMoves;
 
   // Set full move counter.
   const fullMoves = parseInt(fenArray[5]);
-  if (isNaN(fullMoves)) throw new Error();
+  if (isNaN(fullMoves)) throw new Error("Invalid FEN full move number!");
   game.fullMoves = fullMoves;
 
   // Generate the hash.

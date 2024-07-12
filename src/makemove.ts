@@ -120,6 +120,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 /**
  * Take back the last move made on the chessboard.
  * @param game The chess game.
+ * @throws {Error} If take back not possible.
  */
 export function takeBack(game: ChessGame) {
   if (game.ply === 0) throw new Error("Cannot take back!");

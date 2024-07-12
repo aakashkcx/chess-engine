@@ -186,9 +186,9 @@ export function mirror120(index120: Index120): Index120 {
 }
 
 /**
- * Convert a 64 index to a square string.
+ * Convert a 64 index to a coordinate notation string.
  * @param index64 The 64 index.
- * @returns The square string.
+ * @returns The coordinate notation string, a file (letter) and rank (number).
  */
 export function string64(index64: Index120): string {
   const rank = Math.trunc(index64 / 8);
@@ -197,9 +197,9 @@ export function string64(index64: Index120): string {
 }
 
 /**
- * Convert a 120 index to a square string.
+ * Convert a 120 index to a coordinate notation string.
  * @param index120 The 120 index.
- * @returns The square string.
+ * @returns The coordinate notation string, a file (letter) and rank (number).
  */
 export function string120(index120: Index120): string {
   const rank = Math.trunc(index120 / 10) - 2;
@@ -208,25 +208,27 @@ export function string120(index120: Index120): string {
 }
 
 /**
- * Convert a square string to a 64 index.
- * @param string The square string.
+ * Convert a coordinate notation string to a 64 index.
+ * @param string The coordinate notation string, a file (letter) and rank (number).
  * @returns The 64 index.
+ * @throws {Error} If invalid coordinate notation string.
  */
 export function stringTo64(string: string): Index64 {
   const rank = parseInt(string[1]) - 1;
-  if (isNaN(rank)) throw new Error();
+  if (isNaN(rank)) throw new Error("Invalid coordinate notation string!");
   const file = string.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
   return rank * 8 + file;
 }
 
 /**
- * Convert a square string to a 120 index.
- * @param string The square string.
+ * Convert a coordinate notation string to a 120 index.
+ * @param string The coordinate notation string, a file (letter) and rank (number).
  * @returns The 120 index.
+ * @throws {Error} If invalid coordinate notation string.
  */
 export function stringTo120(string: string): Index120 {
   const rank = parseInt(string[1]) - 1;
-  if (isNaN(rank)) throw new Error();
+  if (isNaN(rank)) throw new Error("Invalid coordinate notation string!");
   const file = string.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
   return (rank + 2) * 10 + (file + 1);
 }
