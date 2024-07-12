@@ -1,6 +1,6 @@
 {
   "name": "@aakashkcx/chess-engine",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A chess engine.",
   "author": "Aakash Kc <aakashkcx@gmail.com>",
   "keywords": [
@@ -32,10 +32,10 @@
     "coverage": "vitest --coverage"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@vitest/coverage-v8": "^1.5.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.5.0"
+    "@types/node": "^20.14.10",
+    "@vitest/coverage-v8": "^2.0.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.2"
   }
 }
