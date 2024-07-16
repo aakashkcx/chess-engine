@@ -29,14 +29,14 @@
     "build": "tsup",
     "lint": "tsc",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",
-    "@vitest/coverage-v8": "^2.0.2",
+    "@vitest/coverage-v8": "^2.0.3",
     "tsup": "^8.1.0",
     "typescript": "^5.5.3",
-    "vitest": "^2.0.2"
+    "vitest": "^2.0.3"
   },
   "packageManager": "pnpm@9.5.0"
 }
