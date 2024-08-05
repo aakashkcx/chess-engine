@@ -32,11 +32,11 @@
     "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
-    "@types/node": "^20.14.10",
-    "@vitest/coverage-v8": "^2.0.3",
-    "tsup": "^8.1.0",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.3"
+    "@types/node": "^22.1.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
-  "packageManager": "pnpm@9.5.0"
+  "packageManager": "pnpm@9.6.0"
 }
