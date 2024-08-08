@@ -41,7 +41,7 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
     moveScores.set(move, value);
   }
 
-  moves.sort((a, b) => (moveScores.get(b) || 0) - (moveScores.get(a) || 0));
+  moves.sort((a, b) => (moveScores.get(b) ?? 0) - (moveScores.get(a) ?? 0));
 }
 
 /**

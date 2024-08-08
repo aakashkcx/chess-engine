@@ -76,7 +76,7 @@ const SLIDING_PIECES_OFFSETS = [
 export function generateMoves(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
-  const color = side === undefined ? game.activeColor : side;
+  const color = side ?? game.activeColor;
   const opponent = swapColor(color);
 
   let piece: ColorPiece;
@@ -193,7 +193,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
-  const color = side === undefined ? game.activeColor : side;
+  const color = side ?? game.activeColor;
   const opponent = swapColor(color);
 
   let piece: ColorPiece;
@@ -275,12 +275,9 @@ export function isSquareAttacked(
   side?: Color
 ): boolean {
   const piece = game.pieceBoard[index120];
+
   const color =
-    side === undefined
-      ? piece !== NO_PIECE
-        ? getColor(piece)
-        : game.activeColor
-      : side;
+    side ?? (piece !== NO_PIECE ? getColor(piece) : game.activeColor);
 
   /* Pawn Attacks */
   for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
