@@ -27,16 +27,20 @@
   ],
   "scripts": {
     "build": "tsup",
-    "lint": "tsc",
+    "lint": "eslint",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.1.0",
     "@vitest/coverage-v8": "^2.0.5",
+    "eslint": "^9.8.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.1",
     "vitest": "^2.0.5"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.7.0"
 }
