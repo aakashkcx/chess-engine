@@ -24,47 +24,47 @@ import {
 } from "./piece";
 
 /** The knight piece move offsets. */
-export const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12];
+export const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12] as const;
 
 /** The bishop piece move offsets. */
-export const BISHOP_OFFSETS = [9, 11, -9, -11];
+export const BISHOP_OFFSETS = [9, 11, -9, -11] as const;
 
 /** The rook piece move offsets. */
-export const ROOK_OFFSETS = [10, 1, -10, -1];
+export const ROOK_OFFSETS = [10, 1, -10, -1] as const;
 
 /** The queen piece move offsets. */
-export const QUEEN_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+export const QUEEN_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1] as const;
 
 /** The king piece move offsets. */
-export const KING_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1];
+export const KING_OFFSETS = [9, 10, 11, 1, -9, -10, -11, -1] as const;
 
 /** The pawn piece move offsets. */
-export const PAWN_MOVE_OFFSET = [10, -10];
+export const PAWN_MOVE_OFFSET = [10, -10] as const;
 
 /** The pawn piece behind offsets. */
-export const PAWN_BEHIND_OFFSET = [-10, 10];
+export const PAWN_BEHIND_OFFSET = [-10, 10] as const;
 
 /** The pawn piece double move offsets. */
-export const PAWN_DOUBLE_OFFSET = [20, -20];
+export const PAWN_DOUBLE_OFFSET = [20, -20] as const;
 
 /** The pawn piece capture move offsets. */
 export const PAWN_CAPTURE_OFFSETS = [
   [9, 11],
   [-11, -9],
-];
+] as const;
 
 /** The non sliding pieces move offsets (knight & king). */
-const NON_SLIDING_PIECES_OFFSETS: [Piece, number[]][] = [
+const NON_SLIDING_PIECES_OFFSETS = [
   [Piece.Knight, KNIGHT_OFFSETS],
   [Piece.King, KING_OFFSETS],
-];
+] as const;
 
 /** The sliding pieces move offsets (bishop, rook & queen). */
-const SLIDING_PIECES_OFFSETS: [Piece, number[]][] = [
+const SLIDING_PIECES_OFFSETS = [
   [Piece.Bishop, BISHOP_OFFSETS],
   [Piece.Rook, ROOK_OFFSETS],
   [Piece.Queen, QUEEN_OFFSETS],
-];
+] as const;
 
 /**
  * Generate pseudo-legal moves on the chessboard.

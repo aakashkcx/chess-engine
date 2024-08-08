@@ -1,22 +1,22 @@
 import { NO_PIECE, OFF_BOARD, Piece } from "../piece";
 
 /** The value of a pawn piece. */
-export const PAWN_VALUE = 100 as const;
+export const PAWN_VALUE = 100;
 
 /** The value of a knight piece. */
-export const KNIGHT_VALUE = 300 as const;
+export const KNIGHT_VALUE = 300;
 
 /** The value of a bishop piece. */
-export const BISHOP_VALUE = 350 as const;
+export const BISHOP_VALUE = 350;
 
 /** The value of a rook piece. */
-export const ROOK_VALUE = 500 as const;
+export const ROOK_VALUE = 500;
 
 /** The value of a queen piece. */
-export const QUEEN_VALUE = 1000 as const;
+export const QUEEN_VALUE = 1000;
 
 /** The value of a king piece. */
-export const KING_VALUE = 10000 as const;
+export const KING_VALUE = 10000;
 
 /** The value of all chess pieces. */
 export const PIECE_VALUE: Record<Piece, number> = {

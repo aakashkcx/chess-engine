@@ -45,7 +45,7 @@ export const PROMOTION_FLAGS = [
   MoveFlag.PromoteKnight,
   MoveFlag.PromoteRook,
   MoveFlag.PromoteBishop,
-];
+] as const;
 
 /** The move value binary mask for the start square 120 index (7 bits). */
 const START_MASK = 0b000000000000001111111;

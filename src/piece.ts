@@ -14,7 +14,7 @@ export const Color = {
 /**
  * A null color.
  */
-export const NO_COLOR = -1 as const;
+export const NO_COLOR = -1;
 
 /**
  * A chess piece on the chessboard.
@@ -94,24 +94,24 @@ export const ColorPieces = [
 /**
  * A null chess piece, used to indicate an empty square on the chessboard.
  */
-export const NO_PIECE = 0 as const;
+export const NO_PIECE = 0;
 
 /**
  * An off-board sentinel piece, used to indicate an off-board square on the 120 square chessboard.
  */
-export const OFF_BOARD = -1 as const;
+export const OFF_BOARD = -1;
 
 /**
  * A list of piece names.
  * Indexed by Piece or ColorPiece.
  */
-export const PieceName = ".PNBRQKpnbrqk" as const;
+export const PieceName = ".PNBRQKpnbrqk";
 
 /**
  * A list of piece symbols.
  * Indexed by Piece or ColorPiece.
  */
-export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚" as const;
+export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
 
 /**
  * Create a chess piece with color.

@@ -7,7 +7,7 @@ export type File = number;
  * The file names running horizontally on the chessboard.
  * Indexed by {@link File}.
  */
-export const FileName = "abcdefgh" as const;
+export const FileName = "abcdefgh";
 
 /**
  * The vertical ranks (0-7) of the chessboard.
@@ -18,7 +18,7 @@ export type Rank = number;
  * The rank names running vertically on the chessboard.
  * Indexed by {@link Rank}.
  */
-export const RankName = "12345678" as const;
+export const RankName = "12345678";
 
 /*
   ========== 64 Square Chessboard (8*8) ==========
@@ -79,7 +79,7 @@ export const Square120 = {
 /**
  * A null index on the 120 square chessboard.
  */
-export const NULL_INDEX = 0 as const;
+export const NULL_INDEX = 0;
 
 /**
  * The king piece staring square indices on the 120 square chessboard.
