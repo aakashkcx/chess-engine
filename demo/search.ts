@@ -1,20 +1,14 @@
-import { ChessGame, NO_MOVE } from "../src";
+import { ChessGame } from "../src";
 
 const FEN = "rnbqkbnr/ppppp2p/5p2/6p1/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
 const game = new ChessGame(FEN);
 game.print();
 
-while (true) {
+while (!game.isGameEnd()) {
   const move = game.search();
-  // const move = game.search(3000);
-  if (move !== NO_MOVE) {
-    game.makeMove(move);
-    game.print();
-  } else {
-    if (game.inCheck) console.log("Checkmate!");
-    else console.log("Stalemate!");
-    break;
-  }
+  game.makeMove(move);
+  game.print();
 }
 
-// TODO: Implement Checkmate, Stalemate, Draw
+if (game.isCheckmate()) console.log("Checkmate!");
+if (game.isStalemate()) console.log("Stalemate!");

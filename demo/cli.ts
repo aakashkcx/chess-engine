@@ -31,7 +31,8 @@ async function gamePlayer(rl: readline.Interface) {
     const moveStrings = moves.map(moveStringMin);
     console.log(moveStrings);
     if (moves) {
-      const answer = await rl.question(`\n${Color[side]} to move: `);
+      const color = side === Color.White ? "White" : "Black";
+      const answer = await rl.question(`\n${color} to move: `);
       const index = moveStrings.indexOf(answer);
       if (index >= 0) game.makeMove(moves[index]);
     } else break;
@@ -48,14 +49,16 @@ async function gameAI(rl: readline.Interface) {
       const moveStrings = moves.map(moveStringMin);
       console.log(moveStrings);
       if (moves) {
-        const answer = await rl.question(`\n${Color[side]} to move: `);
+        const color = side === Color.White ? "White" : "Black";
+        const answer = await rl.question(`\n${color} to move: `);
         const index = moveStrings.indexOf(answer);
         if (index >= 0) game.makeMove(moves[index]);
       } else break;
     } else {
       const move = game.search();
       if (move) {
-        console.log(`\n${Color[side]} to move: ${moveStringMin(move)}`);
+        const color = side === Color.White ? "White" : "Black";
+        console.log(`\n${color} to move: ${moveStringMin(move)}`);
         game.makeMove(move);
       } else break;
     }
