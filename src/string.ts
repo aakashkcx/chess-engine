@@ -31,7 +31,7 @@ export function toString(
   if (onlyBoard) return board;
 
   // The active color.
-  let side = game.activeColor === Color.White ? "White" : "Black";
+  const side = game.activeColor === Color.White ? "White" : "Black";
 
   // The castling rights.
   let castlingRights = "";
@@ -42,10 +42,10 @@ export function toString(
   if (game.getCastleRight(CastleRight.BlackQueen)) castlingRights += "q";
 
   // The en passant target square.
-  let enPassant = game.enPassant ? string120(game.enPassant) : "-";
+  const enPassant = game.enPassant ? string120(game.enPassant) : "-";
 
   // The half move and full move counter.
-  let { halfMoves, fullMoves } = game;
+  const { halfMoves, fullMoves } = game;
 
   return `${board}\n ${side} ${castlingRights} ${halfMoves} ${fullMoves} ${enPassant}`;
 }

@@ -274,8 +274,6 @@ export class Search {
 
     while (game.ply > this.startPly) game.takeBack();
 
-    console.log;
-
     return moves;
   }
 

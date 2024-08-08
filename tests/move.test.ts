@@ -13,7 +13,7 @@ import {
   moveString,
   moveStringMin,
 } from "../src/move";
-import { ColorPiece } from "../src/piece";
+import { ColorPiece, NO_PIECE } from "../src/piece";
 
 describe("getMove() function", () => {
   test("should return all correct move properties", () => {
@@ -35,7 +35,7 @@ describe("getMove() function", () => {
     const [start, target, captured, flag] = getMove(move);
     expect(start).toBe(Square120.E8);
     expect(target).toBe(Square120.D6);
-    expect(captured).toBe(ColorPiece.Empty);
+    expect(captured).toBe(NO_PIECE);
     expect(flag).toBe(MoveFlag.None);
   });
 });
@@ -65,8 +65,8 @@ describe("getCaptured() function", () => {
   });
 
   test("should return no captured piece", () => {
-    let move = Move(Square120.F2, Square120.E4);
-    expect(getCaptured(move)).toBe(ColorPiece.Empty);
+    const move = Move(Square120.F2, Square120.E4);
+    expect(getCaptured(move)).toBe(NO_PIECE);
   });
 });
 
@@ -85,7 +85,7 @@ describe("getFlag() function", () => {
   });
 
   test("should return no move flag", () => {
-    let move = Move(0, 0, 0, MoveFlag.None);
+    const move = Move(0, 0, 0, MoveFlag.None);
     expect(getFlag(move)).toBe(MoveFlag.None);
   });
 });

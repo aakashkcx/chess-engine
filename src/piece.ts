@@ -1,54 +1,82 @@
 /**
- * The colors of the chessboard.
+ * A color on the chessboard.
  */
-export enum Color {
-  White = 0,
-  Black = 1,
-  None,
-}
+export type Color = number;
 
 /**
- * The chess pieces.
+ * The colors on the chessboard.
  */
-export enum Piece {
-  Empty = 0,
-  Pawn,
-  Knight,
-  Bishop,
-  Rook,
-  Queen,
-  King,
-}
+export const Color = {
+  White: 0,
+  Black: 1,
+} as const;
 
 /**
- * The chess pieces, with color.
+ * A null color.
  */
-export enum ColorPiece {
-  Empty = 0,
-  WhitePawn,
-  WhiteKnight,
-  WhiteBishop,
-  WhiteRook,
-  WhiteQueen,
-  WhiteKing,
-  BlackPawn,
-  BlackKnight,
-  BlackBishop,
-  BlackRook,
-  BlackQueen,
-  BlackKing,
-}
+export const NO_COLOR = -1 as const;
 
 /**
- * Represents a null chess piece.
+ * A chess piece on the chessboard.
  */
-export const NO_PIECE: ColorPiece = ColorPiece.Empty;
+export type Piece = number;
 
 /**
- * All the chess pieces, with color.
+ * The chess pieces on the chessboard.
  */
-export const PIECES = [
-  ColorPiece.Empty,
+export const Piece = {
+  Pawn: 1,
+  Knight: 2,
+  Bishop: 3,
+  Rook: 4,
+  Queen: 5,
+  King: 6,
+} as const;
+
+/**
+ * All the chess pieces on the chessboard.
+ */
+export const Pieces = [
+  Piece.Pawn,
+  Piece.Knight,
+  Piece.Bishop,
+  Piece.Rook,
+  Piece.Queen,
+  Piece.King,
+] as const;
+
+/**
+ * The offset for black color pieces.
+ */
+export const BLACK_OFFSET = Piece.King;
+
+/**
+ * A chess piece with a color on the chessboard.
+ */
+export type ColorPiece = number;
+
+/**
+ * The chess pieces with color on the chessboard.
+ */
+export const ColorPiece = {
+  WhitePawn: 1, // Piece.Pawn
+  WhiteKnight: 2, // Piece.Knight
+  WhiteBishop: 3, // Piece.Bishop
+  WhiteRook: 4, // Piece.Rook
+  WhiteQueen: 5, // Piece.Queen
+  WhiteKing: 6, // Piece.King
+  BlackPawn: 7, // Piece.Pawn + BLACK_OFFSET
+  BlackKnight: 8, // Piece.Knight + BLACK_OFFSET
+  BlackBishop: 9, // Piece.Bishop + BLACK_OFFSET
+  BlackRook: 10, // Piece.Rook + BLACK_OFFSET
+  BlackQueen: 11, // Piece.Queen + BLACK_OFFSET
+  BlackKing: 12, // Piece.King + BLACK_OFFSET
+} as const;
+
+/**
+ * All the chess pieces with color on the chessboard.
+ */
+export const ColorPieces = [
   ColorPiece.WhitePawn,
   ColorPiece.WhiteKnight,
   ColorPiece.WhiteBishop,
@@ -61,51 +89,43 @@ export const PIECES = [
   ColorPiece.BlackRook,
   ColorPiece.BlackQueen,
   ColorPiece.BlackKing,
-];
+] as const;
 
-/** The value of a pawn piece. */
-export const PAWN_VALUE = 100;
+/**
+ * A null chess piece, used to indicate an empty square on the chessboard.
+ */
+export const NO_PIECE = 0 as const;
 
-/** The value of a knight piece. */
-export const KNIGHT_VALUE = 300;
-
-/** The value of a bishop piece. */
-export const BISHOP_VALUE = 350;
-
-/** The value of a rook piece. */
-export const ROOK_VALUE = 500;
-
-/** The value of a queen piece. */
-export const QUEEN_VALUE = 1000;
-
-/** The value of a king piece. */
-export const KING_VALUE = 10000;
+/**
+ * An off-board sentinel piece, used to indicate an off-board square on the 120 square chessboard.
+ */
+export const OFF_BOARD = -1 as const;
 
 /**
  * A list of piece names.
- * Indexed by {@link Piece} or {@link ColorPiece}.
+ * Indexed by Piece or ColorPiece.
  */
-export const PieceName = ".PNBRQKpnbrqk";
+export const PieceName = ".PNBRQKpnbrqk" as const;
 
 /**
  * A list of piece symbols.
- * Indexed by {@link Piece} or {@link ColorPiece}.
+ * Indexed by Piece or ColorPiece.
  */
-export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
+export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚" as const;
 
 /**
- * Create a color piece.
+ * Create a chess piece with color.
  * @param color The piece color.
  * @param piece The piece type.
  * @returns The color piece.
- * @throws {Error} If piece is empty.
  * @throws {Error} If color is none.
+ * @throws {Error} If piece is none.
  */
 export function colorPiece(color: Color, piece: Piece): ColorPiece {
-  if (piece <= Piece.Empty)
-    throw new Error("Cannot create color piece with empty piece!");
-  if (color === Color.White) return piece as number as ColorPiece;
-  if (color === Color.Black) return piece + ColorPiece.WhiteKing;
+  if (piece <= NO_PIECE)
+    throw new Error("Cannot create color piece with no piece!");
+  if (color === Color.White) return piece;
+  if (color === Color.Black) return piece + BLACK_OFFSET;
   throw new Error("Cannot create color piece with no color!");
 }
 
@@ -116,8 +136,9 @@ export function colorPiece(color: Color, piece: Piece): ColorPiece {
  * @throws {Error} If color is none.
  */
 export function swapColor(color: Color): Color {
-  if (color === Color.None) throw new Error("Cannot change color of none!");
-  return color ^ 1;
+  if (color === Color.White) return Color.Black;
+  if (color === Color.Black) return Color.White;
+  throw new Error("Cannot change color of none!");
 }
 
 /**
@@ -126,9 +147,9 @@ export function swapColor(color: Color): Color {
  * @returns The color.
  */
 export function getColor(piece: ColorPiece): Color {
-  if (piece >= ColorPiece.BlackPawn) return Color.Black;
-  if (piece >= ColorPiece.WhitePawn) return Color.White;
-  return Color.None;
+  if (piece > BLACK_OFFSET) return Color.Black;
+  if (piece > NO_PIECE) return Color.White;
+  return NO_COLOR;
 }
 
 /**
@@ -137,22 +158,8 @@ export function getColor(piece: ColorPiece): Color {
  * @returns The piece type.
  */
 export function getPiece(piece: ColorPiece): Piece {
-  if (piece > ColorPiece.WhiteKing) return piece - ColorPiece.WhiteKing;
-  return piece as number;
-}
-
-/**
- * Get the value of a piece.
- * @param piece The piece type.
- * @returns The value.
- */
-export function getValue(piece: Piece): number {
-  if (piece === Piece.Empty) return 0;
-  if (piece === Piece.Pawn) return PAWN_VALUE;
-  if (piece === Piece.Knight) return KNIGHT_VALUE;
-  if (piece === Piece.Bishop) return BISHOP_VALUE;
-  if (piece === Piece.Rook) return ROOK_VALUE;
-  if (piece === Piece.Queen) return QUEEN_VALUE;
-  if (piece === Piece.King) return KING_VALUE;
-  return 0;
+  if (piece > BLACK_OFFSET) return piece - BLACK_OFFSET;
+  if (piece > NO_PIECE) return piece;
+  if (piece === OFF_BOARD) return OFF_BOARD;
+  return NO_PIECE;
 }

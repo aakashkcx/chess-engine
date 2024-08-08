@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import {
   ALL_CASTLE_RIGHTS,
   CastleRight,
+  CastlingRights,
   NO_CASTLE_RIGHTS,
   getCastleRight,
   setCastleRight,
@@ -10,36 +11,36 @@ import {
 
 describe("getCastleRight() function", () => {
   test("should return correct castle right", () => {
-    let castlingRights = NO_CASTLE_RIGHTS;
-    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(false);
+    let rights: CastlingRights = NO_CASTLE_RIGHTS;
+    expect(getCastleRight(rights, CastleRight.WhiteKing)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.WhiteQueen)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.BlackKing)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.BlackQueen)).toBe(false);
 
-    castlingRights = ALL_CASTLE_RIGHTS;
-    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(true);
+    rights = ALL_CASTLE_RIGHTS;
+    expect(getCastleRight(rights, CastleRight.WhiteKing)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.WhiteQueen)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.BlackKing)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.BlackQueen)).toBe(true);
 
-    castlingRights = 0b1010;
-    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(true);
+    rights = 0b1010;
+    expect(getCastleRight(rights, CastleRight.WhiteKing)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.WhiteQueen)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.BlackKing)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.BlackQueen)).toBe(true);
 
-    castlingRights = 0b0101;
-    expect(getCastleRight(castlingRights, CastleRight.WhiteKing)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.WhiteQueen)).toBe(false);
-    expect(getCastleRight(castlingRights, CastleRight.BlackKing)).toBe(true);
-    expect(getCastleRight(castlingRights, CastleRight.BlackQueen)).toBe(false);
+    rights = 0b0101;
+    expect(getCastleRight(rights, CastleRight.WhiteKing)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.WhiteQueen)).toBe(false);
+    expect(getCastleRight(rights, CastleRight.BlackKing)).toBe(true);
+    expect(getCastleRight(rights, CastleRight.BlackQueen)).toBe(false);
   });
 });
 
 describe("setCastleRight() function", () => {
   test("should return correct castling rights when setting to true", () => {
-    let rights = NO_CASTLE_RIGHTS;
-    let expected = NO_CASTLE_RIGHTS;
+    let rights: CastlingRights = NO_CASTLE_RIGHTS;
+    let expected: CastlingRights = NO_CASTLE_RIGHTS;
 
     rights = setCastleRight(rights, CastleRight.WhiteKing, true);
     expected |= 1 << CastleRight.WhiteKing;
@@ -61,8 +62,8 @@ describe("setCastleRight() function", () => {
   });
 
   test("should return correct castling rights when setting to false", () => {
-    let rights = ALL_CASTLE_RIGHTS;
-    let expected = ALL_CASTLE_RIGHTS;
+    let rights: CastlingRights = ALL_CASTLE_RIGHTS;
+    let expected: CastlingRights = ALL_CASTLE_RIGHTS;
 
     rights = setCastleRight(rights, CastleRight.WhiteKing, false);
     expected &= ~(1 << CastleRight.WhiteKing);

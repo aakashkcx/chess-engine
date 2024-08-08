@@ -1,26 +1,31 @@
 /**
  * The castling availability of the chessboard.
- * Stored as a number with each castle right encoded as a bit.
+ * Stored as a 4-bit number with each castle right encoded as a bit.
  */
 export type CastlingRights = number;
 
 /**
- * The types of castle rights of the chessboard.
+ * A type of castle right of the chessboard.
  */
-export enum CastleRight {
-  WhiteKing,
-  WhiteQueen,
-  BlackKing,
-  BlackQueen,
-}
+export type CastleRight = number;
 
 /**
- * Represents castling rights with no castle rights.
+ * The types of castle rights of the chessboard.
+ */
+export const CastleRight = {
+  WhiteKing: 0,
+  WhiteQueen: 1,
+  BlackKing: 2,
+  BlackQueen: 3,
+} as const;
+
+/**
+ * A castling rights with no castle rights.
  */
 export const NO_CASTLE_RIGHTS: CastlingRights = 0;
 
 /**
- * Represents castling rights with all castle rights.
+ * A castling rights with all castle rights.
  */
 export const ALL_CASTLE_RIGHTS: CastlingRights =
   (1 << CastleRight.WhiteKing) |
@@ -29,20 +34,22 @@ export const ALL_CASTLE_RIGHTS: CastlingRights =
   (1 << CastleRight.BlackQueen);
 
 /**
- * The castling rights on the king size.
+ * The castle rights on the king side.
+ * Indexed by Color.
  */
 export const KING_SIDE_CASTLE_RIGHT = [
   CastleRight.WhiteKing,
   CastleRight.BlackKing,
-];
+] as const;
 
 /**
- * The castling rights on the queen size.
+ * The castle rights on the queen side.
+ * Indexed by Color.
  */
 export const QUEEN_SIDE_CASTLE_RIGHT = [
   CastleRight.WhiteQueen,
   CastleRight.BlackQueen,
-];
+] as const;
 
 /**
  * Get the castling availability of a castle right type.

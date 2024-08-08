@@ -1,4 +1,4 @@
-import { Index120, NO_SQUARE, OFF_BOARD, index64To120 } from "./board";
+import { Index120, NULL_INDEX, index64To120 } from "./board";
 import {
   CastleRight,
   CastlingRights,
@@ -17,7 +17,14 @@ import {
 import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
 import { generateMoves, isSquareAttacked } from "./movegen";
-import { Color, ColorPiece, NO_PIECE, PIECES, swapColor } from "./piece";
+import {
+  Color,
+  ColorPiece,
+  ColorPieces,
+  NO_PIECE,
+  OFF_BOARD,
+  swapColor,
+} from "./piece";
 import { Search } from "./search/search";
 import { State } from "./state";
 import { toString } from "./string";
@@ -61,7 +68,7 @@ export class ChessGame {
   /**
    * The possible en passant target square.
    */
-  enPassant: Index120 = NO_SQUARE;
+  enPassant: Index120 = NULL_INDEX;
 
   /**
    * The half move clock.
@@ -126,8 +133,8 @@ export class ChessGame {
     this.pieceBoard = Array(120).fill(OFF_BOARD);
     for (let index64 = 0; index64 < 64; index64++)
       this.pieceBoard[index64To120(index64)] = NO_PIECE;
-    this.pieceCount = Array(PIECES.length).fill(0);
-    this.pieceLists = Array(PIECES.length)
+    this.pieceCount = Array(ColorPieces.length + 1).fill(0);
+    this.pieceLists = Array(ColorPieces.length + 1)
       .fill([])
       .map(() => []);
     this.pieceListIndex = Array(120).fill(-1);

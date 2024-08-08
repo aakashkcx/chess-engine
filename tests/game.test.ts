@@ -9,15 +9,15 @@ import {
 import { STARTING_FEN } from "../src/fen";
 import { ChessGame } from "../src/game";
 import { generateHash } from "../src/hash";
-import { Color, ColorPiece, PIECES } from "../src/piece";
+import { Color, ColorPiece, ColorPieces, NO_PIECE } from "../src/piece";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {
     test("should initialise starting chessboard", () => {
       const game = new ChessGame();
       expect(game.pieceBoard.length).toBe(120);
-      expect(game.pieceCount.length).toBe(PIECES.length);
-      expect(game.pieceLists.length).toBe(PIECES.length);
+      expect(game.pieceCount.length).toBe(ColorPieces.length + 1);
+      expect(game.pieceLists.length).toBe(ColorPieces.length + 1);
       expect(game.pieceListIndex.length).toBe(120);
       expect(game.activeColor).toBe(Color.White);
       expect(game.castlingRights).toBe(ALL_CASTLE_RIGHTS);
@@ -86,7 +86,7 @@ describe("ChessGame class", () => {
       const square = Square120.A1;
       const piece = ColorPiece.WhiteQueen;
 
-      expect(game.pieceBoard[square]).toBe(ColorPiece.Empty);
+      expect(game.pieceBoard[square]).toBe(NO_PIECE);
       expect(game.pieceCount[piece]).toBe(0);
       expect(game.pieceLists[piece]).toHaveLength(0);
       expect(game.pieceListIndex[square]).toBe(-1);
@@ -105,7 +105,7 @@ describe("ChessGame class", () => {
       const square = Square120.A3;
       const piece = ColorPiece.BlackQueen;
 
-      expect(game.pieceBoard[square]).toBe(ColorPiece.Empty);
+      expect(game.pieceBoard[square]).toBe(NO_PIECE);
       const pieceCount = game.pieceCount[piece];
       expect(game.pieceLists[piece].length).toBe(pieceCount);
       expect(game.pieceListIndex[square]).toBe(-1);
@@ -128,7 +128,7 @@ describe("ChessGame class", () => {
       const piece = ColorPiece.WhitePawn;
 
       expect(game.pieceBoard[start]).toBe(piece);
-      expect(game.pieceBoard[target]).toBe(ColorPiece.Empty);
+      expect(game.pieceBoard[target]).toBe(NO_PIECE);
       const pieceCount = game.pieceCount[piece];
       const pieceListIndex = game.pieceListIndex[start];
       expect(game.pieceListIndex[target]).toBe(-1);
@@ -136,7 +136,7 @@ describe("ChessGame class", () => {
 
       game.movePiece(start, target);
 
-      expect(game.pieceBoard[start]).toBe(ColorPiece.Empty);
+      expect(game.pieceBoard[start]).toBe(NO_PIECE);
       expect(game.pieceBoard[target]).toBe(ColorPiece.WhitePawn);
       expect(game.pieceCount[piece]).toBe(pieceCount);
       expect(game.pieceListIndex[start]).toBe(-1);
@@ -158,7 +158,7 @@ describe("ChessGame class", () => {
 
       game.removePiece(square);
 
-      expect(game.pieceBoard[square]).toBe(ColorPiece.Empty);
+      expect(game.pieceBoard[square]).toBe(NO_PIECE);
       expect(game.pieceCount[piece]).toBe(pieceCount - 1);
       expect(game.pieceLists[piece]).toHaveLength(pieceCount - 1);
       expect(game.pieceListIndex[square]).toBe(-1);
@@ -203,7 +203,7 @@ describe("ChessGame class", () => {
 
   describe("setCastleRight() method", () => {
     test("should return correct castling rights when setting to false", () => {
-      let game = new ChessGame();
+      const game = new ChessGame();
       game.setCastleRight(CastleRight.WhiteKing, false);
       expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(false);
       game.setCastleRight(CastleRight.WhiteQueen, false);
@@ -215,7 +215,7 @@ describe("ChessGame class", () => {
     });
 
     test("should return correct castling rights when setting to true", () => {
-      let game = new ChessGame("");
+      const game = new ChessGame("");
       game.setCastleRight(CastleRight.WhiteKing, true);
       expect(game.getCastleRight(CastleRight.WhiteKing)).toBe(true);
       game.setCastleRight(CastleRight.WhiteQueen, true);

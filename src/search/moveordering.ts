@@ -1,15 +1,13 @@
 import { ChessGame } from "../game";
 import { Move, MoveFlag, getMove, isPromotion } from "../move";
+import { ColorPiece, NO_PIECE, getPiece } from "../piece";
 import {
   BISHOP_VALUE,
-  ColorPiece,
   KNIGHT_VALUE,
-  NO_PIECE,
+  PIECE_VALUE,
   QUEEN_VALUE,
   ROOK_VALUE,
-  getPiece,
-  getValue,
-} from "../piece";
+} from "./value";
 
 /** The multiplier used for victims in MVV-LVA. */
 const VICTIM_MULTIPLIER = 100;
@@ -30,7 +28,7 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
   const moveScores: Map<Move, number> = new Map<Move, number>();
 
   for (const move of moves) {
-    const [start, target, captured, flag] = getMove(move);
+    const [start, , captured, flag] = getMove(move);
     const piece = game.pieceBoard[start];
 
     let value = 0;
@@ -57,7 +55,7 @@ function mvvlvaValue(piece: ColorPiece, captured: ColorPiece): number {
 
   const victim = getPiece(captured);
   const aggressor = getPiece(piece);
-  return getValue(victim) * VICTIM_MULTIPLIER - getValue(aggressor);
+  return PIECE_VALUE[victim] * VICTIM_MULTIPLIER - PIECE_VALUE[aggressor];
 }
 
 /**

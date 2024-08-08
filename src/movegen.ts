@@ -1,7 +1,6 @@
 import {
   Index120,
   KING_SQUARE,
-  OFF_BOARD,
   PAWN_PROMOTION_RANK,
   PAWN_START_RANK,
   getRank120,
@@ -16,6 +15,7 @@ import {
   Color,
   ColorPiece,
   NO_PIECE,
+  OFF_BOARD,
   Piece,
   colorPiece,
   getColor,

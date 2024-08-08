@@ -1,22 +1,17 @@
 import { describe, expect, test } from "vitest";
 
-import { OFF_BOARD } from "../src/board";
 import {
-  BISHOP_VALUE,
   Color,
   ColorPiece,
-  KING_VALUE,
-  KNIGHT_VALUE,
-  PAWN_VALUE,
+  NO_COLOR,
+  NO_PIECE,
+  OFF_BOARD,
   Piece,
   PieceName,
   PieceSymbol,
-  QUEEN_VALUE,
-  ROOK_VALUE,
   colorPiece,
   getColor,
   getPiece,
-  getValue,
   swapColor,
 } from "../src/piece";
 
@@ -31,12 +26,12 @@ describe("colorPiece() function", () => {
   });
 
   test("should throw Error", () => {
-    expect(() => colorPiece(Color.White, Piece.Empty)).toThrow();
-    expect(() => colorPiece(Color.Black, Piece.Empty)).toThrow();
+    expect(() => colorPiece(Color.White, NO_PIECE)).toThrow();
+    expect(() => colorPiece(Color.Black, NO_PIECE)).toThrow();
     expect(() => colorPiece(Color.White, OFF_BOARD)).toThrow();
     expect(() => colorPiece(Color.Black, OFF_BOARD)).toThrow();
-    expect(() => colorPiece(Color.None, Piece.Pawn)).toThrow();
-    expect(() => colorPiece(Color.None, Piece.King)).toThrow();
+    expect(() => colorPiece(NO_COLOR, Piece.Pawn)).toThrow();
+    expect(() => colorPiece(NO_COLOR, Piece.King)).toThrow();
   });
 });
 
@@ -47,7 +42,7 @@ describe("swapColor() function", () => {
   });
 
   test("should throw Error", () => {
-    expect(() => swapColor(Color.None)).toThrow();
+    expect(() => swapColor(NO_COLOR)).toThrow();
   });
 });
 
@@ -62,8 +57,8 @@ describe("getColor() function", () => {
   });
 
   test("should return None", () => {
-    expect(getColor(ColorPiece.Empty)).toBe(Color.None);
-    expect(getColor(OFF_BOARD)).toBe(Color.None);
+    expect(getColor(NO_PIECE)).toBe(NO_COLOR);
+    expect(getColor(OFF_BOARD)).toBe(NO_COLOR);
   });
 });
 
@@ -78,31 +73,15 @@ describe("getPiece() function", () => {
   });
 
   test("should return Empty and OFF_BOARD", () => {
-    expect(getPiece(ColorPiece.Empty)).toBe(Piece.Empty);
+    expect(getPiece(NO_PIECE)).toBe(NO_PIECE);
     expect(getPiece(OFF_BOARD)).toBe(OFF_BOARD);
-  });
-});
-
-describe("getValue() function", () => {
-  test("should return correct value", () => {
-    expect(getValue(Piece.Pawn)).toBe(PAWN_VALUE);
-    expect(getValue(Piece.Knight)).toBe(KNIGHT_VALUE);
-    expect(getValue(Piece.Bishop)).toBe(BISHOP_VALUE);
-    expect(getValue(Piece.Rook)).toBe(ROOK_VALUE);
-    expect(getValue(Piece.Queen)).toBe(QUEEN_VALUE);
-    expect(getValue(Piece.King)).toBe(KING_VALUE);
-  });
-
-  test("should return zero value", () => {
-    expect(getValue(Piece.Empty)).toBe(0);
-    expect(getValue(OFF_BOARD)).toBe(0);
   });
 });
 
 describe("PieceName and PieceSymbol lists", () => {
   test("should return correct character", () => {
-    expect(PieceName[Piece.Empty]).toBe(".");
-    expect(PieceName[ColorPiece.Empty]).toBe(".");
+    expect(PieceName[NO_PIECE]).toBe(".");
+    expect(PieceName[NO_PIECE]).toBe(".");
     expect(PieceName[Piece.Pawn]).toBe("P");
     expect(PieceName[ColorPiece.WhiteKnight]).toBe("N");
     expect(PieceName[ColorPiece.BlackBishop]).toBe("b");
@@ -112,8 +91,8 @@ describe("PieceName and PieceSymbol lists", () => {
   });
 
   test("should return correct symbol", () => {
-    expect(PieceSymbol[Piece.Empty]).toBe(".");
-    expect(PieceSymbol[ColorPiece.Empty]).toBe(".");
+    expect(PieceSymbol[NO_PIECE]).toBe(".");
+    expect(PieceSymbol[NO_PIECE]).toBe(".");
     expect(PieceSymbol[Piece.Pawn]).toBe("♙");
     expect(PieceSymbol[ColorPiece.WhiteKnight]).toBe("♘");
     expect(PieceSymbol[ColorPiece.BlackBishop]).toBe("♝");

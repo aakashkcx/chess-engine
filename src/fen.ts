@@ -4,11 +4,11 @@ import { ChessGame } from "./game";
 import { generateHash } from "./hash";
 import {
   Color,
+  colorPiece,
   ColorPiece,
   NO_PIECE,
   Piece,
   PieceName,
-  colorPiece,
 } from "./piece";
 
 /**
@@ -40,7 +40,7 @@ export function getFEN(game: ChessGame): string {
   }
 
   // The active color.
-  let color = game.activeColor === Color.White ? "w" : "b";
+  const color = game.activeColor === Color.White ? "w" : "b";
 
   // Set castling rights.
   let castlingRights = "";
@@ -51,10 +51,10 @@ export function getFEN(game: ChessGame): string {
   if (game.getCastleRight(CastleRight.BlackQueen)) castlingRights += "q";
 
   // The en passant target square.
-  let enPassant = game.enPassant ? string120(game.enPassant) : "-";
+  const enPassant = game.enPassant ? string120(game.enPassant) : "-";
 
   // The half move and full move counter.
-  let { halfMoves, fullMoves } = game;
+  const { halfMoves, fullMoves } = game;
 
   return `${pieces} ${color} ${castlingRights} ${enPassant} ${halfMoves} ${fullMoves}`;
 }

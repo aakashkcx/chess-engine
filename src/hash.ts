@@ -1,75 +1,86 @@
-import { Index120, NO_SQUARE, index64To120 } from "./board";
+import { Index120, index64To120, NULL_INDEX } from "./board";
 import { CastlingRights, NO_CASTLE_RIGHTS } from "./castlingrights";
 import { ChessGame } from "./game";
-import { Color, ColorPiece, NO_PIECE, PIECES } from "./piece";
-
-/**
- * A zobrist hash value for a chess game.
- */
-export type Hash = number;
+import { Color, ColorPiece, ColorPieces, NO_PIECE } from "./piece";
 
 /** The largest possible integer for bitwise operations. */
 const LARGEST_INT = 2147483647; // 2 ** 31 - 1
 
-/** An array of hash values for each color piece and index on the board. */
-let PIECE_INDEX_HASH: Hash[][] = [];
+/**
+ * A zobrist hash for the chess game.
+ */
+export type Hash = number;
 
-/** A hash value for the black color to move. */
-let COLOR_HASH: Hash = 0;
+/**
+ * An array of hashes for each possible color piece and 120 square index on the board.
+ * Indexed by ColorPiece then Index120.
+ */
+let PIECE_INDEX_HASH: Hash[][];
 
-/** An array of hash values for each castling right. */
-let CASTLING_RIGHTS_HASH: Hash[] = [];
+/**
+ * A hash for the black color.
+ */
+let COLOR_HASH: Hash;
 
-/** An array of hash values for each en passant target square. */
-let EN_PASSANT_HASH: Hash[] = [];
+/**
+ * An array of hashes for each possible castling right.
+ * Indexed by CastlingRights.
+ */
+let CASTLING_RIGHTS_HASH: Hash[];
 
-// Initialise the hash values.
+/**
+ * An array of hashes for each possible en passant target square.
+ * Indexed by Index120.
+ */
+let EN_PASSANT_HASH: Hash[];
+
+// Initialise hashes.
 initHashes();
 
 /**
- * Update the zobrist hash value for a color piece and index.
- * @param hash The current zobrist hash value.
+ * Update a zobrist hash for a color piece and 120 square index.
+ * @param hash The current zobrist hash.
  * @param piece The color piece.
- * @param index120 The 120 index.
- * @returns The new zobrist hash value.
+ * @param index120 The 120 square index.
+ * @returns The new zobrist hash.
  */
 export function hashPiece(hash: Hash, piece: ColorPiece, index120: Index120) {
   return (hash ^= PIECE_INDEX_HASH[piece][index120]);
 }
 
 /**
- * Update the zobrist hash value when changing sides to move.
- * @param hash The current zobrist hash value.
- * @returns The new zobrist hash value.
+ * Update a zobrist hash when changing sides to move.
+ * @param hash The current zobrist hash.
+ * @returns The new zobrist hash.
  */
 export function hashColor(hash: Hash) {
   return (hash ^= COLOR_HASH);
 }
 
 /**
- * Update the zobrist hash value for a castling right.
- * @param hash The current zobrist hash value.
+ * Update a zobrist hash for a castling right.
+ * @param hash The current zobrist hash.
  * @param castlingRights The castling rights.
- * @returns The new zobrist hash value.
+ * @returns The new zobrist hash.
  */
 export function hashCastlingRights(hash: Hash, castlingRights: CastlingRights) {
   return (hash ^= CASTLING_RIGHTS_HASH[castlingRights]);
 }
 
 /**
- * Update the zobrist has value for an en passant target square.
- * @param hash The current zobrist hash value.
- * @param index120 The en passant target square.
- * @returns The new zobrist hash value.
+ * Update a zobrist hash for an en passant target square.
+ * @param hash The current zobrist hash.
+ * @param index120 The en passant target 120 square index.
+ * @returns The new zobrist hash.
  */
 export function hashEnPassant(hash: Hash, index120: Index120) {
   return (hash ^= EN_PASSANT_HASH[index120]);
 }
 
 /**
- * Generate a zobrist hash value for a chess game.
+ * Generate a zobrist hash for a chess game.
  * @param game The chess game.
- * @returns The zobrist hash value for the chess game.
+ * @returns The zobrist hash.
  */
 export function generateHash(game: ChessGame): Hash {
   let hash = 0;
@@ -91,10 +102,12 @@ export function generateHash(game: ChessGame): Hash {
 }
 
 /**
- * Initialise the zobrist hash values.
+ * Initialise the zobrist hashes.
  */
 export function initHashes() {
-  PIECE_INDEX_HASH = PIECES.map(() => Array(120).fill(0));
+  PIECE_INDEX_HASH = Array(ColorPieces.length + 1)
+    .fill([])
+    .map(() => Array(120).fill(0));
   COLOR_HASH = randomBits();
   CASTLING_RIGHTS_HASH = Array(16).fill(0);
   EN_PASSANT_HASH = Array(120).fill(0);
@@ -104,11 +117,11 @@ export function initHashes() {
 
   for (let index64 = 0; index64 < 64; index64++) {
     const index120 = index64To120(index64);
-    for (const piece of PIECES)
+    for (const piece of ColorPieces)
       PIECE_INDEX_HASH[piece][index120] = randomBits();
     EN_PASSANT_HASH[index120] = randomBits();
   }
-  EN_PASSANT_HASH[NO_SQUARE] = 0;
+  EN_PASSANT_HASH[NULL_INDEX] = 0;
 }
 
 /**

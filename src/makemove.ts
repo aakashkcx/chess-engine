@@ -1,4 +1,4 @@
-import { NO_SQUARE, Square120 } from "./board";
+import { NULL_INDEX, Square120 } from "./board";
 import { CastleRight } from "./castlingrights";
 import { ChessGame } from "./game";
 import { Move, MoveFlag, getMove, isPromotion } from "./move";
@@ -41,7 +41,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   game.halfMoves++;
   if (color === Color.Black) game.fullMoves++;
 
-  game._setEnPassant(NO_SQUARE);
+  game._setEnPassant(NULL_INDEX);
 
   if (captured) game.halfMoves = 0;
   if (getPiece(piece) === Piece.Pawn) game.halfMoves = 0;
