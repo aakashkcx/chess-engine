@@ -39,7 +39,7 @@ const ENDGAME_START_VALUE =
  * @returns An evaluation score.
  */
 export function evaluate(game: ChessGame, side?: Color): number {
-  const color = side === undefined ? game.activeColor : side;
+  const color = side ?? game.activeColor;
 
   const whiteMaterial = materialValue(game, Color.White);
   const blackMaterial = materialValue(game, Color.Black);
