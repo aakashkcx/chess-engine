@@ -27,16 +27,20 @@
   ],
   "scripts": {
     "build": "tsup",
-    "lint": "eslint",
+    "demo:cli": "ts-node ./demo/cli.ts",
+    "demo:perft": "ts-node ./demo/perft.ts",
+    "demo:search": "ts-node ./demo/search.ts",
     "lint:fix": "eslint --fix",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "lint": "eslint",
+    "test:coverage": "vitest --coverage",
+    "test": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.5",
     "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.17.0",
+    "ts-node": "^10.9.2",
     "tsup": "^8.3.5",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.1",
