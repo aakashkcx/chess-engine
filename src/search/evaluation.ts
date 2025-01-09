@@ -17,8 +17,6 @@ import {
   ROOK_VALUE,
 } from "./value";
 
-// TODO: Change endgame from boolean to coefficient.
-
 /** The value of a checkmate. */
 export const CHECKMATE_VALUE = 100000;
 

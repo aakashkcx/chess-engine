@@ -29,10 +29,6 @@ import { Search } from "./search/search";
 import { State } from "./state";
 import { toString } from "./string";
 
-/*
-  TODO: Add threefold repetition and insufficient material.
-*/
-
 /** A chess game. */
 export class ChessGame {
   /**

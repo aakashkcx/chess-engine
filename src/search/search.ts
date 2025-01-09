@@ -19,14 +19,6 @@ const MAX_DEPTH = 32;
 /** The number of nodes to evaluate between time checks (2 ** n - 1). */
 const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
-/* 
-  TODO: Check for 50-move rule for draw.
-  TODO: Check for threefold repetition for draw.
-  TODO: Check for insufficient material for draw.
-  TODO: Check for transpositions in search.
-  TODO: Add transposition table (hash, bestMove, depth, score, type)
-*/
-
 /** A search controller. */
 export class Search {
   /**
