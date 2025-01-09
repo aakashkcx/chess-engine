@@ -1,5 +1,5 @@
 import * as readline from "readline/promises";
-import { ChessGame, Color, moveStringMin } from "../src";
+import { ChessGame, Color, moveStringMin, NO_MOVE } from "../src";
 
 async function menu(rl: readline.Interface) {
   while (true) {
@@ -30,7 +30,7 @@ async function gamePlayer(rl: readline.Interface) {
     const moves = game.generateMoves(side, true);
     const moveStrings = moves.map(moveStringMin);
     console.log(moveStrings);
-    if (moves) {
+    if (moves.length) {
       const color = side === Color.White ? "White" : "Black";
       const answer = await rl.question(`\n${color} to move: `);
       const index = moveStrings.indexOf(answer);
@@ -48,17 +48,15 @@ async function gameAI(rl: readline.Interface) {
       const moves = game.generateMoves(side, true);
       const moveStrings = moves.map(moveStringMin);
       console.log(moveStrings);
-      if (moves) {
-        const color = side === Color.White ? "White" : "Black";
-        const answer = await rl.question(`\n${color} to move: `);
+      if (moves.length) {
+        const answer = await rl.question(`\nWhite to move: `);
         const index = moveStrings.indexOf(answer);
         if (index >= 0) game.makeMove(moves[index]);
       } else break;
     } else {
       const move = game.search();
-      if (move) {
-        const color = side === Color.White ? "White" : "Black";
-        console.log(`\n${color} to move: ${moveStringMin(move)}`);
+      if (move !== NO_MOVE) {
+        console.log(`\nBlack to move: ${moveStringMin(move)}`);
         game.makeMove(move);
       } else break;
     }
