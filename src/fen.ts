@@ -26,7 +26,7 @@ export function getFEN(game: ChessGame): string {
   // The piece placement string.
   let pieces = "";
   for (let rank = 7; rank >= 0; rank--) {
-    let empty: number = 0;
+    let empty = 0;
     for (let file = 0; file < 8; file++) {
       const piece = game.pieceBoard[rankFileTo120(rank, file)];
       if (piece != NO_PIECE) {

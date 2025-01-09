@@ -42,12 +42,12 @@ export class Search {
   /**
    * The best score found so far.
    */
-  bestScore: number = 0;
+  bestScore = 0;
 
   /**
    * The number of nodes evaluated.
    */
-  nodes: number = 0;
+  nodes = 0;
 
   /**
    * The search time in milliseconds.
@@ -57,17 +57,17 @@ export class Search {
   /**
    * The stop search flag.
    */
-  stop: boolean = true;
+  stop = true;
 
   /**
    * The starting game ply.
    */
-  startPly: number = 0;
+  startPly = 0;
 
   /**
    * The search starting time in milliseconds.
    */
-  startTimeMS: number = 0;
+  startTimeMS = 0;
 
   /**
    * The principal variation table.

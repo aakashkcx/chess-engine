@@ -12,8 +12,8 @@ import { Color, PieceName, PieceSymbol } from "./piece";
  */
 export function toString(
   game: ChessGame,
-  onlyBoard: boolean = false,
-  useSymbols: boolean = false
+  onlyBoard = false,
+  useSymbols = false
 ): string {
   // The chessboard.
   let board = "=================";

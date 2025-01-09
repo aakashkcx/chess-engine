@@ -93,7 +93,7 @@ function materialValue(game: ChessGame, side: Color): number {
  * @param endgame Whether the game has reached endgame.
  * @returns The value of piece positions.
  */
-function positionValue(game: ChessGame, side: Color, endgame: boolean = false) {
+function positionValue(game: ChessGame, side: Color, endgame = false) {
   let value = 0;
 
   const KING_TABLE = endgame ? KING_END_TABLE : KING_MID_TABLE;

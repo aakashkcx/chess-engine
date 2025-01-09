@@ -73,22 +73,22 @@ export class ChessGame {
   /**
    * The half move clock.
    */
-  halfMoves: number = 0;
+  halfMoves = 0;
 
   /**
    * The number of full moves.
    */
-  fullMoves: number = 1;
+  fullMoves = 1;
 
   /**
    * Whether the king of the active color is in check.
    */
-  inCheck: boolean = false;
+  inCheck = false;
 
   /**
    * The number of plies played.
    */
-  ply: number = 0;
+  ply = 0;
 
   /**
    * The zobrist hash of the game.
@@ -339,7 +339,7 @@ export class ChessGame {
    * @param legal Whether to generate only legal moves or all pseudo-legal moves.
    * @returns An array of moves.
    */
-  generateMoves(side?: Color, legal: boolean = true): Move[] {
+  generateMoves(side?: Color, legal = true): Move[] {
     const moves = generateMoves(this, side);
     return legal ? moves.filter(this.isLegalMove, this) : moves;
   }
@@ -413,7 +413,7 @@ export class ChessGame {
    * @param useSymbols Whether to use symbols or letters to represent pieces.
    * @returns The string representation.
    */
-  toString(onlyBoard: boolean = false, useSymbols: boolean = false): string {
+  toString(onlyBoard = false, useSymbols = false): string {
     return toString(this, onlyBoard, useSymbols);
   }
 
@@ -422,7 +422,7 @@ export class ChessGame {
    * @param onlyBoard Whether to print only the board.
    * @param useSymbols Whether to use symbols or letters to represent pieces.
    */
-  print(onlyBoard: boolean = false, useSymbols: boolean = false) {
+  print(onlyBoard = false, useSymbols = false) {
     console.log("\n" + this.toString(onlyBoard, useSymbols) + "\n");
   }
 }
