@@ -66,6 +66,14 @@ const SLIDING_PIECES_OFFSETS = [
   [Piece.Queen, QUEEN_OFFSETS],
 ] as const;
 
+export function generateMoves(game: ChessGame, side?: Color): Promise<Move[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(generateMovesSync(game, side));
+    });
+  });
+}
+
 /**
  * Generate pseudo-legal moves on the chessboard.
  * @param game The chess game.
@@ -73,7 +81,7 @@ const SLIDING_PIECES_OFFSETS = [
  *  Defaults to the current active color of the game.
  * @returns An array of pseudo-legal moves.
  */
-export function generateMoves(game: ChessGame, side?: Color): Move[] {
+export function generateMovesSync(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side ?? game.activeColor;
