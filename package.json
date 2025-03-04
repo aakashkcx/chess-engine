@@ -27,24 +27,26 @@
   ],
   "scripts": {
     "build": "tsup",
-    "demo:cli": "ts-node ./demo/cli.ts",
-    "demo:perft": "ts-node ./demo/perft.ts",
-    "demo:search": "ts-node ./demo/search.ts",
-    "lint:fix": "eslint --fix",
+    "demo:cli": "tsx ./demo/cli.ts",
+    "demo:perft": "tsx ./demo/perft.ts",
+    "demo:search": "tsx ./demo/search.ts",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "test": "vitest"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/node": "^22.10.5",
-    "@vitest/coverage-v8": "^2.1.8",
-    "eslint": "^9.17.0",
-    "ts-node": "^10.9.2",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.19.1",
-    "vitest": "^2.1.8"
+    "@eslint/js": "^9.21.0",
+    "@tsconfig/node-lts": "^22.0.1",
+    "@types/node": "^22.13.9",
+    "@vitest/coverage-v8": "^3.0.7",
+    "eslint": "^9.21.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.0",
+    "vitest": "^3.0.7"
   },
-  "packageManager": "pnpm@9.15.3"
+  "packageManager": "pnpm@10.5.2"
 }
