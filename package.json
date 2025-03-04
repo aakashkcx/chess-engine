@@ -30,10 +30,11 @@
     "demo:cli": "ts-node ./demo/cli.ts",
     "demo:perft": "ts-node ./demo/perft.ts",
     "demo:search": "ts-node ./demo/search.ts",
-    "lint:fix": "eslint --fix",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "test": "vitest"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
