@@ -73,7 +73,7 @@ const SLIDING_PIECES_OFFSETS = [
  *  Defaults to the current active color of the game.
  * @returns An array of pseudo-legal moves.
  */
-export function generateMoves(game: ChessGame, side?: Color): Move[] {
+export function generateMovesSync(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side ?? game.activeColor;

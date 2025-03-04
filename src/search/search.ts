@@ -1,7 +1,7 @@
 import { ChessGame } from "../game";
 import { Hash } from "../hash";
 import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
-import { generateCaptures, generateMoves } from "../movegen";
+import { generateCaptures, generateMovesSync } from "../movegen";
 import {
   CHECKMATE_VALUE,
   DRAW_VALUE,
@@ -144,7 +144,7 @@ export class Search {
     if (game.inCheck) depth++;
 
     // Generate and order moves.
-    const moves = generateMoves(game);
+    const moves = generateMovesSync(game);
     const pvMove = this.pvTable.get(game.hash);
     orderMoves(game, moves, pvMove);
 

@@ -16,7 +16,7 @@ import {
 } from "./hash";
 import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
-import { generateMoves, isSquareAttacked } from "./movegen";
+import { generateMovesSync, isSquareAttacked } from "./movegen";
 import {
   Color,
   ColorPiece,
@@ -336,7 +336,7 @@ export class ChessGame {
    * @returns An array of moves.
    */
   generateMoves(side?: Color, legal = true): Move[] {
-    const moves = generateMoves(this, side);
+    const moves = generateMovesSync(this, side);
     return legal ? moves.filter(this.isLegalMove, this) : moves;
   }
 

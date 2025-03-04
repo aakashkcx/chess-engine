@@ -4,7 +4,7 @@ import { Index120, Square120, index64To120 } from "../src/board";
 import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
 import { ChessGame } from "../src/game";
 import { Move, MoveFlag, getStart } from "../src/move";
-import { generateMoves, isSquareAttacked } from "../src/movegen";
+import { generateMovesSync, isSquareAttacked } from "../src/movegen";
 import { Color, ColorPiece } from "../src/piece";
 
 describe("isSquareAttacked() function", () => {
@@ -415,20 +415,20 @@ describe("generateMoves() function", () => {
       game.addPiece(Square120.D4, ColorPiece.WhitePawn);
       expected = [Move(Square120.D4, Square120.D5)];
 
-      moves = generateMoves(game, Color.White);
+      moves = generateMovesSync(game, Color.White);
       expect(moves).toEqual(expected);
 
-      moves = generateMoves(game, Color.Black);
+      moves = generateMovesSync(game, Color.Black);
       expect(moves).toEqual([]);
 
       game.initBoard();
       game.addPiece(Square120.E5, ColorPiece.BlackPawn);
       expected = [Move(Square120.E5, Square120.E4)];
 
-      moves = generateMoves(game, Color.White);
+      moves = generateMovesSync(game, Color.White);
       expect(moves).toEqual([]);
 
-      moves = generateMoves(game, Color.Black);
+      moves = generateMovesSync(game, Color.Black);
       expect(moves).toEqual(expected);
     });
 
@@ -437,24 +437,24 @@ describe("generateMoves() function", () => {
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       expected = [Move(Square120.E4, Square120.E5)];
 
-      moves = generateMoves(game);
+      moves = generateMovesSync(game);
       expect(moves).toEqual(expected);
 
       game.switchColor();
 
-      moves = generateMoves(game);
+      moves = generateMovesSync(game);
       expect(moves).toEqual([]);
 
       game.initBoard();
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Move(Square120.D5, Square120.D4)];
 
-      moves = generateMoves(game);
+      moves = generateMovesSync(game);
       expect(moves).toEqual([]);
 
       game.switchColor();
 
-      moves = generateMoves(game);
+      moves = generateMovesSync(game);
       expect(moves).toEqual(expected);
     });
   });
@@ -466,7 +466,7 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.A4, ColorPiece.WhitePawn);
         expected = [Move(Square120.A4, Square120.A5)];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -475,7 +475,7 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.H5, ColorPiece.BlackPawn);
         expected = [Move(Square120.H5, Square120.H4)];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -489,7 +489,7 @@ describe("generateMoves() function", () => {
           Move(Square120.B2, Square120.B4, 0, MoveFlag.PawnDouble),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -501,7 +501,7 @@ describe("generateMoves() function", () => {
           Move(Square120.G7, Square120.G5, 0, MoveFlag.PawnDouble),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -517,7 +517,7 @@ describe("generateMoves() function", () => {
           Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteBishop),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -531,7 +531,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteBishop),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -548,7 +548,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D5, Square120.E6, ColorPiece.BlackPawn),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -562,7 +562,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E4, Square120.D3, ColorPiece.WhitePawn),
           Move(Square120.E4, Square120.F3, ColorPiece.WhitePawn),
         ];
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -589,7 +589,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E7, Square120.F8, ColorPiece.BlackPawn, MoveFlag.PromoteBishop),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -614,7 +614,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D2, Square120.E1, ColorPiece.WhitePawn, MoveFlag.PromoteBishop),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -633,7 +633,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F5, Square120.E6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
 
         game.enPassant = Square120.G6;
@@ -643,7 +643,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F5, Square120.G6, ColorPiece.BlackPawn, MoveFlag.EnPassant),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -660,7 +660,7 @@ describe("generateMoves() function", () => {
           Move(Square120.C4, Square120.B3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
 
         game.enPassant = Square120.D3;
@@ -670,7 +670,7 @@ describe("generateMoves() function", () => {
           Move(Square120.C4, Square120.D3, ColorPiece.WhitePawn, MoveFlag.EnPassant),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -692,7 +692,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D4, Square120.B3),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -710,7 +710,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E5, Square120.C4),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -726,7 +726,7 @@ describe("generateMoves() function", () => {
           Move(Square120.B2, Square120.D1),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -738,7 +738,7 @@ describe("generateMoves() function", () => {
           Move(Square120.H8, Square120.F7),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -760,7 +760,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E5, Square120.C4),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -780,7 +780,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D4, Square120.B3, ColorPiece.WhitePawn),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -807,7 +807,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D5, Square120.A2),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -830,7 +830,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E4, Square120.B1),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -856,7 +856,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E5, Square120.A1, ColorPiece.BlackPawn),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -880,7 +880,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D4, Square120.C3, ColorPiece.WhitePawn),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -908,7 +908,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F4, Square120.A4),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -932,7 +932,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F5, Square120.A5),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -955,7 +955,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F1, Square120.C1, ColorPiece.BlackPawn),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -976,7 +976,7 @@ describe("generateMoves() function", () => {
           Move(Square120.F8, Square120.C8, ColorPiece.WhitePawn),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1017,7 +1017,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D4, Square120.A4),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -1054,7 +1054,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D5, Square120.A5),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1091,7 +1091,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D5, Square120.A5),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -1127,7 +1127,7 @@ describe("generateMoves() function", () => {
           Move(Square120.D4, Square120.A4, ColorPiece.WhitePawn),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1149,7 +1149,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E5, Square120.D5),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -1167,7 +1167,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E4, Square120.D4),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1184,7 +1184,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E1, Square120.D1),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -1199,7 +1199,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E8, Square120.D8),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1222,7 +1222,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E7, Square120.D7, ColorPiece.BlackPawn),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         expect(moves).toEqual(expected);
       });
 
@@ -1243,7 +1243,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E2, Square120.D2),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         expect(moves).toEqual(expected);
       });
     });
@@ -1265,7 +1265,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E1, Square120.C1, 0, MoveFlag.Castle),
         ];
 
-        moves = generateMoves(game, Color.White);
+        moves = generateMovesSync(game, Color.White);
         moves = moves.filter((move) => getStart(move) === Square120.E1);
         expect(moves).toEqual(expected);
       });
@@ -1286,7 +1286,7 @@ describe("generateMoves() function", () => {
           Move(Square120.E8, Square120.C8, 0, MoveFlag.Castle),
         ];
 
-        moves = generateMoves(game, Color.Black);
+        moves = generateMovesSync(game, Color.Black);
         moves = moves.filter((move) => getStart(move) === Square120.E8);
         expect(moves).toEqual(expected);
       });
