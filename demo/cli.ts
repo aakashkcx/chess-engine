@@ -1,5 +1,6 @@
-import * as readline from "readline/promises";
-import { ChessGame, Color, moveStringMin, NO_MOVE } from "../src";
+import readline from "node:readline/promises";
+
+import { ChessGame, Color, moveStringMin, NO_MOVE } from "@";
 
 async function menu(rl: readline.Interface) {
   while (true) {
