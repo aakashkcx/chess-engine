@@ -27,7 +27,7 @@ async function gamePlayer(rl: readline.Interface) {
   const game = new ChessGame();
   while (true) {
     game.print();
-    const side = game.activeColor;
+    const side = game.turn;
     const moves = game.generateMoves(side, true);
     const moveStrings = moves.map(moveStringMin);
     console.log(moveStrings);
@@ -44,7 +44,7 @@ async function gameAI(rl: readline.Interface) {
   const game = new ChessGame();
   while (true) {
     game.print();
-    const side = game.activeColor;
+    const side = game.turn;
     if (side === Color.White) {
       const moves = game.generateMoves(side, true);
       const moveStrings = moves.map(moveStringMin);
@@ -73,4 +73,4 @@ async function cli() {
   }
 }
 
-cli();
+await cli();

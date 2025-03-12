@@ -18,7 +18,7 @@ export function toString(
   // The chessboard.
   let board = "=================";
   for (let rank = 7; rank >= 0; rank--) {
-    const row = game.pieceBoard
+    const row = game._pieceBoard
       .slice((rank + 2) * 10 + 1, (rank + 2) * 10 + 9)
       .map((piece) => (useSymbols ? PieceSymbol : PieceName)[piece])
       .join(" ");
@@ -31,11 +31,11 @@ export function toString(
   if (onlyBoard) return board;
 
   // The active color.
-  const side = game.activeColor === Color.White ? "White" : "Black";
+  const side = game.turn === Color.White ? "White" : "Black";
 
   // The castling rights.
   let castlingRights = "";
-  if (game.castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
+  if (game._castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
   if (game.getCastleRight(CastleRight.WhiteKing)) castlingRights += "K";
   if (game.getCastleRight(CastleRight.WhiteQueen)) castlingRights += "Q";
   if (game.getCastleRight(CastleRight.BlackKing)) castlingRights += "k";

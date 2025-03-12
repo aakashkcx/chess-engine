@@ -37,7 +37,7 @@ const ENDGAME_START_VALUE =
  * @returns An evaluation score.
  */
 export function evaluate(game: ChessGame, side?: Color): number {
-  const color = side ?? game.activeColor;
+  const color = side ?? game.turn;
 
   const whiteMaterial = materialValue(game, Color.White);
   const blackMaterial = materialValue(game, Color.Black);
@@ -66,19 +66,19 @@ function materialValue(game: ChessGame, side: Color): number {
   let value = 0;
 
   if (side === Color.White) {
-    value += PAWN_VALUE * game.pieceCount[ColorPiece.WhitePawn];
-    value += KNIGHT_VALUE * game.pieceCount[ColorPiece.WhiteKnight];
-    value += BISHOP_VALUE * game.pieceCount[ColorPiece.WhiteBishop];
-    value += ROOK_VALUE * game.pieceCount[ColorPiece.WhiteRook];
-    value += QUEEN_VALUE * game.pieceCount[ColorPiece.WhiteQueen];
-    value += KING_VALUE * game.pieceCount[ColorPiece.WhiteKing];
+    value += PAWN_VALUE * game._pieceCount[ColorPiece.WhitePawn];
+    value += KNIGHT_VALUE * game._pieceCount[ColorPiece.WhiteKnight];
+    value += BISHOP_VALUE * game._pieceCount[ColorPiece.WhiteBishop];
+    value += ROOK_VALUE * game._pieceCount[ColorPiece.WhiteRook];
+    value += QUEEN_VALUE * game._pieceCount[ColorPiece.WhiteQueen];
+    value += KING_VALUE * game._pieceCount[ColorPiece.WhiteKing];
   } else {
-    value += PAWN_VALUE * game.pieceCount[ColorPiece.BlackPawn];
-    value += KNIGHT_VALUE * game.pieceCount[ColorPiece.BlackKnight];
-    value += BISHOP_VALUE * game.pieceCount[ColorPiece.BlackBishop];
-    value += ROOK_VALUE * game.pieceCount[ColorPiece.BlackRook];
-    value += QUEEN_VALUE * game.pieceCount[ColorPiece.BlackQueen];
-    value += KING_VALUE * game.pieceCount[ColorPiece.BlackKing];
+    value += PAWN_VALUE * game._pieceCount[ColorPiece.BlackPawn];
+    value += KNIGHT_VALUE * game._pieceCount[ColorPiece.BlackKnight];
+    value += BISHOP_VALUE * game._pieceCount[ColorPiece.BlackBishop];
+    value += ROOK_VALUE * game._pieceCount[ColorPiece.BlackRook];
+    value += QUEEN_VALUE * game._pieceCount[ColorPiece.BlackQueen];
+    value += KING_VALUE * game._pieceCount[ColorPiece.BlackKing];
   }
 
   return value;
@@ -97,53 +97,53 @@ function positionValue(game: ChessGame, side: Color, endgame = false) {
   const KING_TABLE = endgame ? KING_END_TABLE : KING_MID_TABLE;
 
   if (side === Color.White) {
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhitePawn]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhitePawn][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhitePawn]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhitePawn][i];
       value += PAWN_TABLE[index120To64(mirror120(index120))];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhiteKnight]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhiteKnight][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhiteKnight]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhiteKnight][i];
       value += KNIGHT_TABLE[index120To64(mirror120(index120))];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhiteBishop]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhiteBishop][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhiteBishop]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhiteBishop][i];
       value += BISHOP_TABLE[index120To64(mirror120(index120))];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhiteRook]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhiteRook][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhiteRook]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhiteRook][i];
       value += ROOK_TABLE[index120To64(mirror120(index120))];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhiteQueen]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhiteQueen][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhiteQueen]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhiteQueen][i];
       value += QUEEN_TABLE[index120To64(mirror120(index120))];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.WhiteKing]; i++) {
-      const index120 = game.pieceLists[ColorPiece.WhiteKing][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.WhiteKing]; i++) {
+      const index120 = game._pieceLists[ColorPiece.WhiteKing][i];
       value += KING_TABLE[index120To64(mirror120(index120))];
     }
   } else {
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackPawn]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackPawn][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackPawn]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackPawn][i];
       value += PAWN_TABLE[index120To64(index120)];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackKnight]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackKnight][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackKnight]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackKnight][i];
       value += KNIGHT_TABLE[index120To64(index120)];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackBishop]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackBishop][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackBishop]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackBishop][i];
       value += BISHOP_TABLE[index120To64(index120)];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackRook]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackRook][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackRook]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackRook][i];
       value += ROOK_TABLE[index120To64(index120)];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackQueen]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackQueen][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackQueen]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackQueen][i];
       value += QUEEN_TABLE[index120To64(index120)];
     }
-    for (let i = 0; i < game.pieceCount[ColorPiece.BlackKing]; i++) {
-      const index120 = game.pieceLists[ColorPiece.BlackKing][i];
+    for (let i = 0; i < game._pieceCount[ColorPiece.BlackKing]; i++) {
+      const index120 = game._pieceLists[ColorPiece.BlackKing][i];
       value += KING_TABLE[index120To64(index120)];
     }
   }

@@ -76,7 +76,7 @@ const SLIDING_PIECES_OFFSETS = [
 export function generateMoves(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
-  const color = side ?? game.activeColor;
+  const color = side ?? game.turn;
   const opponent = swapColor(color);
 
   let piece: ColorPiece;
@@ -86,23 +86,23 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 
   /* Pawn Moves */
   piece = colorPiece(color, Piece.Pawn);
-  for (let i = 0; i < game.pieceCount[piece]; i++) {
-    start = game.pieceLists[piece][i];
+  for (let i = 0; i < game._pieceCount[piece]; i++) {
+    start = game._pieceLists[piece][i];
     target = start + PAWN_MOVE_OFFSET[color];
-    captured = game.pieceBoard[target];
+    captured = game._pieceBoard[target];
     if (captured === NO_PIECE) {
       if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
         for (const promotionFlag of PROMOTION_FLAGS)
           moves.push(Move(start, target, NO_PIECE, promotionFlag));
       } else moves.push(Move(start, target));
       target = start + PAWN_DOUBLE_OFFSET[color];
-      captured = game.pieceBoard[target];
+      captured = game._pieceBoard[target];
       if (captured === NO_PIECE && getRank120(start) === PAWN_START_RANK[color])
         moves.push(Move(start, target, NO_PIECE, MoveFlag.PawnDouble));
     }
     for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
       target = start + captureOffset;
-      captured = game.pieceBoard[target];
+      captured = game._pieceBoard[target];
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
           for (const promotionFlag of PROMOTION_FLAGS)
@@ -110,7 +110,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
         } else moves.push(Move(start, target, captured));
       }
       if (target === game.enPassant) {
-        captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
+        captured = game._pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
         moves.push(Move(start, target, captured, MoveFlag.EnPassant));
       }
     }
@@ -119,11 +119,11 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   /* Non-Sliding Piece Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
     piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
       for (const offset of offsets) {
         target = start + offset;
-        captured = game.pieceBoard[target];
+        captured = game._pieceBoard[target];
         if (captured === NO_PIECE) moves.push(Move(start, target));
         else if (getColor(captured) === opponent)
           moves.push(Move(start, target, captured));
@@ -134,11 +134,11 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   /* Sliding Piece Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
     piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
       for (const offset of offsets) {
         target = start + offset;
-        captured = game.pieceBoard[target];
+        captured = game._pieceBoard[target];
         while (captured !== OFF_BOARD) {
           if (captured !== NO_PIECE) {
             if (getColor(captured) === opponent)
@@ -147,7 +147,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
           }
           moves.push(Move(start, target));
           target += offset;
-          captured = game.pieceBoard[target];
+          captured = game._pieceBoard[target];
         }
       }
     }
@@ -158,10 +158,10 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   start = KING_SQUARE[color];
   if (
     game.getCastleRight(KING_SIDE_CASTLE_RIGHT[color]) &&
-    game.pieceBoard[start] === piece &&
-    game.pieceBoard[start + 1] === NO_PIECE &&
-    game.pieceBoard[start + 2] === NO_PIECE &&
-    game.pieceBoard[start + 3] === colorPiece(color, Piece.Rook) &&
+    game._pieceBoard[start] === piece &&
+    game._pieceBoard[start + 1] === NO_PIECE &&
+    game._pieceBoard[start + 2] === NO_PIECE &&
+    game._pieceBoard[start + 3] === colorPiece(color, Piece.Rook) &&
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start + 1, color)
   ) {
@@ -169,11 +169,11 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
   }
   if (
     game.getCastleRight(QUEEN_SIDE_CASTLE_RIGHT[color]) &&
-    game.pieceBoard[start] === piece &&
-    game.pieceBoard[start - 1] === NO_PIECE &&
-    game.pieceBoard[start - 2] === NO_PIECE &&
-    game.pieceBoard[start - 3] === NO_PIECE &&
-    game.pieceBoard[start - 4] === colorPiece(color, Piece.Rook) &&
+    game._pieceBoard[start] === piece &&
+    game._pieceBoard[start - 1] === NO_PIECE &&
+    game._pieceBoard[start - 2] === NO_PIECE &&
+    game._pieceBoard[start - 3] === NO_PIECE &&
+    game._pieceBoard[start - 4] === colorPiece(color, Piece.Rook) &&
     !game.isSquareAttacked(start, color) &&
     !game.isSquareAttacked(start - 1, color)
   ) {
@@ -193,7 +193,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
 export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
-  const color = side ?? game.activeColor;
+  const color = side ?? game.turn;
   const opponent = swapColor(color);
 
   let piece: ColorPiece;
@@ -203,13 +203,13 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
 
   /* Pawn Capture Moves */
   piece = colorPiece(color, Piece.Pawn);
-  for (let i = 0; i < game.pieceCount[piece]; i++) {
-    start = game.pieceLists[piece][i];
+  for (let i = 0; i < game._pieceCount[piece]; i++) {
+    start = game._pieceLists[piece][i];
     target = start + PAWN_MOVE_OFFSET[color];
-    captured = game.pieceBoard[target];
+    captured = game._pieceBoard[target];
     for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
       target = start + captureOffset;
-      captured = game.pieceBoard[target];
+      captured = game._pieceBoard[target];
       if (getColor(captured) === opponent) {
         if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
           for (const promotionFlag of PROMOTION_FLAGS)
@@ -217,7 +217,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
         } else moves.push(Move(start, target, captured));
       }
       if (target === game.enPassant) {
-        captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
+        captured = game._pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
         moves.push(Move(start, target, captured, MoveFlag.EnPassant));
       }
     }
@@ -226,11 +226,11 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   /* Non-Sliding Piece Capture Moves (Knight, King) */
   for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
     piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
       for (const offset of offsets) {
         target = start + offset;
-        captured = game.pieceBoard[target];
+        captured = game._pieceBoard[target];
         if (getColor(captured) === opponent)
           moves.push(Move(start, target, captured));
       }
@@ -240,11 +240,11 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   /* Sliding Piece Capture Moves (Bishop, Rook, Queen) */
   for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
     piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
       for (const offset of offsets) {
         target = start + offset;
-        captured = game.pieceBoard[target];
+        captured = game._pieceBoard[target];
         while (captured !== OFF_BOARD) {
           if (captured !== NO_PIECE) {
             if (getColor(captured) === opponent)
@@ -252,7 +252,7 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
             break;
           }
           target += offset;
-          captured = game.pieceBoard[target];
+          captured = game._pieceBoard[target];
         }
       }
     }
@@ -274,21 +274,20 @@ export function isSquareAttacked(
   index120: Index120,
   side?: Color
 ): boolean {
-  const piece = game.pieceBoard[index120];
+  const piece = game._pieceBoard[index120];
 
-  const color =
-    side ?? (piece !== NO_PIECE ? getColor(piece) : game.activeColor);
+  const color = side ?? (piece !== NO_PIECE ? getColor(piece) : game.turn);
 
   /* Pawn Attacks */
   for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
-    const attacker = game.pieceBoard[index120 + captureOffset];
+    const attacker = game._pieceBoard[index120 + captureOffset];
     if (getPiece(attacker) === Piece.Pawn && getColor(attacker) !== color)
       return true;
   }
 
   /* Knight Attacks */
   for (const offset of KNIGHT_OFFSETS) {
-    const attacker = game.pieceBoard[index120 + offset];
+    const attacker = game._pieceBoard[index120 + offset];
     if (getPiece(attacker) === Piece.Knight && getColor(attacker) !== color)
       return true;
   }
@@ -296,7 +295,7 @@ export function isSquareAttacked(
   /* Diagonal Attacks (Bishop, Queen, King) */
   for (const offset of BISHOP_OFFSETS) {
     let target = index120 + offset;
-    let attacker = game.pieceBoard[target];
+    let attacker = game._pieceBoard[target];
     if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
       return true;
     while (attacker !== OFF_BOARD) {
@@ -308,14 +307,14 @@ export function isSquareAttacked(
         break;
       }
       target += offset;
-      attacker = game.pieceBoard[target];
+      attacker = game._pieceBoard[target];
     }
   }
 
   /* Horizontal Attacks (Rook, Queen, King) */
   for (const offset of ROOK_OFFSETS) {
     let target = index120 + offset;
-    let attacker = game.pieceBoard[target];
+    let attacker = game._pieceBoard[target];
     if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
       return true;
     while (attacker !== OFF_BOARD) {
@@ -327,7 +326,7 @@ export function isSquareAttacked(
         break;
       }
       target += offset;
-      attacker = game.pieceBoard[target];
+      attacker = game._pieceBoard[target];
     }
   }
 

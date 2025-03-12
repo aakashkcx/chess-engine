@@ -89,7 +89,7 @@ describe("isSquareAttacked() function", () => {
       );
       expect(attacked).toEqual([]);
 
-      game.switchColor();
+      game.changeTurn();
 
       attacked = indexes120.filter((index120) =>
         isSquareAttacked(game, index120)
@@ -105,7 +105,7 @@ describe("isSquareAttacked() function", () => {
       );
       expect(attacked).toEqual(expected);
 
-      game.switchColor();
+      game.changeTurn();
 
       attacked = indexes120.filter((index120) =>
         isSquareAttacked(game, index120)
@@ -439,7 +439,7 @@ describe("generateMoves() function", () => {
       moves = generateMoves(game);
       expect(moves).toEqual(expected);
 
-      game.switchColor();
+      game.changeTurn();
 
       moves = generateMoves(game);
       expect(moves).toEqual([]);
@@ -451,7 +451,7 @@ describe("generateMoves() function", () => {
       moves = generateMoves(game);
       expect(moves).toEqual([]);
 
-      game.switchColor();
+      game.changeTurn();
 
       moves = generateMoves(game);
       expect(moves).toEqual(expected);
@@ -1253,7 +1253,7 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
         game.addPiece(Square120.A1, ColorPiece.WhiteRook);
         game.addPiece(Square120.H1, ColorPiece.WhiteRook);
-        game.castlingRights = ALL_CASTLE_RIGHTS;
+        game._castlingRights = ALL_CASTLE_RIGHTS;
         expected = [
           Move(Square120.E1, Square120.D2),
           Move(Square120.E1, Square120.E2),
@@ -1274,7 +1274,7 @@ describe("generateMoves() function", () => {
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
         game.addPiece(Square120.A8, ColorPiece.BlackRook);
         game.addPiece(Square120.H8, ColorPiece.BlackRook);
-        game.castlingRights = ALL_CASTLE_RIGHTS;
+        game._castlingRights = ALL_CASTLE_RIGHTS;
         expected = [
           Move(Square120.E8, Square120.F8),
           Move(Square120.E8, Square120.F7),

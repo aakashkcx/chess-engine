@@ -105,7 +105,7 @@ export class Search {
       if (this.stop) break;
 
       this.bestScore = score;
-      const move = this.pvTable.get(game.hash);
+      const move = this.pvTable.get(game._hash);
       if (move) this.bestMove = move;
       else break;
 
@@ -145,7 +145,7 @@ export class Search {
 
     // Generate and order moves.
     const moves = generateMoves(game);
-    const pvMove = this.pvTable.get(game.hash);
+    const pvMove = this.pvTable.get(game._hash);
     orderMoves(game, moves, pvMove);
 
     let mate = true;
@@ -168,7 +168,7 @@ export class Search {
       // Update alpha (better move found).
       if (score > alpha) {
         alpha = score;
-        this.pvTable.set(game.hash, move);
+        this.pvTable.set(game._hash, move);
       }
     }
 
@@ -209,7 +209,7 @@ export class Search {
 
     // Generate and order moves.
     const captures = generateCaptures(game);
-    const pvMove = this.pvTable.get(game.hash);
+    const pvMove = this.pvTable.get(game._hash);
     orderMoves(game, captures, pvMove);
 
     for (const capture of captures) {
@@ -230,7 +230,7 @@ export class Search {
       // Update alpha (better move found).
       if (score > alpha) {
         alpha = score;
-        this.pvTable.set(game.hash, capture);
+        this.pvTable.set(game._hash, capture);
       }
     }
 
@@ -257,7 +257,7 @@ export class Search {
     const moves: Move[] = [];
 
     for (let i = 0; i < depth; i++) {
-      const move = this.pvTable.get(game.hash);
+      const move = this.pvTable.get(game._hash);
       if (!move) break;
       const legal = game.makeMove(move);
       if (!legal) break;

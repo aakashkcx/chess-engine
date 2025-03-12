@@ -35,7 +35,7 @@ export function getFEN(game: ChessGame): string {
   for (let rank = 7; rank >= 0; rank--) {
     let empty = 0;
     for (let file = 0; file < 8; file++) {
-      const piece = game.pieceBoard[rankFileTo120(rank, file)];
+      const piece = game._pieceBoard[rankFileTo120(rank, file)];
       if (piece != NO_PIECE) {
         if (empty) pieces += empty;
         empty = 0;
@@ -47,11 +47,11 @@ export function getFEN(game: ChessGame): string {
   }
 
   // The active color.
-  const color = game.activeColor === Color.White ? "w" : "b";
+  const color = game.turn === Color.White ? "w" : "b";
 
   // Set castling rights.
   let castlingRights = "";
-  if (game.castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
+  if (game._castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
   if (game.getCastleRight(CastleRight.WhiteKing)) castlingRights += "K";
   if (game.getCastleRight(CastleRight.WhiteQueen)) castlingRights += "Q";
   if (game.getCastleRight(CastleRight.BlackKing)) castlingRights += "k";
@@ -83,7 +83,7 @@ export function setFEN(game: ChessGame, fen: string) {
     throw new Error("Invalid FEN piece placement string!");
 
   const setPiece = (rank: Rank, file: File, piece: ColorPiece) => {
-    game.pieceBoard[rankFileTo120(rank, file)] = piece;
+    game._pieceBoard[rankFileTo120(rank, file)] = piece;
   };
 
   // Iterate through piece placement strings and set pieces.
@@ -109,12 +109,12 @@ export function setFEN(game: ChessGame, fen: string) {
   }
 
   // Update the piece representations.
-  game._updatePieceLists();
+  game._updateBoard();
 
   // Set active color.
   const sideToMove = fenArray[1];
-  if (sideToMove === "w") game.activeColor = Color.White;
-  else if (sideToMove === "b") game.activeColor = Color.Black;
+  if (sideToMove === "w") game.turn = Color.White;
+  else if (sideToMove === "b") game.turn = Color.Black;
 
   // Set castling rights.
   const castlingRights = fenArray[2];
@@ -140,11 +140,11 @@ export function setFEN(game: ChessGame, fen: string) {
   game.fullMoves = fullMoves;
 
   // Generate the hash.
-  game.hash = generateHash(game);
+  game._hash = generateHash(game);
 
   // Check whether the king is in check.
-  const king = colorPiece(game.activeColor, Piece.King);
-  const kingIndex = game.pieceLists[king][0];
+  const king = colorPiece(game.turn, Piece.King);
+  const kingIndex = game._pieceLists[king][0];
   if (kingIndex !== NULL_INDEX)
-    game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
+    game.inCheck = game.isSquareAttacked(kingIndex, game.turn);
 }

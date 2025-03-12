@@ -29,7 +29,7 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
 
   for (const move of moves) {
     const [start, , captured, flag] = getMove(move);
-    const piece = game.pieceBoard[start];
+    const piece = game._pieceBoard[start];
 
     let value = 0;
 

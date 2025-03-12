@@ -87,14 +87,14 @@ export function generateHash(game: ChessGame): Hash {
 
   for (let index64 = 0; index64 < 64; index64++) {
     const index120 = index64To120(index64);
-    const piece = game.pieceBoard[index120];
+    const piece = game._pieceBoard[index120];
     if (piece === NO_PIECE) continue;
     hash ^= PIECE_INDEX_HASH[piece][index120];
   }
 
-  if (game.activeColor === Color.Black) hash ^= COLOR_HASH;
+  if (game.turn === Color.Black) hash ^= COLOR_HASH;
 
-  hash ^= CASTLING_RIGHTS_HASH[game.castlingRights];
+  hash ^= CASTLING_RIGHTS_HASH[game._castlingRights];
 
   hash ^= EN_PASSANT_HASH[game.enPassant];
 
