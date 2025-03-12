@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { Index120, Square120, index64To120 } from "../src/board";
+import { Index120, Square120 } from "../src/board";
 import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
 import { ChessGame } from "../src/game";
 import { Move, MoveFlag, getStart } from "../src/move";
@@ -8,15 +8,15 @@ import { generateMoves, isSquareAttacked } from "../src/movegen";
 import { Color, ColorPiece } from "../src/piece";
 
 describe("isSquareAttacked() function", () => {
-  const indexes120: Index120[] = [...Array(64).keys()].map(index64To120);
-  const game = new ChessGame("");
+  const indexes120: Index120[] = Object.values(Square120);
 
+  let game: ChessGame;
   let expected: Index120[];
   let attacked: Index120[];
 
   describe("should check attacks from correct side", () => {
     test("when side specified", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       expected = [Square120.D5, Square120.F5];
 
@@ -30,7 +30,7 @@ describe("isSquareAttacked() function", () => {
       );
       expect(attacked).toEqual(expected);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Square120.C4, Square120.E4];
 
@@ -46,7 +46,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("when side not specified and on occupied square", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       game.addPiece(Square120.F5, ColorPiece.BlackPawn);
@@ -54,7 +54,7 @@ describe("isSquareAttacked() function", () => {
       expect(isSquareAttacked(game, Square120.D5)).toBe(true);
       expect(isSquareAttacked(game, Square120.F5)).toBe(true);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       game.addPiece(Square120.D5, ColorPiece.WhitePawn);
       game.addPiece(Square120.F5, ColorPiece.WhitePawn);
@@ -62,7 +62,7 @@ describe("isSquareAttacked() function", () => {
       expect(isSquareAttacked(game, Square120.D5)).toBe(false);
       expect(isSquareAttacked(game, Square120.F5)).toBe(false);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       game.addPiece(Square120.C4, ColorPiece.BlackPawn);
       game.addPiece(Square120.E4, ColorPiece.BlackPawn);
@@ -70,7 +70,7 @@ describe("isSquareAttacked() function", () => {
       expect(isSquareAttacked(game, Square120.C4)).toBe(false);
       expect(isSquareAttacked(game, Square120.E4)).toBe(false);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       game.addPiece(Square120.C4, ColorPiece.WhitePawn);
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
@@ -80,7 +80,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("when side not specified and on empty square", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       expected = [Square120.D5, Square120.F5];
 
@@ -96,7 +96,7 @@ describe("isSquareAttacked() function", () => {
       );
       expect(attacked).toEqual(expected);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Square120.C4, Square120.E4];
 
@@ -116,7 +116,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from pawn piece", () => {
     test("white pawn piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       expected = [Square120.D5, Square120.F5];
 
@@ -132,7 +132,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black pawn piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Square120.C4, Square120.E4];
 
@@ -150,7 +150,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from knight piece", () => {
     test("white knight piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhiteKnight);
       // prettier-ignore
       expected = [
@@ -173,7 +173,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black knight piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackKnight);
       // prettier-ignore
       expected = [
@@ -198,7 +198,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from bishop piece", () => {
     test("white bishop piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhiteBishop);
       // prettier-ignore
       expected = [
@@ -224,7 +224,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black bishop piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackBishop);
       // prettier-ignore
       expected = [
@@ -252,7 +252,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from rook piece", () => {
     test("white rook piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhiteRook);
       // prettier-ignore
       expected = [
@@ -278,7 +278,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black rook piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackRook);
       // prettier-ignore
       expected = [
@@ -306,7 +306,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from queen piece", () => {
     test("white queen piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhiteQueen);
       // prettier-ignore
       expected = [
@@ -332,7 +332,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black queen piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackQueen);
       // prettier-ignore
       expected = [
@@ -360,7 +360,7 @@ describe("isSquareAttacked() function", () => {
 
   describe("should correctly check attacks from king piece", () => {
     test("white king piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhiteKing);
       // prettier-ignore
       expected = [
@@ -381,7 +381,7 @@ describe("isSquareAttacked() function", () => {
     });
 
     test("black king piece", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackKing);
       // prettier-ignore
       expected = [
@@ -404,14 +404,13 @@ describe("isSquareAttacked() function", () => {
 });
 
 describe("generateMoves() function", () => {
-  const game = new ChessGame("");
-
+  let game: ChessGame;
   let expected: Move[];
   let moves: Move[];
 
   describe("should generate moves from the correct side", () => {
     test("when side specified", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D4, ColorPiece.WhitePawn);
       expected = [Move(Square120.D4, Square120.D5)];
 
@@ -421,7 +420,7 @@ describe("generateMoves() function", () => {
       moves = generateMoves(game, Color.Black);
       expect(moves).toEqual([]);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E5, ColorPiece.BlackPawn);
       expected = [Move(Square120.E5, Square120.E4)];
 
@@ -433,7 +432,7 @@ describe("generateMoves() function", () => {
     });
 
     test("should side not specified", () => {
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       expected = [Move(Square120.E4, Square120.E5)];
 
@@ -445,7 +444,7 @@ describe("generateMoves() function", () => {
       moves = generateMoves(game);
       expect(moves).toEqual([]);
 
-      game.initBoard();
+      game = new ChessGame("");
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Move(Square120.D5, Square120.D4)];
 
@@ -462,7 +461,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for pawn piece", () => {
     describe("for a standard move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.A4, ColorPiece.WhitePawn);
         expected = [Move(Square120.A4, Square120.A5)];
 
@@ -471,7 +470,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.H5, ColorPiece.BlackPawn);
         expected = [Move(Square120.H5, Square120.H4)];
 
@@ -482,7 +481,7 @@ describe("generateMoves() function", () => {
 
     describe("for a double move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.B2, ColorPiece.WhitePawn);
         expected = [
           Move(Square120.B2, Square120.B3),
@@ -494,7 +493,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.G7, ColorPiece.BlackPawn);
         expected = [
           Move(Square120.G7, Square120.G6),
@@ -508,7 +507,7 @@ describe("generateMoves() function", () => {
 
     describe("for a promotion move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.C7, ColorPiece.WhitePawn);
         expected = [
           Move(Square120.C7, Square120.C8, 0, MoveFlag.PromoteQueen),
@@ -522,7 +521,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F2, ColorPiece.BlackPawn);
         expected = [
           Move(Square120.F2, Square120.F1, 0, MoveFlag.PromoteQueen),
@@ -538,7 +537,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D5, ColorPiece.WhitePawn);
         game.addPiece(Square120.C6, ColorPiece.BlackPawn);
         game.addPiece(Square120.E6, ColorPiece.BlackPawn);
@@ -553,7 +552,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E4, ColorPiece.BlackPawn);
         game.addPiece(Square120.D3, ColorPiece.WhitePawn);
         game.addPiece(Square120.F3, ColorPiece.WhitePawn);
@@ -569,7 +568,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture promotion move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E7, ColorPiece.WhitePawn);
         game.addPiece(Square120.D8, ColorPiece.BlackPawn);
         game.addPiece(Square120.F8, ColorPiece.BlackPawn);
@@ -594,7 +593,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D2, ColorPiece.BlackPawn);
         game.addPiece(Square120.C1, ColorPiece.WhitePawn);
         game.addPiece(Square120.E1, ColorPiece.WhitePawn);
@@ -621,7 +620,7 @@ describe("generateMoves() function", () => {
 
     describe("for an enPassant capture move", () => {
       test("white pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F5, ColorPiece.WhitePawn);
         game.addPiece(Square120.E5, ColorPiece.BlackPawn);
         game.addPiece(Square120.G5, ColorPiece.BlackPawn);
@@ -648,7 +647,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black pawn piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.C4, ColorPiece.BlackPawn);
         game.addPiece(Square120.B4, ColorPiece.WhitePawn);
         game.addPiece(Square120.D4, ColorPiece.WhitePawn);
@@ -679,7 +678,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for knight piece", () => {
     describe("for a standard move", () => {
       test("white knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D4, ColorPiece.WhiteKnight);
         expected = [
           Move(Square120.D4, Square120.B5),
@@ -697,7 +696,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E5, ColorPiece.BlackKnight);
         expected = [
           Move(Square120.E5, Square120.C6),
@@ -717,7 +716,7 @@ describe("generateMoves() function", () => {
 
     describe("for a standard move near the edges", () => {
       test("white knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.B2, ColorPiece.WhiteKnight);
         expected = [
           Move(Square120.B2, Square120.A4),
@@ -731,7 +730,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.H8, ColorPiece.BlackKnight);
         expected = [
           Move(Square120.H8, Square120.G6),
@@ -745,7 +744,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E5, ColorPiece.WhiteKnight);
         game.addPiece(Square120.D7, ColorPiece.BlackPawn);
         game.addPiece(Square120.F3, ColorPiece.BlackPawn);
@@ -765,7 +764,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black knight piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D4, ColorPiece.BlackKnight);
         game.addPiece(Square120.F5, ColorPiece.WhitePawn);
         game.addPiece(Square120.B3, ColorPiece.WhitePawn);
@@ -789,7 +788,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for bishop piece", () => {
     describe("for a standard move", () => {
       test("white bishop piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D5, ColorPiece.WhiteBishop);
         expected = [
           Move(Square120.D5, Square120.C6),
@@ -812,7 +811,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black bishop piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E4, ColorPiece.BlackBishop);
         expected = [
           Move(Square120.E4, Square120.D5),
@@ -837,7 +836,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white bishop piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E5, ColorPiece.WhiteBishop);
         game.addPiece(Square120.D6, ColorPiece.BlackPawn);
         game.addPiece(Square120.G7, ColorPiece.BlackPawn);
@@ -861,7 +860,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black bishop piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D4, ColorPiece.BlackBishop);
         game.addPiece(Square120.A7, ColorPiece.WhitePawn);
         game.addPiece(Square120.H8, ColorPiece.WhitePawn);
@@ -889,7 +888,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for rook piece", () => {
     describe("for a standard move", () => {
       test("white rook piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F4, ColorPiece.WhiteRook);
         expected = [
           Move(Square120.F4, Square120.F5),
@@ -913,7 +912,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black rook piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F5, ColorPiece.BlackRook);
         expected = [
           Move(Square120.F5, Square120.F6),
@@ -939,7 +938,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white rook piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F1, ColorPiece.WhiteRook);
         game.addPiece(Square120.F5, ColorPiece.BlackPawn);
         game.addPiece(Square120.C1, ColorPiece.BlackPawn);
@@ -960,7 +959,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black rook piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.F8, ColorPiece.BlackRook);
         game.addPiece(Square120.F4, ColorPiece.WhitePawn);
         game.addPiece(Square120.C8, ColorPiece.WhitePawn);
@@ -985,7 +984,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for queen piece", () => {
     describe("for a standard move", () => {
       test("white queen piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D4, ColorPiece.WhiteQueen);
         expected = [
           Move(Square120.D4, Square120.C5),
@@ -1022,7 +1021,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black queen piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D5, ColorPiece.BlackQueen);
         expected = [
           Move(Square120.D5, Square120.C6),
@@ -1061,7 +1060,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white queen piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D5, ColorPiece.WhiteQueen);
         game.addPiece(Square120.C6, ColorPiece.BlackPawn);
         game.addPiece(Square120.G5, ColorPiece.BlackPawn);
@@ -1096,7 +1095,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black queen piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.D4, ColorPiece.BlackQueen);
         game.addPiece(Square120.F6, ColorPiece.WhitePawn);
         game.addPiece(Square120.E3, ColorPiece.WhitePawn);
@@ -1136,7 +1135,7 @@ describe("generateMoves() function", () => {
   describe("should correctly generate pseudo-legal moves for king piece", () => {
     describe("for a standard move", () => {
       test("white king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E5, ColorPiece.WhiteKing);
         expected = [
           Move(Square120.E5, Square120.D6),
@@ -1154,7 +1153,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E4, ColorPiece.BlackKing);
         expected = [
           Move(Square120.E4, Square120.D5),
@@ -1174,7 +1173,7 @@ describe("generateMoves() function", () => {
 
     describe("for a standard move near the edges", () => {
       test("white king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
         expected = [
           Move(Square120.E1, Square120.D2),
@@ -1189,7 +1188,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
         expected = [
           Move(Square120.E8, Square120.F8),
@@ -1206,7 +1205,7 @@ describe("generateMoves() function", () => {
 
     describe("for a capture move", () => {
       test("white king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E7, ColorPiece.WhiteKing);
         game.addPiece(Square120.E8, ColorPiece.BlackPawn);
         game.addPiece(Square120.F8, ColorPiece.BlackPawn);
@@ -1227,7 +1226,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E2, ColorPiece.BlackKing);
         game.addPiece(Square120.F2, ColorPiece.WhitePawn);
         game.addPiece(Square120.E1, ColorPiece.WhitePawn);
@@ -1250,7 +1249,7 @@ describe("generateMoves() function", () => {
 
     describe("for a castle move", () => {
       test("white king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E1, ColorPiece.WhiteKing);
         game.addPiece(Square120.A1, ColorPiece.WhiteRook);
         game.addPiece(Square120.H1, ColorPiece.WhiteRook);
@@ -1271,7 +1270,7 @@ describe("generateMoves() function", () => {
       });
 
       test("black king piece", () => {
-        game.initBoard();
+        game = new ChessGame("");
         game.addPiece(Square120.E8, ColorPiece.BlackKing);
         game.addPiece(Square120.A8, ColorPiece.BlackRook);
         game.addPiece(Square120.H8, ColorPiece.BlackRook);

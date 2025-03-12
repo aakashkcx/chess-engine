@@ -1,4 +1,11 @@
-import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
+import {
+  File,
+  NULL_INDEX,
+  Rank,
+  rankFileTo120,
+  string120,
+  stringTo120,
+} from "./board";
 import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
 import { ChessGame } from "./game";
 import { generateHash } from "./hash";
@@ -66,9 +73,6 @@ export function getFEN(game: ChessGame): string {
  * @throws {Error} If FEN string is invalid.
  */
 export function setFEN(game: ChessGame, fen: string) {
-  // Reset the board.
-  game.initBoard();
-
   // Split FEN string.
   const fenArray = fen.trim().split(" ");
   if (fenArray.length !== 6) throw new Error("Invalid FEN string!");
@@ -110,7 +114,7 @@ export function setFEN(game: ChessGame, fen: string) {
   // Set active color.
   const sideToMove = fenArray[1];
   if (sideToMove === "w") game.activeColor = Color.White;
-  if (sideToMove === "b") game.activeColor = Color.Black;
+  else if (sideToMove === "b") game.activeColor = Color.Black;
 
   // Set castling rights.
   const castlingRights = fenArray[2];
@@ -141,5 +145,6 @@ export function setFEN(game: ChessGame, fen: string) {
   // Check whether the king is in check.
   const king = colorPiece(game.activeColor, Piece.King);
   const kingIndex = game.pieceLists[king][0];
-  game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
+  if (kingIndex !== NULL_INDEX)
+    game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
 }

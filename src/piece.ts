@@ -102,6 +102,21 @@ export const NO_PIECE = 0;
 export const OFF_BOARD = -1;
 
 /**
+ * The total number of pieces.
+ */
+export const N_PIECES = Pieces.length;
+
+/**
+ * The total number of color pieces.
+ */
+export const N_COLORPIECES = ColorPieces.length;
+
+/**
+ * The maximum possible number of an individual piece on the board.
+ */
+export const MAX_PIECE_COUNT = 10;
+
+/**
  * A list of piece names.
  * Indexed by Piece or ColorPiece.
  */

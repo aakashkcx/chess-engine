@@ -6,9 +6,6 @@ import { perft } from "../src/perft";
 // https://www.chessprogramming.org/Perft_Results
 
 describe("move generation performance tests", () => {
-  const game = new ChessGame();
-  let nodes: number;
-
   // prettier-ignore
   const cases: [string, number, number][] = [
     // [FEN, Depth, Expected]
@@ -45,8 +42,8 @@ describe("move generation performance tests", () => {
   ];
 
   test.each(cases)("%s, Depth: %s", (fen, depth, expected) => {
-    game.setFEN(fen);
-    nodes = perft(game, depth);
+    const game = new ChessGame(fen);
+    const nodes = perft(game, depth);
     expect(nodes).toBe(expected);
   });
 });

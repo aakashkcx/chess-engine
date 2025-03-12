@@ -20,8 +20,9 @@ import { generateMoves, isSquareAttacked } from "./movegen";
 import {
   Color,
   ColorPiece,
-  ColorPieces,
+  MAX_PIECE_COUNT,
   NO_PIECE,
+  N_COLORPIECES,
   OFF_BOARD,
   swapColor,
 } from "./piece";
@@ -31,84 +32,52 @@ import { toString } from "./string";
 
 /** A chess game. */
 export class ChessGame {
-  /**
-   * A 10*12 array storing the occupancy of each square on the board.
-   */
-  pieceBoard: ColorPiece[] = [];
+  /** A 10*12 array storing the occupancy of each square on the board. */
+  pieceBoard: ColorPiece[];
 
-  /**
-   * The total number of each piece type on the board.
-   */
-  pieceCount: number[] = [];
+  /** The total number of each piece type on the board. */
+  pieceCount: number[];
 
-  /**
-   * The piece lists for each piece type, storing the index of each piece on the board.
-   */
-  pieceLists: Index120[][] = [];
+  /** The piece lists for each piece type, storing the index of each piece on the board. */
+  pieceLists: Index120[][];
 
-  /**
-   * A 10*12 array storing the index of each piece on the board within the piece lists.
-   */
-  pieceListIndex: number[] = [];
+  /** A 10*12 array storing the index of each piece on the board within the piece lists. */
+  pieceListIndex: number[];
 
-  /**
-   * The next color to move.
-   */
-  activeColor: Color = Color.White;
+  /** The next color to move. */
+  activeColor: Color;
 
-  /**
-   * The castling availability.
-   */
-  castlingRights: CastlingRights = NO_CASTLE_RIGHTS;
+  /** The castling availability. */
+  castlingRights: CastlingRights;
 
-  /**
-   * The possible en passant target square.
-   */
-  enPassant: Index120 = NULL_INDEX;
+  /** The possible en passant target square. */
+  enPassant: Index120;
 
-  /**
-   * The half move clock.
-   */
-  halfMoves = 0;
+  /** The half move clock. */
+  halfMoves: number;
 
-  /**
-   * The number of full moves.
-   */
-  fullMoves = 1;
+  /** The number of full moves. */
+  fullMoves: number;
 
-  /**
-   * Whether the king of the active color is in check.
-   */
-  inCheck = false;
+  /** Whether the king of the active color is in check. */
+  inCheck: boolean;
 
-  /**
-   * The number of plies played.
-   */
-  ply = 0;
+  /** The number of plies played. */
+  ply: number;
 
-  /**
-   * The zobrist hash of the game.
-   */
-  hash: Hash = 0;
+  /** The zobrist hash of the game. */
+  hash: Hash;
 
-  /**
-   * The history of moves made.
-   */
-  moveList: Move[] = [];
+  /** The history of moves made. */
+  moveList: Move[];
 
-  /**
-   * The history of game state.
-   */
-  stateList: State[] = [];
+  /** The history of game state. */
+  stateList: State[];
 
-  /**
-   * The history of zobrist hashes.
-   */
-  hashList: Hash[] = [];
+  /** The history of zobrist hashes. */
+  hashList: Hash[];
 
-  /**
-   * The search controller.
-   */
+  /** The search controller. */
   _search?: Search;
 
   /**
@@ -118,25 +87,21 @@ export class ChessGame {
    * @throws {Error} If FEN string is invalid.
    */
   constructor(fen: string = STARTING_FEN) {
-    if (fen) this.setFEN(fen);
-    else this.initBoard();
-  }
-
-  /**
-   * Set the chess game to an empty board state and initialise board representation.
-   */
-  initBoard() {
-    this.pieceBoard = Array(120).fill(OFF_BOARD);
+    this.pieceBoard = Array<ColorPiece>(120).fill(OFF_BOARD);
     for (let index64 = 0; index64 < 64; index64++)
       this.pieceBoard[index64To120(index64)] = NO_PIECE;
-    this.pieceCount = Array(ColorPieces.length + 1).fill(0);
-    this.pieceLists = Array(ColorPieces.length + 1)
+
+    this.pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
+
+    this.pieceLists = Array<number[]>(N_COLORPIECES + 1)
       .fill([])
-      .map(() => []);
-    this.pieceListIndex = Array(120).fill(-1);
+      .map(() => Array<number>(MAX_PIECE_COUNT).fill(NULL_INDEX));
+
+    this.pieceListIndex = Array<number>(120).fill(-1);
+
     this.activeColor = Color.White;
     this.castlingRights = NO_CASTLE_RIGHTS;
-    this.enPassant = 0;
+    this.enPassant = NULL_INDEX;
     this.halfMoves = 0;
     this.fullMoves = 1;
     this.inCheck = false;
@@ -145,7 +110,8 @@ export class ChessGame {
     this.moveList = [];
     this.stateList = [];
     this.hashList = [];
-    this._search = undefined;
+
+    if (fen) setFEN(this, fen);
   }
 
   /**
@@ -153,9 +119,13 @@ export class ChessGame {
    * Fills in the piece lists based on {@link pieceBoard}.
    */
   _updatePieceLists() {
-    this.pieceCount.fill(0);
-    this.pieceLists = this.pieceLists.map(() => []);
-    this.pieceListIndex.fill(-1);
+    this.pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
+
+    this.pieceLists = Array<number[]>(N_COLORPIECES + 1)
+      .fill([])
+      .map(() => Array<number>(MAX_PIECE_COUNT).fill(NULL_INDEX));
+
+    this.pieceListIndex = Array<number>(120).fill(-1);
 
     for (let index64 = 0; index64 < 64; index64++) {
       const index120 = index64To120(index64);
@@ -227,13 +197,13 @@ export class ChessGame {
     const piece = this.pieceBoard[index120];
     const pieceListIndex = this.pieceListIndex[index120];
     const pieceListLastIndex = this.pieceCount[piece] - 1;
-    const lastIndex = this.pieceLists[piece][pieceListLastIndex];
+    const lastPieceIndex = this.pieceLists[piece][pieceListLastIndex];
 
     this.pieceBoard[index120] = NO_PIECE;
     this.pieceLists[piece][pieceListIndex] =
       this.pieceLists[piece][pieceListLastIndex];
-    this.pieceLists[piece].length--;
-    this.pieceListIndex[lastIndex] = pieceListIndex;
+    this.pieceLists[piece][pieceListLastIndex] = NULL_INDEX;
+    this.pieceListIndex[lastPieceIndex] = pieceListIndex;
     this.pieceListIndex[index120] = -1;
     this.pieceCount[piece]--;
 
@@ -311,11 +281,21 @@ export class ChessGame {
   }
 
   /**
-   * Check whether the game is over.
+   * Check whether the game has ended.
    * @returns Whether the game has ended.
+   * TODO: rename to isEnd().
    */
   isGameEnd(): boolean {
-    return this.isCheckmate() || this.isStalemate();
+    return this.isCheckmate() || this.isDraw();
+  }
+
+  /**
+   * Check whether the game has ended as a draw.
+   * @returns Whether the game has ended as a draw.
+   */
+  isDraw(): boolean {
+    // TODO: insufficient material, 50 move, threefold repetition.
+    return this.isStalemate();
   }
 
   /**
@@ -382,15 +362,6 @@ export class ChessGame {
    */
   getFEN(): string {
     return getFEN(this);
-  }
-
-  /**
-   * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
-   * @param fen The Forsyth–Edwards Notation (FEN) string.
-   * @throws {Error} If FEN string is invalid.
-   */
-  setFEN(fen: string) {
-    setFEN(this, fen);
   }
 
   /**
