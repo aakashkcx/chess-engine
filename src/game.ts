@@ -77,6 +77,12 @@ export class ChessGame {
   /** The history of zobrist hashes. */
   _hashList: Hash[];
 
+  /** The list of legal moves. */
+  _moves?: Move[];
+
+  /** The list of pseudo-legal moves. */
+  _pseudoMoves?: Move[];
+
   /** The search controller. */
   _search?: Search;
 
@@ -242,6 +248,23 @@ export class ChessGame {
       value
     );
     this._hash = hashCastlingRights(this._hash, this._castlingRights);
+  }
+
+  /**
+   * The list of legal moves.
+   */
+  get moves(): Move[] {
+    if (!this._moves)
+      this._moves = this.pseudoMoves.filter((move) => isLegalMove(this, move));
+    return this._moves;
+  }
+
+  /**
+   * The list of pseudo-legal moves.
+   */
+  get pseudoMoves(): Move[] {
+    if (!this._pseudoMoves) this._pseudoMoves = generateMoves(this);
+    return this._pseudoMoves;
   }
 
   /**
