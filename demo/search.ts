@@ -5,7 +5,7 @@ const FEN = "rnbqkbnr/ppppp2p/5p2/6p1/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
 const game = new ChessGame(FEN);
 game.print();
 
-while (!game.isGameEnd()) {
+while (!game.isEnd()) {
   const move = game.search();
   game.makeMove(move);
   game.print();

@@ -283,9 +283,8 @@ export class ChessGame {
   /**
    * Check whether the game has ended.
    * @returns Whether the game has ended.
-   * TODO: rename to isEnd().
    */
-  isGameEnd(): boolean {
+  isEnd(): boolean {
     return this.isCheckmate() || this.isDraw();
   }
 
