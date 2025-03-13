@@ -16,7 +16,7 @@ import {
 } from "./hash";
 import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
-import { generateMoves, isSquareAttacked } from "./movegen";
+import { generatePseudoMoves, isSquareAttacked } from "./movegen";
 import {
   Color,
   ColorPiece,
@@ -166,7 +166,7 @@ export class ChessGame {
    * The list of pseudo-legal moves.
    */
   get pseudoMoves(): Move[] {
-    if (!this._pseudoMoves) this._pseudoMoves = generateMoves(this);
+    if (!this._pseudoMoves) this._pseudoMoves = generatePseudoMoves(this);
     return this._pseudoMoves;
   }
 

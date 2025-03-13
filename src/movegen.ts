@@ -145,7 +145,7 @@ export function isSquareAttacked(
  *  Defaults to the current active color of the game.
  * @returns An array of pseudo-legal moves.
  */
-export function generateMoves(game: ChessGame, side?: Color): Move[] {
+export function generatePseudoMoves(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side ?? game.turn;
@@ -262,7 +262,7 @@ export function generateMoves(game: ChessGame, side?: Color): Move[] {
  *  Defaults to the current active color of the game.
  * @returns An array of pseudo-legal capture moves.
  */
-export function generateCaptures(game: ChessGame, side?: Color): Move[] {
+export function generatePseudoCaptures(game: ChessGame, side?: Color): Move[] {
   const moves: Move[] = [];
 
   const color = side ?? game.turn;
