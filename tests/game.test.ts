@@ -50,7 +50,7 @@ describe("ChessGame class", () => {
       expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
 
-      expect(game.getFEN()).toBe(STARTING_FEN);
+      expect(game.fen).toBe(STARTING_FEN);
     });
 
     test("should initialise empty chessboard", () => {
@@ -84,7 +84,7 @@ describe("ChessGame class", () => {
       expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
 
-      expect(game.getFEN()).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
+      expect(game.fen).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
     });
   });
 

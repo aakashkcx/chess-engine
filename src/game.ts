@@ -177,6 +177,13 @@ export class ChessGame {
   }
 
   /**
+   * The Forsyth–Edwards Notation (FEN) string.
+   */
+  get fen(): string {
+    return getFEN(this);
+  }
+
+  /**
    * Whether the current turn has been checkmated.
    */
   get isCheckmate(): boolean {
@@ -444,14 +451,6 @@ export class ChessGame {
     this._hash = hashEnPassant(this._hash, this.enPassant);
     this.enPassant = index120;
     this._hash = hashEnPassant(this._hash, this.enPassant);
-  }
-
-  /**
-   * Get the Forsyth–Edwards Notation (FEN) string of the chess game.
-   * @returns The Forsyth–Edwards Notation (FEN) string.
-   */
-  getFEN(): string {
-    return getFEN(this);
   }
 
   /**
