@@ -6,6 +6,7 @@ import {
   DRAW_VALUE,
   STALEMATE_VALUE,
   evaluate,
+  scoreString,
 } from "@/search/evaluation";
 import { orderMoves } from "@/search/moveordering";
 
@@ -275,9 +276,10 @@ export class Search {
    * @param depth The current search depth.
    */
   _logIteration(depth: number) {
-    const bestMove = moveString(this.bestMove);
+    const bestMove = moveStringMin(this.bestMove);
+    const bestScore = scoreString(this.bestScore);
     const moveList = this._getMoveList(depth).map(moveStringMin).toString();
-    const output = `Depth ${depth}: ${bestMove} / ${this.bestScore}\t(${this.nodes} nodes)\t${moveList} `;
+    const output = `Depth ${depth}: ${bestMove} / ${bestScore}\t(${this.nodes} nodes)\t${moveList} `;
     console.log(output);
   }
 
@@ -287,7 +289,8 @@ export class Search {
   _logEnd() {
     const time = (performance.now() - this._startTimeMS).toFixed(3);
     const bestMove = moveString(this.bestMove);
-    const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${this.bestScore}`;
+    const bestScore = scoreString(this.bestScore);
+    const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${bestScore}`;
     console.log(output);
   }
 }

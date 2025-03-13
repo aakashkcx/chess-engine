@@ -150,3 +150,14 @@ function positionValue(game: ChessGame, side: Color, endgame = false) {
 
   return value;
 }
+
+/**
+ * Get a string representation of an evaluation score.
+ * @param score The evaluation score.
+ * @returns The string representation.
+ */
+export function scoreString(score: number): string {
+  const mateIn = CHECKMATE_VALUE - score;
+  if (mateIn < 6) return `CM in ${mateIn}`;
+  return score.toString();
+}
