@@ -7,18 +7,6 @@ import { Color, Piece, colorPiece, getPiece, swapColor } from "@/piece";
 import { State, getState } from "@/state";
 
 /**
- * Check whether a move is legal.
- * @param game The chess game.
- * @param move The move value.
- * @returns Whether the move is legal.
- */
-export function isLegalMove(game: ChessGame, move: Move): boolean {
-  const legal = makeMove(game, move);
-  if (legal) takeBack(game);
-  return legal;
-}
-
-/**
  * Make a move on the chessboard.
  * @param game The chess game.
  * @param move The move value.

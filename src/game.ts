@@ -14,7 +14,7 @@ import {
   hashPiece,
   hashTurn,
 } from "@/hash";
-import { isLegalMove, makeMove, takeBack } from "@/makemove";
+import { makeMove, takeBack } from "@/makemove";
 import { Move } from "@/move";
 import {
   generatePseudoCaptures,
@@ -166,7 +166,7 @@ export class ChessGame {
    */
   get moves(): Move[] {
     if (!this._moves)
-      this._moves = this.pseudoMoves.filter((move) => isLegalMove(this, move));
+      this._moves = this.pseudoMoves.filter((move) => this.isLegalMove(move));
     return this._moves;
   }
 
@@ -199,15 +199,6 @@ export class ChessGame {
   }
 
   /**
-   * Check whether a move is legal.
-   * @param move The move value.
-   * @returns Whether the move is legal.
-   */
-  isLegalMove(move: Move): boolean {
-    return isLegalMove(this, move);
-  }
-
-  /**
    * Make a move on the chessboard.
    * @param move The move value.
    * @returns Whether the move was legal and therefore completed.
@@ -222,6 +213,17 @@ export class ChessGame {
    */
   takeBack() {
     takeBack(this);
+  }
+
+  /**
+   * Check whether a move is legal.
+   * @param move The move value.
+   * @returns Whether the move is legal.
+   */
+  isLegalMove(move: Move): boolean {
+    const legal = this.makeMove(move);
+    if (legal) this.takeBack();
+    return legal;
   }
 
   /**
