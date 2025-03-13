@@ -30,6 +30,8 @@
     "demo:cli": "tsx ./demo/cli.ts",
     "demo:perft": "tsx ./demo/perft.ts",
     "demo:search": "tsx ./demo/search.ts",
+    "format:check": "prettier . --check",
+    "format:write": "prettier . --write",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "vitest",
@@ -37,16 +39,17 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "@tsconfig/node-lts": "^22.0.1",
-    "@types/node": "^22.13.9",
-    "@vitest/coverage-v8": "^3.0.7",
-    "eslint": "^9.21.0",
+    "@types/node": "^22.13.10",
+    "@vitest/coverage-v8": "^3.0.8",
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.0",
-    "vitest": "^3.0.7"
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^3.0.8"
   },
-  "packageManager": "pnpm@10.5.2"
+  "packageManager": "pnpm@10.6.2"
 }

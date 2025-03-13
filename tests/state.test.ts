@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { Square120 } from "../src/board";
-import { ALL_CASTLE_RIGHTS, NO_CASTLE_RIGHTS } from "../src/castlingrights";
+import { Square120 } from "@/board";
+import { ALL_CASTLE_RIGHTS, NO_CASTLE_RIGHTS } from "@/castlingrights";
 import {
   State,
   getCastlingRights,
   getEnPassant,
   getHalfMoves,
   getState,
-} from "../src/state";
+} from "@/state";
 
 describe("getState() function", () => {
   test("should return all correct state properties", () => {

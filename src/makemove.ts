@@ -1,42 +1,30 @@
-import { NULL_INDEX, Square120 } from "./board";
-import { CastleRight } from "./castlingrights";
-import { ChessGame } from "./game";
-import { Move, MoveFlag, getMove, isPromotion } from "./move";
-import { PAWN_MOVE_OFFSET } from "./movegen";
-import { Color, Piece, colorPiece, getPiece, swapColor } from "./piece";
-import { State, getState } from "./state";
+import { NULL_INDEX, Square120 } from "@/board";
+import { CastleRight } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, getMove, isPromotion } from "@/move";
+import { PAWN_MOVE_OFFSET } from "@/movegen";
+import { Color, Piece, colorPiece, getPiece, swapColor } from "@/piece";
+import { State, getState } from "@/state";
 
 /**
- * Check whether a move is legal.
+ * Make a move on a chess game.
  * @param game The chess game.
  * @param move The move value.
- * @returns Whether the move is legal.
- */
-export function isLegalMove(game: ChessGame, move: Move): boolean {
-  const legal = makeMove(game, move);
-  if (legal) takeBack(game);
-  return legal;
-}
-
-/**
- * Make a move on the chessboard.
- * @param game The chess game.
- * @param move The move value.
- * @returns Whether the move was legal and therefore completed.
+ * @returns Whether the move was legal and successful.
  */
 export function makeMove(game: ChessGame, move: Move): boolean {
   const [start, target, captured, flag] = getMove(move);
-  const piece = game.pieceBoard[start];
+  const piece = game._pieceBoard[start];
 
-  const state = State(game.castlingRights, game.enPassant, game.halfMoves);
+  const state = State(game._castlingRights, game.enPassant, game.halfMoves);
 
-  game.moveList[game.ply] = move;
-  game.stateList[game.ply] = state;
-  game.hashList[game.ply] = game.hash;
-  game.ply++;
+  game._moveHistory[game._ply] = move;
+  game._stateHistory[game._ply] = state;
+  game._hashHistory[game._ply] = game._hash;
+  game._ply++;
 
-  const color = game.activeColor;
-  const opponent = swapColor(game.activeColor);
+  const color = game.turn;
+  const opponent = swapColor(game.turn);
 
   game.halfMoves++;
   if (color === Color.Black) game.fullMoves++;
@@ -101,33 +89,38 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   )
     game.setCastleRight(CastleRight.BlackQueen, false);
 
-  game.switchColor();
+  game.changeTurn();
 
   const king = colorPiece(color, Piece.King);
-  const kingIndex = game.pieceLists[king][0];
+  const kingIndex = game._pieceLists[king][0];
   if (game.isSquareAttacked(kingIndex, color)) {
     game.takeBack();
     return false;
   }
 
   const opponentKing = colorPiece(opponent, Piece.King);
-  const opponentKingIndex = game.pieceLists[opponentKing][0];
+  const opponentKingIndex = game._pieceLists[opponentKing][0];
   game.inCheck = game.isSquareAttacked(opponentKingIndex, opponent);
+
+  game._moves = undefined;
+  game._captureMoves = undefined;
+  game._pseudoMoves = undefined;
+  game._pseudoCaptureMoves = undefined;
 
   return true;
 }
 
 /**
- * Take back the last move made on the chessboard.
+ * Take back the last move made on a chess game.
  * @param game The chess game.
  * @throws {Error} If take back not possible.
  */
-export function takeBack(game: ChessGame) {
-  if (game.ply === 0) throw new Error("Cannot take back!");
+export function takeBack(game: ChessGame): void {
+  if (game._ply === 0) throw new Error("Cannot take back!");
 
-  game.ply--;
-  const move = game.moveList[game.ply];
-  const state = game.stateList[game.ply];
+  game._ply--;
+  const move = game._moveHistory[game._ply];
+  const state = game._stateHistory[game._ply];
 
   const [start, target, captured, flag] = getMove(move);
   const [castlingRights, enPassant, halfMoves] = getState(state);
@@ -136,9 +129,9 @@ export function takeBack(game: ChessGame) {
   game._setEnPassant(enPassant);
   game.halfMoves = halfMoves;
 
-  game.switchColor();
-  const color = game.activeColor;
-  const opponent = swapColor(game.activeColor);
+  game.changeTurn();
+  const color = game.turn;
+  const opponent = swapColor(game.turn);
 
   if (color === Color.Black) game.fullMoves--;
 
@@ -167,6 +160,11 @@ export function takeBack(game: ChessGame) {
   }
 
   const king = colorPiece(color, Piece.King);
-  const kingIndex = game.pieceLists[king][0];
+  const kingIndex = game._pieceLists[king][0];
   game.inCheck = game.isSquareAttacked(kingIndex, color);
+
+  game._moves = undefined;
+  game._captureMoves = undefined;
+  game._pseudoMoves = undefined;
+  game._pseudoCaptureMoves = undefined;
 }

@@ -14,5 +14,8 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+  },
+  {
+    ignores: ["eslint.config.mjs"],
   }
 );

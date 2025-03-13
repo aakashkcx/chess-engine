@@ -1,5 +1,6 @@
-import * as readline from "readline/promises";
-import { ChessGame, Color, moveStringMin, NO_MOVE } from "../src";
+import readline from "node:readline/promises";
+
+import { ChessGame, Color, moveStringMin, NO_MOVE } from "@";
 
 async function menu(rl: readline.Interface) {
   while (true) {
@@ -26,8 +27,8 @@ async function gamePlayer(rl: readline.Interface) {
   const game = new ChessGame();
   while (true) {
     game.print();
-    const side = game.activeColor;
-    const moves = game.generateMoves(side, true);
+    const side = game.turn;
+    const moves = game.moves;
     const moveStrings = moves.map(moveStringMin);
     console.log(moveStrings);
     if (moves.length) {
@@ -43,9 +44,9 @@ async function gameAI(rl: readline.Interface) {
   const game = new ChessGame();
   while (true) {
     game.print();
-    const side = game.activeColor;
+    const side = game.turn;
     if (side === Color.White) {
-      const moves = game.generateMoves(side, true);
+      const moves = game.moves;
       const moveStrings = moves.map(moveStringMin);
       console.log(moveStrings);
       if (moves.length) {
@@ -72,4 +73,4 @@ async function cli() {
   }
 }
 
-cli();
+await cli();

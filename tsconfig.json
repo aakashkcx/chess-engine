@@ -4,6 +4,10 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "declaration": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@": ["./src/"],
+      "@/*": ["./src/*"]
+    }
   }
 }

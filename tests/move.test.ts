@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { Square120 } from "../src/board";
+import { Square120 } from "@/board";
 import {
   Move,
   MoveFlag,
@@ -12,8 +12,8 @@ import {
   isPromotion,
   moveString,
   moveStringMin,
-} from "../src/move";
-import { ColorPiece, NO_PIECE } from "../src/piece";
+} from "@/move";
+import { ColorPiece, NO_PIECE } from "@/piece";
 
 describe("getMove() function", () => {
   test("should return all correct move properties", () => {

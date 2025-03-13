@@ -1,13 +1,13 @@
-import { ChessGame } from "../game";
-import { Move, MoveFlag, getMove, isPromotion } from "../move";
-import { ColorPiece, NO_PIECE, getPiece } from "../piece";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, getMove, isPromotion } from "@/move";
+import { ColorPiece, NO_PIECE, getPiece } from "@/piece";
 import {
   BISHOP_VALUE,
   KNIGHT_VALUE,
   PIECE_VALUE,
   QUEEN_VALUE,
   ROOK_VALUE,
-} from "./value";
+} from "@/search/value";
 
 /** The multiplier used for victims in MVV-LVA. */
 const VICTIM_MULTIPLIER = 100;
@@ -16,7 +16,7 @@ const VICTIM_MULTIPLIER = 100;
 const PROMOTION_MULTIPLIER = 100;
 
 /** The value of the principal variation move. */
-const PV_VALUE = 1000000;
+const PV_VALUE = 1_000_000;
 
 /**
  * Order a list of moves.
@@ -29,7 +29,7 @@ export function orderMoves(game: ChessGame, moves: Move[], pvMove?: Move) {
 
   for (const move of moves) {
     const [start, , captured, flag] = getMove(move);
-    const piece = game.pieceBoard[start];
+    const piece = game._pieceBoard[start];
 
     let value = 0;
 

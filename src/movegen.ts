@@ -4,13 +4,13 @@ import {
   PAWN_PROMOTION_RANK,
   PAWN_START_RANK,
   getRank120,
-} from "./board";
+} from "@/board";
 import {
   KING_SIDE_CASTLE_RIGHT,
   QUEEN_SIDE_CASTLE_RIGHT,
-} from "./castlingrights";
-import { ChessGame } from "./game";
-import { Move, MoveFlag, PROMOTION_FLAGS } from "./move";
+} from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, PROMOTION_FLAGS } from "@/move";
 import {
   Color,
   ColorPiece,
@@ -21,7 +21,7 @@ import {
   getColor,
   getPiece,
   swapColor,
-} from "./piece";
+} from "@/piece";
 
 /** The knight piece move offsets. */
 export const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12] as const;
@@ -67,228 +67,32 @@ const SLIDING_PIECES_OFFSETS = [
 ] as const;
 
 /**
- * Generate pseudo-legal moves on the chessboard.
+ * Check whether a square is attacked on a chess game.
  * @param game The chess game.
- * @param side The side from which to generate moves.
- *  Defaults to the current active color of the game.
- * @returns An array of pseudo-legal moves.
- */
-export function generateMoves(game: ChessGame, side?: Color): Move[] {
-  const moves: Move[] = [];
-
-  const color = side ?? game.activeColor;
-  const opponent = swapColor(color);
-
-  let piece: ColorPiece;
-  let start: Index120;
-  let target: Index120;
-  let captured: ColorPiece;
-
-  /* Pawn Moves */
-  piece = colorPiece(color, Piece.Pawn);
-  for (let i = 0; i < game.pieceCount[piece]; i++) {
-    start = game.pieceLists[piece][i];
-    target = start + PAWN_MOVE_OFFSET[color];
-    captured = game.pieceBoard[target];
-    if (captured === NO_PIECE) {
-      if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-        for (const promotionFlag of PROMOTION_FLAGS)
-          moves.push(Move(start, target, NO_PIECE, promotionFlag));
-      } else moves.push(Move(start, target));
-      target = start + PAWN_DOUBLE_OFFSET[color];
-      captured = game.pieceBoard[target];
-      if (captured === NO_PIECE && getRank120(start) === PAWN_START_RANK[color])
-        moves.push(Move(start, target, NO_PIECE, MoveFlag.PawnDouble));
-    }
-    for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
-      target = start + captureOffset;
-      captured = game.pieceBoard[target];
-      if (getColor(captured) === opponent) {
-        if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-          for (const promotionFlag of PROMOTION_FLAGS)
-            moves.push(Move(start, target, captured, promotionFlag));
-        } else moves.push(Move(start, target, captured));
-      }
-      if (target === game.enPassant) {
-        captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
-        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
-      }
-    }
-  }
-
-  /* Non-Sliding Piece Moves (Knight, King) */
-  for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
-    piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
-      for (const offset of offsets) {
-        target = start + offset;
-        captured = game.pieceBoard[target];
-        if (captured === NO_PIECE) moves.push(Move(start, target));
-        else if (getColor(captured) === opponent)
-          moves.push(Move(start, target, captured));
-      }
-    }
-  }
-
-  /* Sliding Piece Moves (Bishop, Rook, Queen) */
-  for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
-    piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
-      for (const offset of offsets) {
-        target = start + offset;
-        captured = game.pieceBoard[target];
-        while (captured !== OFF_BOARD) {
-          if (captured !== NO_PIECE) {
-            if (getColor(captured) === opponent)
-              moves.push(Move(start, target, captured));
-            break;
-          }
-          moves.push(Move(start, target));
-          target += offset;
-          captured = game.pieceBoard[target];
-        }
-      }
-    }
-  }
-
-  /* King Castle Moves */
-  piece = colorPiece(color, Piece.King);
-  start = KING_SQUARE[color];
-  if (
-    game.getCastleRight(KING_SIDE_CASTLE_RIGHT[color]) &&
-    game.pieceBoard[start] === piece &&
-    game.pieceBoard[start + 1] === NO_PIECE &&
-    game.pieceBoard[start + 2] === NO_PIECE &&
-    game.pieceBoard[start + 3] === colorPiece(color, Piece.Rook) &&
-    !game.isSquareAttacked(start, color) &&
-    !game.isSquareAttacked(start + 1, color)
-  ) {
-    moves.push(Move(start, start + 2, NO_PIECE, MoveFlag.Castle));
-  }
-  if (
-    game.getCastleRight(QUEEN_SIDE_CASTLE_RIGHT[color]) &&
-    game.pieceBoard[start] === piece &&
-    game.pieceBoard[start - 1] === NO_PIECE &&
-    game.pieceBoard[start - 2] === NO_PIECE &&
-    game.pieceBoard[start - 3] === NO_PIECE &&
-    game.pieceBoard[start - 4] === colorPiece(color, Piece.Rook) &&
-    !game.isSquareAttacked(start, color) &&
-    !game.isSquareAttacked(start - 1, color)
-  ) {
-    moves.push(Move(start, start - 2, NO_PIECE, MoveFlag.Castle));
-  }
-
-  return moves;
-}
-
-/**
- * Generate pseudo-legal capture moves on the chessboard - for quiescence search.
- * @param game The chess game.
- * @param side The side from which to generate capture moves.
- *  Defaults to the current active color of the game.
- * @returns An array of pseudo-legal capture moves.
- */
-export function generateCaptures(game: ChessGame, side?: Color): Move[] {
-  const moves: Move[] = [];
-
-  const color = side ?? game.activeColor;
-  const opponent = swapColor(color);
-
-  let piece: ColorPiece;
-  let start: Index120;
-  let target: Index120;
-  let captured: ColorPiece;
-
-  /* Pawn Capture Moves */
-  piece = colorPiece(color, Piece.Pawn);
-  for (let i = 0; i < game.pieceCount[piece]; i++) {
-    start = game.pieceLists[piece][i];
-    target = start + PAWN_MOVE_OFFSET[color];
-    captured = game.pieceBoard[target];
-    for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
-      target = start + captureOffset;
-      captured = game.pieceBoard[target];
-      if (getColor(captured) === opponent) {
-        if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
-          for (const promotionFlag of PROMOTION_FLAGS)
-            moves.push(Move(start, target, captured, promotionFlag));
-        } else moves.push(Move(start, target, captured));
-      }
-      if (target === game.enPassant) {
-        captured = game.pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
-        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
-      }
-    }
-  }
-
-  /* Non-Sliding Piece Capture Moves (Knight, King) */
-  for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
-    piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
-      for (const offset of offsets) {
-        target = start + offset;
-        captured = game.pieceBoard[target];
-        if (getColor(captured) === opponent)
-          moves.push(Move(start, target, captured));
-      }
-    }
-  }
-
-  /* Sliding Piece Capture Moves (Bishop, Rook, Queen) */
-  for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
-    piece = colorPiece(color, pieceType);
-    for (let i = 0; i < game.pieceCount[piece]; i++) {
-      start = game.pieceLists[piece][i];
-      for (const offset of offsets) {
-        target = start + offset;
-        captured = game.pieceBoard[target];
-        while (captured !== OFF_BOARD) {
-          if (captured !== NO_PIECE) {
-            if (getColor(captured) === opponent)
-              moves.push(Move(start, target, captured));
-            break;
-          }
-          target += offset;
-          captured = game.pieceBoard[target];
-        }
-      }
-    }
-  }
-
-  return moves;
-}
-
-/**
- * Check whether a square is attacked by the opponent.
- * @param game The chess game.
- * @param index120 The index of the square to check.
+ * @param index120 The index of the square.
  * @param side The side to check whether the opponent is attacking.
- *  Defaults to color of piece at index, or if square empty, the current active color.
- * @returns Whether the square is attacked by the opponent.
+ *  Defaults to color of piece at index, or if square empty, the current turn.
+ * @returns Whether the square is attacked.
  */
 export function isSquareAttacked(
   game: ChessGame,
   index120: Index120,
   side?: Color
 ): boolean {
-  const piece = game.pieceBoard[index120];
+  const piece = game._pieceBoard[index120];
 
-  const color =
-    side ?? (piece !== NO_PIECE ? getColor(piece) : game.activeColor);
+  const color = side ?? (piece !== NO_PIECE ? getColor(piece) : game.turn);
 
   /* Pawn Attacks */
   for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
-    const attacker = game.pieceBoard[index120 + captureOffset];
+    const attacker = game._pieceBoard[index120 + captureOffset];
     if (getPiece(attacker) === Piece.Pawn && getColor(attacker) !== color)
       return true;
   }
 
   /* Knight Attacks */
   for (const offset of KNIGHT_OFFSETS) {
-    const attacker = game.pieceBoard[index120 + offset];
+    const attacker = game._pieceBoard[index120 + offset];
     if (getPiece(attacker) === Piece.Knight && getColor(attacker) !== color)
       return true;
   }
@@ -296,7 +100,7 @@ export function isSquareAttacked(
   /* Diagonal Attacks (Bishop, Queen, King) */
   for (const offset of BISHOP_OFFSETS) {
     let target = index120 + offset;
-    let attacker = game.pieceBoard[target];
+    let attacker = game._pieceBoard[target];
     if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
       return true;
     while (attacker !== OFF_BOARD) {
@@ -308,14 +112,14 @@ export function isSquareAttacked(
         break;
       }
       target += offset;
-      attacker = game.pieceBoard[target];
+      attacker = game._pieceBoard[target];
     }
   }
 
   /* Horizontal Attacks (Rook, Queen, King) */
   for (const offset of ROOK_OFFSETS) {
     let target = index120 + offset;
-    let attacker = game.pieceBoard[target];
+    let attacker = game._pieceBoard[target];
     if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
       return true;
     while (attacker !== OFF_BOARD) {
@@ -327,9 +131,210 @@ export function isSquareAttacked(
         break;
       }
       target += offset;
-      attacker = game.pieceBoard[target];
+      attacker = game._pieceBoard[target];
     }
   }
 
   return false;
+}
+
+/**
+ * Generate the pseudo-legal moves of a chess game.
+ *
+ * Pseudo-legal moves may leave the king in check and therefore be illegal.
+ *
+ * @param game The chess game.
+ * @param side The side from which to generate moves.
+ *  Defaults to the current side to move of the game.
+ * @returns An array of pseudo-legal moves.
+ */
+export function generatePseudoMoves(game: ChessGame, side?: Color): Move[] {
+  const moves: Move[] = [];
+
+  const color = side ?? game.turn;
+  const opponent = swapColor(color);
+
+  let piece: ColorPiece;
+  let start: Index120;
+  let target: Index120;
+  let captured: ColorPiece;
+
+  /* Pawn Moves */
+  piece = colorPiece(color, Piece.Pawn);
+  for (let i = 0; i < game._pieceCount[piece]; i++) {
+    start = game._pieceLists[piece][i];
+    target = start + PAWN_MOVE_OFFSET[color];
+    captured = game._pieceBoard[target];
+    if (captured === NO_PIECE) {
+      if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
+        for (const promotionFlag of PROMOTION_FLAGS)
+          moves.push(Move(start, target, NO_PIECE, promotionFlag));
+      } else moves.push(Move(start, target));
+      target = start + PAWN_DOUBLE_OFFSET[color];
+      captured = game._pieceBoard[target];
+      if (captured === NO_PIECE && getRank120(start) === PAWN_START_RANK[color])
+        moves.push(Move(start, target, NO_PIECE, MoveFlag.PawnDouble));
+    }
+    for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
+      target = start + captureOffset;
+      captured = game._pieceBoard[target];
+      if (getColor(captured) === opponent) {
+        if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
+          for (const promotionFlag of PROMOTION_FLAGS)
+            moves.push(Move(start, target, captured, promotionFlag));
+        } else moves.push(Move(start, target, captured));
+      }
+      if (target === game.enPassant) {
+        captured = game._pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
+        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
+      }
+    }
+  }
+
+  /* Non-Sliding Piece Moves (Knight, King) */
+  for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
+    piece = colorPiece(color, pieceType);
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game._pieceBoard[target];
+        if (captured === NO_PIECE) moves.push(Move(start, target));
+        else if (getColor(captured) === opponent)
+          moves.push(Move(start, target, captured));
+      }
+    }
+  }
+
+  /* Sliding Piece Moves (Bishop, Rook, Queen) */
+  for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
+    piece = colorPiece(color, pieceType);
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game._pieceBoard[target];
+        while (captured !== OFF_BOARD) {
+          if (captured !== NO_PIECE) {
+            if (getColor(captured) === opponent)
+              moves.push(Move(start, target, captured));
+            break;
+          }
+          moves.push(Move(start, target));
+          target += offset;
+          captured = game._pieceBoard[target];
+        }
+      }
+    }
+  }
+
+  /* King Castle Moves */
+  piece = colorPiece(color, Piece.King);
+  start = KING_SQUARE[color];
+  if (
+    game.getCastleRight(KING_SIDE_CASTLE_RIGHT[color]) &&
+    game._pieceBoard[start] === piece &&
+    game._pieceBoard[start + 1] === NO_PIECE &&
+    game._pieceBoard[start + 2] === NO_PIECE &&
+    game._pieceBoard[start + 3] === colorPiece(color, Piece.Rook) &&
+    !game.isSquareAttacked(start, color) &&
+    !game.isSquareAttacked(start + 1, color)
+  ) {
+    moves.push(Move(start, start + 2, NO_PIECE, MoveFlag.Castle));
+  }
+  if (
+    game.getCastleRight(QUEEN_SIDE_CASTLE_RIGHT[color]) &&
+    game._pieceBoard[start] === piece &&
+    game._pieceBoard[start - 1] === NO_PIECE &&
+    game._pieceBoard[start - 2] === NO_PIECE &&
+    game._pieceBoard[start - 3] === NO_PIECE &&
+    game._pieceBoard[start - 4] === colorPiece(color, Piece.Rook) &&
+    !game.isSquareAttacked(start, color) &&
+    !game.isSquareAttacked(start - 1, color)
+  ) {
+    moves.push(Move(start, start - 2, NO_PIECE, MoveFlag.Castle));
+  }
+
+  return moves;
+}
+
+/**
+ * Generate the pseudo-legal capture moves of a chess game.
+ *
+ * Pseudo-legal moves may leave the king in check and therefore be illegal.
+ *
+ * @param game The chess game.
+ * @param side The side from which to generate capture moves.
+ *  Defaults to the current side to move of the game.
+ * @returns An array of pseudo-legal capture moves.
+ */
+export function generatePseudoCaptures(game: ChessGame, side?: Color): Move[] {
+  const moves: Move[] = [];
+
+  const color = side ?? game.turn;
+  const opponent = swapColor(color);
+
+  let piece: ColorPiece;
+  let start: Index120;
+  let target: Index120;
+  let captured: ColorPiece;
+
+  /* Pawn Capture Moves */
+  piece = colorPiece(color, Piece.Pawn);
+  for (let i = 0; i < game._pieceCount[piece]; i++) {
+    start = game._pieceLists[piece][i];
+    target = start + PAWN_MOVE_OFFSET[color];
+    captured = game._pieceBoard[target];
+    for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
+      target = start + captureOffset;
+      captured = game._pieceBoard[target];
+      if (getColor(captured) === opponent) {
+        if (getRank120(start) === PAWN_PROMOTION_RANK[color]) {
+          for (const promotionFlag of PROMOTION_FLAGS)
+            moves.push(Move(start, target, captured, promotionFlag));
+        } else moves.push(Move(start, target, captured));
+      }
+      if (target === game.enPassant) {
+        captured = game._pieceBoard[target + PAWN_BEHIND_OFFSET[color]];
+        moves.push(Move(start, target, captured, MoveFlag.EnPassant));
+      }
+    }
+  }
+
+  /* Non-Sliding Piece Capture Moves (Knight, King) */
+  for (const [pieceType, offsets] of NON_SLIDING_PIECES_OFFSETS) {
+    piece = colorPiece(color, pieceType);
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game._pieceBoard[target];
+        if (getColor(captured) === opponent)
+          moves.push(Move(start, target, captured));
+      }
+    }
+  }
+
+  /* Sliding Piece Capture Moves (Bishop, Rook, Queen) */
+  for (const [pieceType, offsets] of SLIDING_PIECES_OFFSETS) {
+    piece = colorPiece(color, pieceType);
+    for (let i = 0; i < game._pieceCount[piece]; i++) {
+      start = game._pieceLists[piece][i];
+      for (const offset of offsets) {
+        target = start + offset;
+        captured = game._pieceBoard[target];
+        while (captured !== OFF_BOARD) {
+          if (captured !== NO_PIECE) {
+            if (getColor(captured) === opponent)
+              moves.push(Move(start, target, captured));
+            break;
+          }
+          target += offset;
+          captured = game._pieceBoard[target];
+        }
+      }
+    }
+  }
+
+  return moves;
 }

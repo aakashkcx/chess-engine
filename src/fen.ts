@@ -1,7 +1,14 @@
-import { File, Rank, rankFileTo120, string120, stringTo120 } from "./board";
-import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
-import { ChessGame } from "./game";
-import { generateHash } from "./hash";
+import {
+  File,
+  NULL_INDEX,
+  Rank,
+  rankFileTo120,
+  string120,
+  stringTo120,
+} from "@/board";
+import { CastleRight, NO_CASTLE_RIGHTS } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { generateHash } from "@/hash";
 import {
   Color,
   colorPiece,
@@ -9,7 +16,7 @@ import {
   NO_PIECE,
   Piece,
   PieceName,
-} from "./piece";
+} from "@/piece";
 
 /**
  * The starting Forsyth–Edwards Notation (FEN) string.
@@ -28,7 +35,7 @@ export function getFEN(game: ChessGame): string {
   for (let rank = 7; rank >= 0; rank--) {
     let empty = 0;
     for (let file = 0; file < 8; file++) {
-      const piece = game.pieceBoard[rankFileTo120(rank, file)];
+      const piece = game._pieceBoard[rankFileTo120(rank, file)];
       if (piece != NO_PIECE) {
         if (empty) pieces += empty;
         empty = 0;
@@ -39,12 +46,12 @@ export function getFEN(game: ChessGame): string {
     if (rank) pieces += "/";
   }
 
-  // The active color.
-  const color = game.activeColor === Color.White ? "w" : "b";
+  // The current turn.
+  const turn = game.turn === Color.White ? "w" : "b";
 
   // Set castling rights.
   let castlingRights = "";
-  if (game.castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
+  if (game._castlingRights === NO_CASTLE_RIGHTS) castlingRights = "-";
   if (game.getCastleRight(CastleRight.WhiteKing)) castlingRights += "K";
   if (game.getCastleRight(CastleRight.WhiteQueen)) castlingRights += "Q";
   if (game.getCastleRight(CastleRight.BlackKing)) castlingRights += "k";
@@ -56,19 +63,19 @@ export function getFEN(game: ChessGame): string {
   // The half move and full move counter.
   const { halfMoves, fullMoves } = game;
 
-  return `${pieces} ${color} ${castlingRights} ${enPassant} ${halfMoves} ${fullMoves}`;
+  return `${pieces} ${turn} ${castlingRights} ${enPassant} ${halfMoves} ${fullMoves}`;
 }
 
 /**
- * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
- * @param game The chess game.
+ * Setup a new chess game from a Forsyth–Edwards Notation (FEN) string.
+ *
+ * *Assumes a new empty chess game.*
+ *
+ * @param game The new chess game.
  * @param fen The Forsyth–Edwards Notation (FEN) string.
  * @throws {Error} If FEN string is invalid.
  */
 export function setFEN(game: ChessGame, fen: string) {
-  // Reset the board.
-  game.initBoard();
-
   // Split FEN string.
   const fenArray = fen.trim().split(" ");
   if (fenArray.length !== 6) throw new Error("Invalid FEN string!");
@@ -79,7 +86,7 @@ export function setFEN(game: ChessGame, fen: string) {
     throw new Error("Invalid FEN piece placement string!");
 
   const setPiece = (rank: Rank, file: File, piece: ColorPiece) => {
-    game.pieceBoard[rankFileTo120(rank, file)] = piece;
+    game._pieceBoard[rankFileTo120(rank, file)] = piece;
   };
 
   // Iterate through piece placement strings and set pieces.
@@ -105,12 +112,12 @@ export function setFEN(game: ChessGame, fen: string) {
   }
 
   // Update the piece representations.
-  game._updatePieceLists();
+  game._updateBoard();
 
-  // Set active color.
+  // Set current turn.
   const sideToMove = fenArray[1];
-  if (sideToMove === "w") game.activeColor = Color.White;
-  if (sideToMove === "b") game.activeColor = Color.Black;
+  if (sideToMove === "w") game.turn = Color.White;
+  else if (sideToMove === "b") game.turn = Color.Black;
 
   // Set castling rights.
   const castlingRights = fenArray[2];
@@ -136,10 +143,11 @@ export function setFEN(game: ChessGame, fen: string) {
   game.fullMoves = fullMoves;
 
   // Generate the hash.
-  game.hash = generateHash(game);
+  game._hash = generateHash(game);
 
   // Check whether the king is in check.
-  const king = colorPiece(game.activeColor, Piece.King);
-  const kingIndex = game.pieceLists[king][0];
-  game.inCheck = game.isSquareAttacked(kingIndex, game.activeColor);
+  const king = colorPiece(game.turn, Piece.King);
+  const kingIndex = game._pieceLists[king][0];
+  if (kingIndex !== NULL_INDEX)
+    game.inCheck = game.isSquareAttacked(kingIndex, game.turn);
 }

@@ -1,17 +1,17 @@
-import { ChessGame } from "../game";
-import { Hash } from "../hash";
-import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
-import { generateCaptures, generateMoves } from "../movegen";
+import { ChessGame } from "@/game";
+import { Hash } from "@/hash";
+import { Move, NO_MOVE, moveString, moveStringMin } from "@/move";
 import {
   CHECKMATE_VALUE,
   DRAW_VALUE,
   STALEMATE_VALUE,
   evaluate,
-} from "./evaluation";
-import { orderMoves } from "./moveordering";
+  scoreString,
+} from "@/search/evaluation";
+import { orderMoves } from "@/search/moveordering";
 
 /** The default search time in milliseconds. */
-const DEFAULT_TIME_MS = 1000;
+const DEFAULT_TIME_MS = 1_000;
 
 /** The maximum search depth. */
 const MAX_DEPTH = 32;
@@ -21,98 +21,90 @@ const NUM_NODES_TIME_CHECK = 2 ** 16 - 1;
 
 /** A search controller. */
 export class Search {
-  /**
-   * The chess game.
-   */
-  game: ChessGame;
+  /** The chess game. */
+  _game: ChessGame;
 
-  /**
-   * The best move found so far.
-   */
-  bestMove: Move = NO_MOVE;
+  /** The best move. */
+  bestMove: Move;
 
-  /**
-   * The best score found so far.
-   */
-  bestScore = 0;
+  /** The best score. */
+  bestScore: number;
 
-  /**
-   * The number of nodes evaluated.
-   */
-  nodes = 0;
+  /** The total number of leaf nodes evaluated. */
+  nodes: number;
 
-  /**
-   * The search time in milliseconds.
-   */
-  timeMS: number = DEFAULT_TIME_MS;
+  /** The search time in milliseconds. */
+  timeMS: number;
 
-  /**
-   * The stop search flag.
-   */
-  stop = true;
+  /** The stop search flag. */
+  stopped: boolean;
 
-  /**
-   * The starting game ply.
-   */
-  startPly = 0;
+  /** The starting game ply. */
+  _startPly: number;
 
-  /**
-   * The search starting time in milliseconds.
-   */
-  startTimeMS = 0;
+  /** The starting time in milliseconds */
+  _startTimeMS: number;
 
   /**
    * The principal variation table.
-   * Key: A zobrist hash value for a board position.
-   * Value: The best move found.
+   * - Key: A zobrist hash value for a board position.
+   * - Value: The best move found.
    */
-  pvTable: Map<Hash, Move> = new Map<Hash, Move>();
+  _pvTable: Map<Hash, Move>;
 
   /**
-   * Create a new search controller.
+   * Create a new search controller for a chess game.
    * @param game The chess game.
    */
   constructor(game: ChessGame) {
-    this.game = game;
+    this._game = game;
+    this.bestMove = NO_MOVE;
+    this.bestScore = 0;
+    this.nodes = 0;
+    this.timeMS = DEFAULT_TIME_MS;
+    this.stopped = true;
+    this._startPly = 0;
+    this._startTimeMS = 0;
+    this._pvTable = new Map<Hash, Move>();
   }
 
   /**
    * Search for the best move.
-   * @param timeMS The search time in milliseconds, default 1000 ms.
+   * @param timeMS The search time in milliseconds, default 1,000 ms.
    * @returns The best move.
    */
   search(timeMS: number = DEFAULT_TIME_MS): Move {
-    const { game } = this;
+    if (!this.stopped) throw Error("Already searching!");
+
+    const { _game: game } = this;
 
     this.bestMove = NO_MOVE;
     this.bestScore = 0;
     this.nodes = 0;
-    this.startPly = game.ply;
-    this.pvTable.clear();
-
     this.timeMS = timeMS;
-    this.startTimeMS = performance.now();
+    this.stopped = false;
+    this._startPly = game._ply;
+    this._startTimeMS = performance.now();
+    this._pvTable.clear();
 
-    this.stop = false;
-
-    this._logStart(timeMS);
+    this._logStart();
 
     // Iterative deepening strategy.
     for (let depth = 1; depth <= MAX_DEPTH; depth++) {
-      const score = this.alphaBeta(depth, -Infinity, Infinity);
+      const score = this._alphaBeta(depth, -Infinity, Infinity);
 
       // If search stopped, ignore partial answer.
-      if (this.stop) break;
+      if (this.stopped) break;
 
       this.bestScore = score;
-      const move = this.pvTable.get(game.hash);
+      const move = this._pvTable.get(game._hash);
       if (move) this.bestMove = move;
       else break;
 
       this._logIteration(depth);
     }
 
-    this.stop = true;
+    this.stopped = true;
 
     this._logEnd();
 
@@ -126,26 +118,26 @@ export class Search {
    * @param beta The beta value (maximum score).
    * @returns The best score.
    */
-  alphaBeta(depth: number, alpha: number, beta: number): number {
-    const { game } = this;
+  _alphaBeta(depth: number, alpha: number, beta: number): number {
+    const { _game: game } = this;
 
     this._checkTime();
-    if (this.stop) return 0;
+    if (this.stopped) return 0;
 
     // Evaluate quiet positions.
-    if (depth === 0) return this.quiescence(alpha, beta);
+    if (depth === 0) return this._quiescence(alpha, beta);
 
     this.nodes++;
 
     // Check if max search depth reached.
-    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
+    if (game._ply - this._startPly > MAX_DEPTH) return evaluate(game);
 
     // If in check, increase search depth.
     if (game.inCheck) depth++;
 
     // Generate and order moves.
-    const moves = generateMoves(game);
-    const pvMove = this.pvTable.get(game.hash);
+    const moves = game.pseudoMoves;
+    const pvMove = this._pvTable.get(game._hash);
     orderMoves(game, moves, pvMove);
 
     let mate = true;
@@ -156,11 +148,11 @@ export class Search {
       mate = false;
 
       // Negamax algorithm.
-      const score = -this.alphaBeta(depth - 1, -beta, -alpha);
+      const score = -this._alphaBeta(depth - 1, -beta, -alpha);
 
       game.takeBack();
 
-      if (this.stop) return 0;
+      if (this.stopped) return 0;
 
       // Fail hard beta-cutoff (move is too good).
       if (score >= beta) return beta;
@@ -168,13 +160,13 @@ export class Search {
       // Update alpha (better move found).
       if (score > alpha) {
         alpha = score;
-        this.pvTable.set(game.hash, move);
+        this._pvTable.set(game._hash, move);
       }
     }
 
     // No legal moves, checkmate or stalemate.
     if (mate) {
-      const plies = game.ply - this.startPly;
+      const plies = game._ply - this._startPly;
       if (game.inCheck) return -CHECKMATE_VALUE + plies;
       return -STALEMATE_VALUE - plies;
     }
@@ -191,16 +183,16 @@ export class Search {
    * @param beta The beta value (maximum score).
    * @returns The best score.
    */
-  quiescence(alpha: number, beta: number): number {
-    const { game } = this;
+  _quiescence(alpha: number, beta: number): number {
+    const { _game: game } = this;
 
     this._checkTime();
-    if (this.stop) return 0;
+    if (this.stopped) return 0;
 
     this.nodes++;
 
     // Check if max search depth reached.
-    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
+    if (game._ply - this._startPly > MAX_DEPTH) return evaluate(game);
 
     // Standing pat score.
     const standScore = evaluate(game);
@@ -208,8 +200,8 @@ export class Search {
     if (standScore > alpha) alpha = standScore;
 
     // Generate and order moves.
-    const captures = generateCaptures(game);
-    const pvMove = this.pvTable.get(game.hash);
+    const captures = game.pseudoCaptureMoves;
+    const pvMove = this._pvTable.get(game._hash);
     orderMoves(game, captures, pvMove);
 
     for (const capture of captures) {
@@ -218,11 +210,11 @@ export class Search {
 
       // Negamax algorithm.
 
-      const score = -this.quiescence(-beta, -alpha);
+      const score = -this._quiescence(-beta, -alpha);
 
       game.takeBack();
 
-      if (this.stop) return 0;
+      if (this.stopped) return 0;
 
       // Fail hard beta-cutoff (move is too good).
       if (score >= beta) return beta;
@@ -230,7 +222,7 @@ export class Search {
       // Update alpha (better move found).
       if (score > alpha) {
         alpha = score;
-        this.pvTable.set(game.hash, capture);
+        this._pvTable.set(game._hash, capture);
       }
     }
 
@@ -239,12 +231,14 @@ export class Search {
 
   /**
    * Check if the search time has elapsed.
+   *
    * Only performs the check after evaluating a certain number of nodes.
    */
   _checkTime() {
     if (this.nodes & NUM_NODES_TIME_CHECK) return;
     // If elapsed time > search time, set stop search flag.
-    if (performance.now() - this.startTimeMS > this.timeMS) this.stop = true;
+    if (performance.now() - this._startTimeMS > this.timeMS)
+      this.stopped = true;
   }
 
   /**
@@ -253,39 +247,39 @@ export class Search {
    * @returns A list of moves.
    */
   _getMoveList(depth: number): Move[] {
-    const { game } = this;
+    const { _game: game } = this;
     const moves: Move[] = [];
 
     for (let i = 0; i < depth; i++) {
-      const move = this.pvTable.get(game.hash);
+      const move = this._pvTable.get(game._hash);
       if (!move) break;
       const legal = game.makeMove(move);
       if (!legal) break;
       moves[i] = move;
     }
 
-    while (game.ply > this.startPly) game.takeBack();
+    while (game._ply > this._startPly) game.takeBack();
 
     return moves;
   }
 
   /**
    * Log info at the start of search.
-   * @param timeMS The search time in milliseconds.
    */
-  _logStart(timeMS: number) {
-    const output = `Searching (${timeMS} ms) ...`;
+  _logStart() {
+    const output = `Searching (${this.timeMS} ms) ...`;
     console.log(output);
   }
 
   /**
    * Log info after completing an iteration.
-   * @param depth The search depth.
+   * @param depth The current search depth.
    */
   _logIteration(depth: number) {
-    const moveList = this._getMoveList(depth).map(moveStringMin);
-    const bestMove = moveString(this.bestMove);
-    const output = `Depth ${depth}: ${bestMove} / ${this.bestScore}\t(${this.nodes} nodes)\t${moveList} `;
+    const bestMove = moveStringMin(this.bestMove);
+    const bestScore = scoreString(this.bestScore);
+    const moveList = this._getMoveList(depth).map(moveStringMin).toString();
+    const output = `Depth ${depth}: ${bestMove} / ${bestScore}\t(${this.nodes} nodes)\t${moveList} `;
     console.log(output);
   }
 
@@ -293,9 +287,10 @@ export class Search {
    * Log info at the end of search.
    */
   _logEnd() {
+    const time = (performance.now() - this._startTimeMS).toFixed(3);
     const bestMove = moveString(this.bestMove);
-    const time = (performance.now() - this.startTimeMS).toFixed(3);
-    const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${this.bestScore}`;
+    const bestScore = scoreString(this.bestScore);
+    const output = `(Total Nodes: ${this.nodes}, Time: ${time} ms)\nBest Move: ${bestMove}, Best Score: ${bestScore}`;
     console.log(output);
   }
 }

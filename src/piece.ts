@@ -1,10 +1,10 @@
 /**
- * A color on the chessboard.
+ * A color on a chessboard.
  */
 export type Color = number;
 
 /**
- * The colors on the chessboard.
+ * The colors of a chessboard.
  */
 export const Color = {
   White: 0,
@@ -17,12 +17,12 @@ export const Color = {
 export const NO_COLOR = -1;
 
 /**
- * A chess piece on the chessboard.
+ * A chess piece on a chessboard.
  */
 export type Piece = number;
 
 /**
- * The chess pieces on the chessboard.
+ * The chess pieces of a chessboard.
  */
 export const Piece = {
   Pawn: 1,
@@ -34,7 +34,7 @@ export const Piece = {
 } as const;
 
 /**
- * All the chess pieces on the chessboard.
+ * All the chess pieces of a chessboard.
  */
 export const Pieces = [
   Piece.Pawn,
@@ -51,12 +51,12 @@ export const Pieces = [
 export const BLACK_OFFSET = Piece.King;
 
 /**
- * A chess piece with a color on the chessboard.
+ * A chess piece with color on a chessboard.
  */
 export type ColorPiece = number;
 
 /**
- * The chess pieces with color on the chessboard.
+ * The chess pieces with color of a chessboard.
  */
 export const ColorPiece = {
   WhitePawn: 1, // Piece.Pawn
@@ -74,7 +74,7 @@ export const ColorPiece = {
 } as const;
 
 /**
- * All the chess pieces with color on the chessboard.
+ * All the chess pieces with color of a chessboard.
  */
 export const ColorPieces = [
   ColorPiece.WhitePawn,
@@ -92,24 +92,39 @@ export const ColorPieces = [
 ] as const;
 
 /**
- * A null chess piece, used to indicate an empty square on the chessboard.
+ * A null chess piece, used to indicate an empty square on a chessboard.
  */
 export const NO_PIECE = 0;
 
 /**
- * An off-board sentinel piece, used to indicate an off-board square on the 120 square chessboard.
+ * An off-board sentinel piece, used to indicate an off-board square on a 120 square chessboard.
  */
 export const OFF_BOARD = -1;
 
 /**
+ * The total number of pieces of a chessboard.
+ */
+export const N_PIECES = Pieces.length;
+
+/**
+ * The total number of pieces with color of a chessboard.
+ */
+export const N_COLORPIECES = ColorPieces.length;
+
+/**
+ * The maximum possible number of an individual piece with color on a chessboard.
+ */
+export const MAX_PIECE_COUNT = 10;
+
+/**
  * A list of piece names.
- * Indexed by Piece or ColorPiece.
+ * Indexed by {@link Piece} or {@link ColorPiece}.
  */
 export const PieceName = ".PNBRQKpnbrqk";
 
 /**
  * A list of piece symbols.
- * Indexed by Piece or ColorPiece.
+ * Indexed by Piece or {@link ColorPiece}.
  */
 export const PieceSymbol = ".♙♘♗♖♕♔♟♞♝♜♛♚";
 
