@@ -68,6 +68,7 @@ export function getFEN(game: ChessGame): string {
 
 /**
  * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
+ * * Assumes a new empty chess game.
  * @param game The chess game.
  * @param fen The Forsyth–Edwards Notation (FEN) string.
  * @throws {Error} If FEN string is invalid.
