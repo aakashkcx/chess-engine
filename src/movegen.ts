@@ -67,6 +67,78 @@ const SLIDING_PIECES_OFFSETS = [
 ] as const;
 
 /**
+ * Check whether a square is attacked by the opponent.
+ * @param game The chess game.
+ * @param index120 The index of the square to check.
+ * @param side The side to check whether the opponent is attacking.
+ *  Defaults to color of piece at index, or if square empty, the current active color.
+ * @returns Whether the square is attacked by the opponent.
+ */
+export function isSquareAttacked(
+  game: ChessGame,
+  index120: Index120,
+  side?: Color
+): boolean {
+  const piece = game._pieceBoard[index120];
+
+  const color = side ?? (piece !== NO_PIECE ? getColor(piece) : game.turn);
+
+  /* Pawn Attacks */
+  for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
+    const attacker = game._pieceBoard[index120 + captureOffset];
+    if (getPiece(attacker) === Piece.Pawn && getColor(attacker) !== color)
+      return true;
+  }
+
+  /* Knight Attacks */
+  for (const offset of KNIGHT_OFFSETS) {
+    const attacker = game._pieceBoard[index120 + offset];
+    if (getPiece(attacker) === Piece.Knight && getColor(attacker) !== color)
+      return true;
+  }
+
+  /* Diagonal Attacks (Bishop, Queen, King) */
+  for (const offset of BISHOP_OFFSETS) {
+    let target = index120 + offset;
+    let attacker = game._pieceBoard[target];
+    if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
+      return true;
+    while (attacker !== OFF_BOARD) {
+      if (attacker !== NO_PIECE) {
+        if (getPiece(attacker) === Piece.Queen && getColor(attacker) !== color)
+          return true;
+        if (getPiece(attacker) === Piece.Bishop && getColor(attacker) !== color)
+          return true;
+        break;
+      }
+      target += offset;
+      attacker = game._pieceBoard[target];
+    }
+  }
+
+  /* Horizontal Attacks (Rook, Queen, King) */
+  for (const offset of ROOK_OFFSETS) {
+    let target = index120 + offset;
+    let attacker = game._pieceBoard[target];
+    if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
+      return true;
+    while (attacker !== OFF_BOARD) {
+      if (attacker !== NO_PIECE) {
+        if (getPiece(attacker) === Piece.Queen && getColor(attacker) !== color)
+          return true;
+        if (getPiece(attacker) === Piece.Rook && getColor(attacker) !== color)
+          return true;
+        break;
+      }
+      target += offset;
+      attacker = game._pieceBoard[target];
+    }
+  }
+
+  return false;
+}
+
+/**
  * Generate pseudo-legal moves on the chessboard.
  * @param game The chess game.
  * @param side The side from which to generate moves.
@@ -259,76 +331,4 @@ export function generateCaptures(game: ChessGame, side?: Color): Move[] {
   }
 
   return moves;
-}
-
-/**
- * Check whether a square is attacked by the opponent.
- * @param game The chess game.
- * @param index120 The index of the square to check.
- * @param side The side to check whether the opponent is attacking.
- *  Defaults to color of piece at index, or if square empty, the current active color.
- * @returns Whether the square is attacked by the opponent.
- */
-export function isSquareAttacked(
-  game: ChessGame,
-  index120: Index120,
-  side?: Color
-): boolean {
-  const piece = game._pieceBoard[index120];
-
-  const color = side ?? (piece !== NO_PIECE ? getColor(piece) : game.turn);
-
-  /* Pawn Attacks */
-  for (const captureOffset of PAWN_CAPTURE_OFFSETS[color]) {
-    const attacker = game._pieceBoard[index120 + captureOffset];
-    if (getPiece(attacker) === Piece.Pawn && getColor(attacker) !== color)
-      return true;
-  }
-
-  /* Knight Attacks */
-  for (const offset of KNIGHT_OFFSETS) {
-    const attacker = game._pieceBoard[index120 + offset];
-    if (getPiece(attacker) === Piece.Knight && getColor(attacker) !== color)
-      return true;
-  }
-
-  /* Diagonal Attacks (Bishop, Queen, King) */
-  for (const offset of BISHOP_OFFSETS) {
-    let target = index120 + offset;
-    let attacker = game._pieceBoard[target];
-    if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
-      return true;
-    while (attacker !== OFF_BOARD) {
-      if (attacker !== NO_PIECE) {
-        if (getPiece(attacker) === Piece.Queen && getColor(attacker) !== color)
-          return true;
-        if (getPiece(attacker) === Piece.Bishop && getColor(attacker) !== color)
-          return true;
-        break;
-      }
-      target += offset;
-      attacker = game._pieceBoard[target];
-    }
-  }
-
-  /* Horizontal Attacks (Rook, Queen, King) */
-  for (const offset of ROOK_OFFSETS) {
-    let target = index120 + offset;
-    let attacker = game._pieceBoard[target];
-    if (getPiece(attacker) === Piece.King && getColor(attacker) !== color)
-      return true;
-    while (attacker !== OFF_BOARD) {
-      if (attacker !== NO_PIECE) {
-        if (getPiece(attacker) === Piece.Queen && getColor(attacker) !== color)
-          return true;
-        if (getPiece(attacker) === Piece.Rook && getColor(attacker) !== color)
-          return true;
-        break;
-      }
-      target += offset;
-      attacker = game._pieceBoard[target];
-    }
-  }
-
-  return false;
 }
