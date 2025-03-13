@@ -2,7 +2,8 @@ import { Index120 } from "@/board";
 import { CastlingRights } from "@/castlingrights";
 
 /**
- * Game state that stores irreversible aspects of a position.
+ * A state that stores irreversible aspects of a position.
+ *
  * Stored as a number with the state properties encoded as bits.
  */
 export type State = number;

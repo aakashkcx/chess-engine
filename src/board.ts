@@ -1,39 +1,39 @@
 /**
- * The horizontal files (0-7) of the chessboard.
+ * The horizontal files (0-7) of a chessboard.
  */
 export type File = number;
 
 /**
- * The file names running horizontally on the chessboard.
+ * The file names running horizontally on a chessboard.
  * Indexed by {@link File}.
  */
 export const FileName = "abcdefgh";
 
 /**
- * The vertical ranks (0-7) of the chessboard.
+ * The vertical ranks (0-7) of a chessboard.
  */
 export type Rank = number;
 
 /**
- * The rank names running vertically on the chessboard.
+ * The rank names running vertically on a chessboard.
  * Indexed by {@link Rank}.
  */
 export const RankName = "12345678";
 
 /*
   ========== 64 Square Chessboard (8*8) ==========
-  The 8*8 chessboard is represented as an array of
+  A 8*8 chessboard is represented as an array of
     length 64, with A1 as 0 and H8 as 63.
   ================================================
 */
 
 /**
- * The indices of the 64 square chessboard.
+ * The indices of a 64 square chessboard.
  */
 export type Index64 = number;
 
 /**
- * The squares of the 64 square chessboard.
+ * The squares of a 64 square chessboard.
  */
 // prettier-ignore
 export const Square64 = {
@@ -49,7 +49,7 @@ export const Square64 = {
 
 /*
   ========== 120 Square Chessboard (10*12) ==========
-  The 64 square chessboard surrounded by 1 sentinel
+  A 64 square chessboard surrounded by 1 sentinel
     file at each side and 2 sentinel ranks at the top
     and bottom (adding 2 files and 4 ranks).
   https://www.chessprogramming.org/10x12_Board
@@ -57,12 +57,12 @@ export const Square64 = {
 */
 
 /**
- * The indices of the 120 square chessboard.
+ * The indices of a 120 square chessboard.
  */
 export type Index120 = number;
 
 /**
- * The squares of the 120 square chessboard.
+ * The squares of a 120 square chessboard.
  */
 // prettier-ignore
 export const Square120 = {
@@ -77,30 +77,30 @@ export const Square120 = {
 } as const;
 
 /**
- * A null index on the 120 square chessboard.
+ * A null index on a 120 square chessboard.
  */
 export const NULL_INDEX = 0;
 
 /**
- * The king piece staring square indices on the 120 square chessboard.
- * Indexed by Color.
+ * The king piece staring square indices on a 120 square chessboard.
+ * Indexed by {@link Color}.
  */
 export const KING_SQUARE = [Square120.E1, Square120.E8] as const;
 
 /**
- * The pawn piece starting ranks on the chessboard.
- * Indexed by Color.
+ * The pawn piece starting ranks on a chessboard.
+ * Indexed by {@link Color}.
  */
 export const PAWN_START_RANK = [1, 6] as const;
 
 /**
- * The pawn piece promotion ranks on the chessboard.
- * Indexed by Color.
+ * The pawn piece promotion ranks on a chessboard.
+ * Indexed by {@link Color}.
  */
 export const PAWN_PROMOTION_RANK = [6, 1] as const;
 
 /**
- * Convert an index on the 64 square chessboard to the 120 square chessboard.
+ * Convert an index on a 64 square chessboard to a 120 square chessboard.
  * @param index64 The 64 square index.
  * @returns The 120 square index.
  */
@@ -111,7 +111,7 @@ export function index64To120(index64: Index64): Index120 {
 }
 
 /**
- * Convert an index on the 120 square chessboard to the 64 square chessboard.
+ * Convert an index on a 120 square chessboard to a 64 square chessboard.
  * @param index120 The 120 square index.
  * @returns The 64 square index.
  */
@@ -122,7 +122,7 @@ export function index120To64(index120: Index120): Index64 {
 }
 
 /**
- * Get the rank of an index on the 64 square chessboard.
+ * Get the rank of an index on a 64 square chessboard.
  * @param index64 The 64 square index.
  * @returns The rank.
  */
@@ -131,7 +131,7 @@ export function getRank64(index64: Index64): Rank {
 }
 
 /**
- * Get the rank of an index on the 120 square chessboard.
+ * Get the rank of an index on a 120 square chessboard.
  * @param index120 The 120 square index.
  * @returns The rank.
  */
@@ -140,7 +140,7 @@ export function getRank120(index120: Index120): Rank {
 }
 
 /**
- * Get the file of an index on the 64 square chessboard.
+ * Get the file of an index on a 64 square chessboard.
  * @param index64 The 64 square index.
  * @returns The file.
  */
@@ -149,7 +149,7 @@ export function getFile64(index64: Index64): File {
 }
 
 /**
- * Get the file of an index on the 120 square chessboard.
+ * Get the file of an index on a 120 square chessboard.
  * @param index120 The 120 square index.
  * @returns The file.
  */
@@ -158,7 +158,7 @@ export function getFile120(index120: Index120): File {
 }
 
 /**
- * Convert a rank and file to an index on the 64 square chessboard.
+ * Convert a rank and file to an index on a 64 square chessboard.
  * @param rank The rank.
  * @param file The file.
  * @returns The 64 square index.
@@ -168,7 +168,7 @@ export function rankFileTo64(rank: Rank, file: File): Index64 {
 }
 
 /**
- * Convert a rank and file to an index on the 120 square chessboard.
+ * Convert a rank and file to an index on a 120 square chessboard.
  * @param rank The rank.
  * @param file The file.
  * @returns The 120 square index.
@@ -178,7 +178,7 @@ export function rankFileTo120(rank: Rank, file: File): Index120 {
 }
 
 /**
- * Mirror an index on the 64 square chessboard.
+ * Mirror an index on a 64 square chessboard.
  * @param index64 The 64 square index.
  * @returns The mirrored 64 square index.
  */
@@ -189,7 +189,7 @@ export function mirror64(index64: Index64): Index64 {
 }
 
 /**
- * Mirror an index on the 120 square chessboard.
+ * Mirror an index on a 120 square chessboard.
  * @param index120 The 120 square index.
  * @returns The mirrored 120 square index.
  */

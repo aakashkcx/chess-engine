@@ -21,19 +21,19 @@ let TURN_HASH: Hash;
 
 /**
  * An array of hashes for each possible en passant target square.
- * Indexed by Index120.
+ * Indexed by {@link Index120}.
  */
 let EN_PASSANT_HASH: Hash[];
 
 /**
  * An array of hashes for each possible color piece and 120 square index on the board.
- * Indexed by ColorPiece then Index120.
+ * Indexed by {@link ColorPiece} and {@link Index120}.
  */
 let PIECE_INDEX_HASH: Hash[][];
 
 /**
  * An array of hashes for each possible castling right.
- * Indexed by CastlingRights.
+ * Indexed by {@link CastlingRights}.
  */
 let CASTLING_RIGHTS_HASH: Hash[];
 

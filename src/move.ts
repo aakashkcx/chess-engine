@@ -2,7 +2,8 @@ import { Index120, string120 } from "@/board";
 import { ColorPiece, NO_PIECE, PieceName } from "@/piece";
 
 /**
- * A move that can be made on the chessboard.
+ * A move that can be made on a chess game.
+ *
  * Stored as a number with the move properties encoded as bits.
  */
 export type Move = number;

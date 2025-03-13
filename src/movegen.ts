@@ -67,7 +67,7 @@ const SLIDING_PIECES_OFFSETS = [
 ] as const;
 
 /**
- * Check whether a square is attacked.
+ * Check whether a square is attacked on a chess game.
  * @param game The chess game.
  * @param index120 The index of the square.
  * @param side The side to check whether the opponent is attacking.
@@ -139,10 +139,13 @@ export function isSquareAttacked(
 }
 
 /**
- * Generate pseudo-legal moves on the chessboard.
+ * Generate the pseudo-legal moves of a chess game.
+ *
+ * Pseudo-legal moves may leave the king in check and therefore be illegal.
+ *
  * @param game The chess game.
  * @param side The side from which to generate moves.
- *  Defaults to the current active color of the game.
+ *  Defaults to the current side to move of the game.
  * @returns An array of pseudo-legal moves.
  */
 export function generatePseudoMoves(game: ChessGame, side?: Color): Move[] {
@@ -256,10 +259,13 @@ export function generatePseudoMoves(game: ChessGame, side?: Color): Move[] {
 }
 
 /**
- * Generate pseudo-legal capture moves on the chessboard - for quiescence search.
+ * Generate the pseudo-legal capture moves of a chess game.
+ *
+ * Pseudo-legal moves may leave the king in check and therefore be illegal.
+ *
  * @param game The chess game.
  * @param side The side from which to generate capture moves.
- *  Defaults to the current active color of the game.
+ *  Defaults to the current side to move of the game.
  * @returns An array of pseudo-legal capture moves.
  */
 export function generatePseudoCaptures(game: ChessGame, side?: Color): Move[] {

@@ -46,8 +46,8 @@ export function getFEN(game: ChessGame): string {
     if (rank) pieces += "/";
   }
 
-  // The active color.
-  const color = game.turn === Color.White ? "w" : "b";
+  // The current turn.
+  const turn = game.turn === Color.White ? "w" : "b";
 
   // Set castling rights.
   let castlingRights = "";
@@ -63,13 +63,15 @@ export function getFEN(game: ChessGame): string {
   // The half move and full move counter.
   const { halfMoves, fullMoves } = game;
 
-  return `${pieces} ${color} ${castlingRights} ${enPassant} ${halfMoves} ${fullMoves}`;
+  return `${pieces} ${turn} ${castlingRights} ${enPassant} ${halfMoves} ${fullMoves}`;
 }
 
 /**
- * Set the chess game state from a Forsyth–Edwards Notation (FEN) string.
- * * Assumes a new empty chess game.
- * @param game The chess game.
+ * Setup a new chess game from a Forsyth–Edwards Notation (FEN) string.
+ *
+ * *Assumes a new empty chess game.*
+ *
+ * @param game The new chess game.
  * @param fen The Forsyth–Edwards Notation (FEN) string.
  * @throws {Error} If FEN string is invalid.
  */
@@ -112,7 +114,7 @@ export function setFEN(game: ChessGame, fen: string) {
   // Update the piece representations.
   game._updateBoard();
 
-  // Set active color.
+  // Set current turn.
   const sideToMove = fenArray[1];
   if (sideToMove === "w") game.turn = Color.White;
   else if (sideToMove === "b") game.turn = Color.Black;

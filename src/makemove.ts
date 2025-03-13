@@ -7,7 +7,7 @@ import { Color, Piece, colorPiece, getPiece, swapColor } from "@/piece";
 import { State, getState } from "@/state";
 
 /**
- * Make a move on the chessboard.
+ * Make a move on a chess game.
  * @param game The chess game.
  * @param move The move value.
  * @returns Whether the move was legal and successful.
@@ -111,7 +111,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 }
 
 /**
- * Take back the last move made on the chessboard.
+ * Take back the last move made on a chess game.
  * @param game The chess game.
  * @throws {Error} If take back not possible.
  */

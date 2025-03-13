@@ -4,7 +4,7 @@ import { ChessGame } from "@/game";
 import { Color, PieceName, PieceSymbol } from "@/piece";
 
 /**
- * Get a string representation of a chess game.
+ * Get the string representation of a chess game.
  * @param game The chess game.
  * @param onlyBoard Whether to print only the board.
  * @param useSymbols Whether to use symbols or letters to represent pieces.
@@ -30,7 +30,7 @@ export function toString(
   // Check if only printing out board.
   if (onlyBoard) return board;
 
-  // The active color.
+  // The current turn.
   const side = game.turn === Color.White ? "White" : "Black";
 
   // The castling rights.

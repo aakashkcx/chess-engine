@@ -319,7 +319,7 @@ describe("ChessGame class", () => {
   });
 
   describe("getBoard()", () => {
-    test("should return a chess board of length 64", () => {
+    test("should return a chessboard of length 64", () => {
       const game = new ChessGame(STARTING_FEN);
       expect(game.getBoard()).toHaveLength(64);
     });

@@ -1,6 +1,17 @@
 import { ChessGame } from "@/game";
 import { moveString, moveStringMin } from "@/move";
 
+/**
+ * Execute a performance test (perft) on a chess game.
+ *
+ * Walk the legal move tree and count all leaf nodes to a certain depth.
+ *
+ * {@link https://www.chessprogramming.org/Perft}
+ *
+ * @param game The chess game.
+ * @param depth The perft test depth.
+ * @returns The total number of leaf nodes.
+ */
 export function perft(game: ChessGame, depth: number): number {
   if (depth === 0) return 1;
   const moves = game.pseudoMoves;
@@ -19,6 +30,18 @@ export function perft(game: ChessGame, depth: number): number {
   return nodes;
 }
 
+/**
+ * Execute a performance test (perft) on a chess game.
+ *
+ * Divide lists the total leaf nodes for each move,
+ *  i.e. the perft of the decremented depth.
+ *
+ * {@link https://www.chessprogramming.org/Perft#Divide}
+ *
+ * @param game The chess game.
+ * @param depth The perft test depth.
+ * @returns The total number of leaf nodes.
+ */
 export function perftDivide(game: ChessGame, depth: number): number {
   console.log(`Perft Test Depth: ${depth}`);
   if (depth === 0) return 1;

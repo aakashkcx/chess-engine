@@ -454,8 +454,8 @@ export class ChessGame {
   }
 
   /**
-   * Get the chess board as an array of length 64.
-   * @returns The chess board, of length 64.
+   * Get the chessboard as an array of length 64.
+   * @returns The chessboard, of length 64.
    */
   getBoard(): ColorPiece[] {
     const board: ColorPiece[] = Array<ColorPiece>(64);

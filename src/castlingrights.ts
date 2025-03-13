@@ -1,16 +1,19 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Color } from "@/piece";
+
 /**
- * The castling availability of the chessboard.
+ * The castling availability of a chessboard.
  * Stored as a 4-bit number with each castle right encoded as a bit.
  */
 export type CastlingRights = number;
 
 /**
- * A type of castle right of the chessboard.
+ * A type of castle right of a chessboard.
  */
 export type CastleRight = number;
 
 /**
- * The types of castle rights of the chessboard.
+ * The types of castle rights of a chessboard.
  */
 export const CastleRight = {
   WhiteKing: 0,
@@ -35,7 +38,7 @@ export const ALL_CASTLE_RIGHTS: CastlingRights =
 
 /**
  * The castle rights on the king side.
- * Indexed by Color.
+ * Indexed by {@link Color}.
  */
 export const KING_SIDE_CASTLE_RIGHT = [
   CastleRight.WhiteKing,
@@ -44,7 +47,7 @@ export const KING_SIDE_CASTLE_RIGHT = [
 
 /**
  * The castle rights on the queen side.
- * Indexed by Color.
+ * Indexed by {@link Color}.
  */
 export const QUEEN_SIDE_CASTLE_RIGHT = [
   CastleRight.WhiteQueen,
