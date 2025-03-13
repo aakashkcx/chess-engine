@@ -37,23 +37,8 @@ import { toString } from "@/string";
 
 /** A chess game. */
 export class ChessGame {
-  /** A 10*12 array storing the occupancy of each square on the board. */
-  _pieceBoard: ColorPiece[];
-
-  /** The total number of each piece type on the board. */
-  _pieceCount: number[];
-
-  /** The piece lists for each piece type, storing the index of each piece on the board. */
-  _pieceLists: Index120[][];
-
-  /** A 10*12 array storing the index of each piece on the board within the piece lists. */
-  _pieceListIndex: number[];
-
   /** The current side to move. */
   turn: Color;
-
-  /** The castling availability. */
-  _castlingRights: CastlingRights;
 
   /** The possible en passant target square. */
   enPassant: Index120;
@@ -67,11 +52,26 @@ export class ChessGame {
   /** Whether the king of the active color is in check. */
   inCheck: boolean;
 
-  /** The number of plies played. */
-  ply: number;
+  /** A 10*12 array storing the occupancy of each square on the board. */
+  _pieceBoard: ColorPiece[];
+
+  /** The total number of each piece type on the board. */
+  _pieceCount: number[];
+
+  /** The piece lists for each piece type, storing the index of each piece on the board. */
+  _pieceLists: Index120[][];
+
+  /** A 10*12 array storing the index of each piece on the board within the piece lists. */
+  _pieceListIndex: number[];
+
+  /** The castling availability. */
+  _castlingRights: CastlingRights;
 
   /** The zobrist hash of the game. */
   _hash: Hash;
+
+  /** The number of plies played. */
+  _ply: number;
 
   /** The history of moves made. */
   _moveList: Move[];
@@ -101,6 +101,18 @@ export class ChessGame {
    * @throws {Error} If FEN string is invalid.
    */
   constructor(fen: string = STARTING_FEN) {
+    this.turn = Color.White;
+    this.enPassant = NULL_INDEX;
+    this.halfMoves = 0;
+    this.fullMoves = 1;
+    this.inCheck = false;
+    this._castlingRights = NO_CASTLE_RIGHTS;
+    this._hash = 0;
+    this._ply = 0;
+    this._moveList = [];
+    this._stateList = [];
+    this._hashList = [];
+
     this._pieceBoard = Array<ColorPiece>(120).fill(OFF_BOARD);
     for (let index64 = 0; index64 < 64; index64++)
       this._pieceBoard[index64To120(index64)] = NO_PIECE;
@@ -112,18 +124,6 @@ export class ChessGame {
       .map(() => Array<number>(MAX_PIECE_COUNT).fill(NULL_INDEX));
 
     this._pieceListIndex = Array<number>(120).fill(-1);
-
-    this.turn = Color.White;
-    this._castlingRights = NO_CASTLE_RIGHTS;
-    this.enPassant = NULL_INDEX;
-    this.halfMoves = 0;
-    this.fullMoves = 1;
-    this.inCheck = false;
-    this.ply = 0;
-    this._hash = 0;
-    this._moveList = [];
-    this._stateList = [];
-    this._hashList = [];
 
     if (fen) setFEN(this, fen);
   }
@@ -235,6 +235,16 @@ export class ChessGame {
   }
 
   /**
+   * Change the current side to move.
+   * @returns The updated side to mode.
+   */
+  changeTurn(): Color {
+    this.turn = swapColor(this.turn);
+    this._hash = hashColor(this._hash);
+    return this.turn;
+  }
+
+  /**
    * Add a piece to the chessboard.
    * @param index120 The 120 index.
    * @param piece The color piece.
@@ -328,16 +338,6 @@ export class ChessGame {
       this._pieceListIndex[index120] = pieceListIndex;
       this._pieceCount[piece]++;
     }
-  }
-
-  /**
-   * Change the current side to move.
-   * @returns The updated side to mode.
-   */
-  changeTurn(): Color {
-    this.turn = swapColor(this.turn);
-    this._hash = hashColor(this._hash);
-    return this.turn;
   }
 
   /**

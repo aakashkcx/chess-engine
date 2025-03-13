@@ -9,28 +9,44 @@ import {
 import { STARTING_FEN } from "@/fen";
 import { ChessGame } from "@/game";
 import { generateHash } from "@/hash";
-import { Color, ColorPiece, N_COLORPIECES, NO_PIECE } from "@/piece";
+import {
+  Color,
+  ColorPiece,
+  MAX_PIECE_COUNT,
+  N_COLORPIECES,
+  NO_PIECE,
+} from "@/piece";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {
     test("should initialise starting chessboard", () => {
       const game = new ChessGame();
 
-      expect(game._pieceBoard).toHaveLength(120);
-      expect(game._pieceCount).toHaveLength(N_COLORPIECES + 1);
-      expect(game._pieceLists).toHaveLength(N_COLORPIECES + 1);
-      expect(game._pieceListIndex).toHaveLength(120);
       expect(game.turn).toBe(Color.White);
-      expect(game._castlingRights).toBe(ALL_CASTLE_RIGHTS);
       expect(game.enPassant).toBe(NULL_INDEX);
       expect(game.halfMoves).toBe(0);
       expect(game.fullMoves).toBe(1);
       expect(game.inCheck).toBe(false);
-      expect(game.ply).toBe(0);
+      expect(game._castlingRights).toBe(ALL_CASTLE_RIGHTS);
       expect(game._hash).toBe(generateHash(game));
+      expect(game._ply).toBe(0);
       expect(game._moveList).toHaveLength(0);
       expect(game._stateList).toHaveLength(0);
       expect(game._hashList).toHaveLength(0);
+
+      expect(game._pieceBoard).toHaveLength(120);
+
+      expect(game._pieceCount).toHaveLength(N_COLORPIECES + 1);
+
+      expect(game._pieceLists).toHaveLength(N_COLORPIECES + 1);
+      for (const pieceList of game._pieceLists)
+        expect(pieceList).toHaveLength(MAX_PIECE_COUNT);
+
+      expect(game._pieceListIndex).toHaveLength(120);
+
+      expect(game._moves).toBeUndefined();
+      expect(game._pseudoMoves).toBeUndefined();
+      expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
 
       expect(game.getFEN()).toBe(STARTING_FEN);
@@ -39,21 +55,31 @@ describe("ChessGame class", () => {
     test("should initialise empty chessboard", () => {
       const game = new ChessGame("");
 
-      expect(game._pieceBoard).toHaveLength(120);
-      expect(game._pieceCount).toHaveLength(N_COLORPIECES + 1);
-      expect(game._pieceLists).toHaveLength(N_COLORPIECES + 1);
-      expect(game._pieceListIndex).toHaveLength(120);
       expect(game.turn).toBe(Color.White);
-      expect(game._castlingRights).toBe(NO_CASTLE_RIGHTS);
       expect(game.enPassant).toBe(NULL_INDEX);
       expect(game.halfMoves).toBe(0);
       expect(game.fullMoves).toBe(1);
       expect(game.inCheck).toBe(false);
-      expect(game.ply).toBe(0);
+      expect(game._castlingRights).toBe(NO_CASTLE_RIGHTS);
       expect(game._hash).toBe(0);
+      expect(game._ply).toBe(0);
       expect(game._moveList).toHaveLength(0);
       expect(game._stateList).toHaveLength(0);
       expect(game._hashList).toHaveLength(0);
+
+      expect(game._pieceBoard).toHaveLength(120);
+
+      expect(game._pieceCount).toHaveLength(N_COLORPIECES + 1);
+
+      expect(game._pieceLists).toHaveLength(N_COLORPIECES + 1);
+      for (const pieceList of game._pieceLists)
+        expect(pieceList).toHaveLength(MAX_PIECE_COUNT);
+
+      expect(game._pieceListIndex).toHaveLength(120);
+
+      expect(game._moves).toBeUndefined();
+      expect(game._pseudoMoves).toBeUndefined();
+      expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
 
       expect(game.getFEN()).toBe("8/8/8/8/8/8/8/8 w - - 0 1");
@@ -229,7 +255,7 @@ describe("ChessGame class", () => {
   });
 
   describe("changeTurn() method", () => {
-    test("should switch active color", () => {
+    test("should switch side to move", () => {
       const game = new ChessGame();
       expect(game.turn).toBe(Color.White);
       game.changeTurn();
@@ -238,7 +264,7 @@ describe("ChessGame class", () => {
       expect(game.turn).toBe(Color.White);
     });
 
-    test("should return correct next color", () => {
+    test("should return correct next side to move", () => {
       const game = new ChessGame();
       expect(game.turn).toBe(Color.White);
       let color = game.changeTurn();

@@ -86,7 +86,7 @@ export class Search {
     this.bestMove = NO_MOVE;
     this.bestScore = 0;
     this.nodes = 0;
-    this.startPly = game.ply;
+    this.startPly = game._ply;
     this.pvTable.clear();
 
     this.timeMS = timeMS;
@@ -137,7 +137,7 @@ export class Search {
     this.nodes++;
 
     // Check if max search depth reached.
-    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
+    if (game._ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
     // If in check, increase search depth.
     if (game.inCheck) depth++;
@@ -173,7 +173,7 @@ export class Search {
 
     // No legal moves, checkmate or stalemate.
     if (mate) {
-      const plies = game.ply - this.startPly;
+      const plies = game._ply - this.startPly;
       if (game.inCheck) return -CHECKMATE_VALUE + plies;
       return -STALEMATE_VALUE - plies;
     }
@@ -199,7 +199,7 @@ export class Search {
     this.nodes++;
 
     // Check if max search depth reached.
-    if (game.ply - this.startPly > MAX_DEPTH) return evaluate(game);
+    if (game._ply - this.startPly > MAX_DEPTH) return evaluate(game);
 
     // Standing pat score.
     const standScore = evaluate(game);
@@ -263,7 +263,7 @@ export class Search {
       moves[i] = move;
     }
 
-    while (game.ply > this.startPly) game.takeBack();
+    while (game._ply > this.startPly) game.takeBack();
 
     return moves;
   }
