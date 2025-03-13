@@ -114,6 +114,10 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   const opponentKingIndex = game._pieceLists[opponentKing][0];
   game.inCheck = game.isSquareAttacked(opponentKingIndex, opponent);
 
+  game._moves = undefined;
+  game._pseudoMoves = undefined;
+  game._pseudoCaptureMoves = undefined;
+
   return true;
 }
 
@@ -169,4 +173,8 @@ export function takeBack(game: ChessGame) {
   const king = colorPiece(color, Piece.King);
   const kingIndex = game._pieceLists[king][0];
   game.inCheck = game.isSquareAttacked(kingIndex, color);
+
+  game._moves = undefined;
+  game._pseudoMoves = undefined;
+  game._pseudoCaptureMoves = undefined;
 }
