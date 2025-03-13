@@ -265,7 +265,7 @@ export class ChessGame {
   }
 
   /**
-   * Make a move on the chessboard.
+   * Make a move.
    * @param move The move value.
    * @returns Whether the move was legal and successful.
    */
@@ -274,7 +274,7 @@ export class ChessGame {
   }
 
   /**
-   * Take back the last move made on the chessboard.
+   * Take back the last move made.
    * @throws {Error} If take back not possible.
    */
   takeBack(): void {
@@ -313,13 +313,13 @@ export class ChessGame {
   }
 
   /**
-   * Add a piece to the chessboard.
+   * Add a piece.
    * @param index120 The 120 index.
    * @param piece The color piece.
    * @throws {Error} If square is occupied.
    * @throws {Error} If piece is null.
    */
-  addPiece(index120: Index120, piece: ColorPiece) {
+  addPiece(index120: Index120, piece: ColorPiece): void {
     if (this._pieceBoard[index120] !== NO_PIECE)
       throw new Error("Cannot add piece to occupied square!");
     if (piece === NO_PIECE) throw new Error("Cannot add null chess piece!");
@@ -334,13 +334,13 @@ export class ChessGame {
   }
 
   /**
-   * Move a piece on the chessboard.
+   * Move a piece.
    * @param start120 The 120 index start square.
    * @param target120 The 120 index target square.
    * @throws {Error} If start square is empty.
    * @throws {Error} If target square is occupied.
    */
-  movePiece(start120: Index120, target120: Index120) {
+  movePiece(start120: Index120, target120: Index120): void {
     if (this._pieceBoard[start120] === NO_PIECE)
       throw new Error("Cannot move piece from empty square!");
     if (this._pieceBoard[target120] !== NO_PIECE)
@@ -360,11 +360,11 @@ export class ChessGame {
   }
 
   /**
-   * Remove a piece on the chessboard.
+   * Remove a piece.
    * @param index120 The 120 index of the piece.
    * @throws {Error} If square is empty.
    */
-  removePiece(index120: Index120) {
+  removePiece(index120: Index120): void {
     if (this._pieceBoard[index120] === NO_PIECE)
       throw new Error("Cannot remove piece from empty square!");
 
@@ -389,7 +389,7 @@ export class ChessGame {
    *
    * Repopulates {@link _pieceCount}, {@link _pieceLists} and {@link _pieceListIndex} based on {@link _pieceBoard}.
    */
-  _updateBoard() {
+  _updateBoard(): void {
     this._pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
 
     this._pieceLists = Array<number[]>(N_COLORPIECES + 1)
@@ -410,7 +410,7 @@ export class ChessGame {
   }
 
   /**
-   * Get the castling availability of the chess game.
+   * Get the castling availability.
    * @param castleRight The castle right type.
    * @returns The castling availability.
    */
@@ -419,11 +419,11 @@ export class ChessGame {
   }
 
   /**
-   * Set the castling availability of the chess game.
+   * Set the castling availability.
    * @param castleRight The castle right type.
    * @param value The castling availability.
    */
-  setCastleRight(castleRight: CastleRight, value: boolean) {
+  setCastleRight(castleRight: CastleRight, value: boolean): void {
     this._hash = hashCastlingRights(this._hash, this._castlingRights);
     this._castlingRights = setCastleRight(
       this._castlingRights,
@@ -437,7 +437,7 @@ export class ChessGame {
    * Set the castling rights value.
    * @param castlingRights The castling rights value.
    */
-  _setCastlingRights(castlingRights: CastlingRights) {
+  _setCastlingRights(castlingRights: CastlingRights): void {
     this._hash = hashCastlingRights(this._hash, this._castlingRights);
     this._castlingRights = castlingRights;
     this._hash = hashCastlingRights(this._hash, this._castlingRights);
@@ -447,7 +447,7 @@ export class ChessGame {
    * Set the en passant target square.
    * @param index120 The en passant target square.
    */
-  _setEnPassant(index120: Index120) {
+  _setEnPassant(index120: Index120): void {
     this._hash = hashEnPassant(this._hash, this.enPassant);
     this.enPassant = index120;
     this._hash = hashEnPassant(this._hash, this.enPassant);
@@ -478,7 +478,7 @@ export class ChessGame {
    * @param onlyBoard Whether to print only the board.
    * @param useSymbols Whether to use symbols or letters to represent pieces.
    */
-  print(onlyBoard = false, useSymbols = false) {
+  print(onlyBoard = false, useSymbols = false): void {
     console.log("\n" + this.toString(onlyBoard, useSymbols) + "\n");
   }
 
