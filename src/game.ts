@@ -10,9 +10,9 @@ import { STARTING_FEN, getFEN, setFEN } from "@/fen";
 import {
   Hash,
   hashCastlingRights,
-  hashColor,
   hashEnPassant,
   hashPiece,
+  hashTurn,
 } from "@/hash";
 import { isLegalMove, makeMove, takeBack } from "@/makemove";
 import { Move } from "@/move";
@@ -240,7 +240,7 @@ export class ChessGame {
    */
   changeTurn(): Color {
     this.turn = swapColor(this.turn);
-    this._hash = hashColor(this._hash);
+    this._hash = hashTurn(this._hash);
     return this.turn;
   }
 
