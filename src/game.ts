@@ -85,6 +85,9 @@ export class ChessGame {
   /** The list of legal moves. */
   _moves?: Move[];
 
+  /** The list of legal capture moves. */
+  _captureMoves?: Move[];
+
   /** The list of pseudo-legal moves. */
   _pseudoMoves?: Move[];
 
@@ -168,6 +171,17 @@ export class ChessGame {
     if (!this._moves)
       this._moves = this.pseudoMoves.filter((move) => this.isLegalMove(move));
     return this._moves;
+  }
+
+  /**
+   * The list of legal capture moves.
+   */
+  get captureMoves(): Move[] {
+    if (!this._captureMoves)
+      this._captureMoves = this.pseudoCaptureMoves.filter((move) =>
+        this.isLegalMove(move)
+      );
+    return this._captureMoves;
   }
 
   /**

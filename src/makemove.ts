@@ -103,6 +103,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
   game.inCheck = game.isSquareAttacked(opponentKingIndex, opponent);
 
   game._moves = undefined;
+  game._captureMoves = undefined;
   game._pseudoMoves = undefined;
   game._pseudoCaptureMoves = undefined;
 
@@ -163,6 +164,7 @@ export function takeBack(game: ChessGame) {
   game.inCheck = game.isSquareAttacked(kingIndex, color);
 
   game._moves = undefined;
+  game._captureMoves = undefined;
   game._pseudoMoves = undefined;
   game._pseudoCaptureMoves = undefined;
 }

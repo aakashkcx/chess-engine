@@ -45,6 +45,7 @@ describe("ChessGame class", () => {
       expect(game._pieceListIndex).toHaveLength(120);
 
       expect(game._moves).toBeUndefined();
+      expect(game._captureMoves).toBeUndefined();
       expect(game._pseudoMoves).toBeUndefined();
       expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
@@ -78,6 +79,7 @@ describe("ChessGame class", () => {
       expect(game._pieceListIndex).toHaveLength(120);
 
       expect(game._moves).toBeUndefined();
+      expect(game._captureMoves).toBeUndefined();
       expect(game._pseudoMoves).toBeUndefined();
       expect(game._pseudoCaptureMoves).toBeUndefined();
       expect(game._search).toBeUndefined();
