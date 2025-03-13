@@ -30,9 +30,9 @@ describe("ChessGame class", () => {
       expect(game._castlingRights).toBe(ALL_CASTLE_RIGHTS);
       expect(game._hash).toBe(generateHash(game));
       expect(game._ply).toBe(0);
-      expect(game._moveList).toHaveLength(0);
-      expect(game._stateList).toHaveLength(0);
-      expect(game._hashList).toHaveLength(0);
+      expect(game._moveHistory).toHaveLength(0);
+      expect(game._stateHistory).toHaveLength(0);
+      expect(game._hashHistory).toHaveLength(0);
 
       expect(game._pieceBoard).toHaveLength(120);
 
@@ -63,9 +63,9 @@ describe("ChessGame class", () => {
       expect(game._castlingRights).toBe(NO_CASTLE_RIGHTS);
       expect(game._hash).toBe(0);
       expect(game._ply).toBe(0);
-      expect(game._moveList).toHaveLength(0);
-      expect(game._stateList).toHaveLength(0);
-      expect(game._hashList).toHaveLength(0);
+      expect(game._moveHistory).toHaveLength(0);
+      expect(game._stateHistory).toHaveLength(0);
+      expect(game._hashHistory).toHaveLength(0);
 
       expect(game._pieceBoard).toHaveLength(120);
 

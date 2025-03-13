@@ -30,9 +30,9 @@ export function makeMove(game: ChessGame, move: Move): boolean {
 
   const state = State(game._castlingRights, game.enPassant, game.halfMoves);
 
-  game._moveList[game._ply] = move;
-  game._stateList[game._ply] = state;
-  game._hashList[game._ply] = game._hash;
+  game._moveHistory[game._ply] = move;
+  game._stateHistory[game._ply] = state;
+  game._hashHistory[game._ply] = game._hash;
   game._ply++;
 
   const color = game.turn;
@@ -130,8 +130,8 @@ export function takeBack(game: ChessGame) {
   if (game._ply === 0) throw new Error("Cannot take back!");
 
   game._ply--;
-  const move = game._moveList[game._ply];
-  const state = game._stateList[game._ply];
+  const move = game._moveHistory[game._ply];
+  const state = game._stateHistory[game._ply];
 
   const [start, target, captured, flag] = getMove(move);
   const [castlingRights, enPassant, halfMoves] = getState(state);

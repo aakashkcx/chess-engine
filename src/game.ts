@@ -74,13 +74,13 @@ export class ChessGame {
   _ply: number;
 
   /** The history of moves made. */
-  _moveList: Move[];
+  _moveHistory: Move[];
 
   /** The history of game state. */
-  _stateList: State[];
+  _stateHistory: State[];
 
   /** The history of zobrist hashes. */
-  _hashList: Hash[];
+  _hashHistory: Hash[];
 
   /** The list of legal moves. */
   _moves?: Move[];
@@ -109,9 +109,9 @@ export class ChessGame {
     this._castlingRights = NO_CASTLE_RIGHTS;
     this._hash = 0;
     this._ply = 0;
-    this._moveList = [];
-    this._stateList = [];
-    this._hashList = [];
+    this._moveHistory = [];
+    this._stateHistory = [];
+    this._hashHistory = [];
 
     this._pieceBoard = Array<ColorPiece>(120).fill(OFF_BOARD);
     for (let index64 = 0; index64 < 64; index64++)
