@@ -52,6 +52,39 @@ export class ChessGame {
   /** Whether the king of the current turn is in check. */
   inCheck: boolean;
 
+  /** The castling availability. */
+  _castlingRights: CastlingRights;
+
+  /** The zobrist hash of the game. */
+  _hash: Hash;
+
+  /** The number of plies played. */
+  _ply: number;
+
+  /** The history of moves made. Indexed by {@link _ply}. */
+  _moveHistory: Move[];
+
+  /** The history of game state. Indexed by {@link _ply}. */
+  _stateHistory: State[];
+
+  /** The history of zobrist hashes. Indexed by {@link _ply}. */
+  _hashHistory: Hash[];
+
+  /** The list of legal moves. */
+  _moves?: Move[];
+
+  /** The list of legal capture moves. */
+  _captureMoves?: Move[];
+
+  /** The list of pseudo-legal moves. */
+  _pseudoMoves?: Move[];
+
+  /** The list of pseudo-legal capture moves. */
+  _pseudoCaptureMoves?: Move[];
+
+  /** The search controller. */
+  _search?: Search;
+
   /**
    * A 10x12 array storing the occupancy of each square on the board.
    * Indexed by {@link Index120}.
@@ -108,39 +141,6 @@ export class ChessGame {
    * ```
    */
   _pieceListIndex: number[];
-
-  /** The castling availability. */
-  _castlingRights: CastlingRights;
-
-  /** The zobrist hash of the game. */
-  _hash: Hash;
-
-  /** The number of plies played. */
-  _ply: number;
-
-  /** The history of moves made. Indexed by {@link _ply}. */
-  _moveHistory: Move[];
-
-  /** The history of game state. Indexed by {@link _ply}. */
-  _stateHistory: State[];
-
-  /** The history of zobrist hashes. Indexed by {@link _ply}. */
-  _hashHistory: Hash[];
-
-  /** The list of legal moves. */
-  _moves?: Move[];
-
-  /** The list of legal capture moves. */
-  _captureMoves?: Move[];
-
-  /** The list of pseudo-legal moves. */
-  _pseudoMoves?: Move[];
-
-  /** The list of pseudo-legal capture moves. */
-  _pseudoCaptureMoves?: Move[];
-
-  /** The search controller. */
-  _search?: Search;
 
   /**
    * Create a new chess game.
