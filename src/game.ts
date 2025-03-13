@@ -16,7 +16,11 @@ import {
 } from "./hash";
 import { isLegalMove, makeMove, takeBack } from "./makemove";
 import { Move } from "./move";
-import { generatePseudoMoves, isSquareAttacked } from "./movegen";
+import {
+  generatePseudoCaptures,
+  generatePseudoMoves,
+  isSquareAttacked,
+} from "./movegen";
 import {
   Color,
   ColorPiece,
@@ -82,6 +86,9 @@ export class ChessGame {
 
   /** The list of pseudo-legal moves. */
   _pseudoMoves?: Move[];
+
+  /** The list of pseudo-legal capture moves. */
+  _pseudoCaptureMoves?: Move[];
 
   /** The search controller. */
   _search?: Search;
@@ -168,6 +175,15 @@ export class ChessGame {
   get pseudoMoves(): Move[] {
     if (!this._pseudoMoves) this._pseudoMoves = generatePseudoMoves(this);
     return this._pseudoMoves;
+  }
+
+  /**
+   * The list of pseudo-legal capture moves.
+   */
+  get pseudoCaptureMoves(): Move[] {
+    if (!this._pseudoCaptureMoves)
+      this._pseudoCaptureMoves = generatePseudoCaptures(this);
+    return this._pseudoCaptureMoves;
   }
 
   /**

@@ -1,7 +1,6 @@
 import { ChessGame } from "../game";
 import { Hash } from "../hash";
 import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
-import { generatePseudoCaptures } from "../movegen";
 import {
   CHECKMATE_VALUE,
   DRAW_VALUE,
@@ -208,7 +207,7 @@ export class Search {
     if (standScore > alpha) alpha = standScore;
 
     // Generate and order moves.
-    const captures = generatePseudoCaptures(game);
+    const captures = game.pseudoCaptureMoves;
     const pvMove = this.pvTable.get(game._hash);
     orderMoves(game, captures, pvMove);
 
