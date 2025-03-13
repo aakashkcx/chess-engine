@@ -60,33 +60,49 @@ describe("ChessGame class", () => {
     });
   });
 
-  describe("_updateBoard() method", () => {
-    test("should update piece lists", () => {
-      const game = new ChessGame("");
-      const square1 = Square120.A1;
-      const square2 = Square120.A2;
-      const piece = ColorPiece.WhitePawn;
+  describe("isCheckmate property", () => {
+    test("should return true if checkmated", () => {
+      // Fool's mate
+      let game = new ChessGame(
+        "rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w - - 0 1"
+      );
+      expect(game.isCheckmate).toBe(true);
 
-      game._pieceBoard[square1] = piece;
-      game._pieceBoard[square2] = piece;
+      // King-queen mate
+      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
+      expect(game.isCheckmate).toBe(true);
 
-      expect(game._pieceCount[piece]).toBe(0);
-      expect(game._pieceLists[piece]).not.toContain(square1);
-      expect(game._pieceLists[piece]).not.toContain(square2);
-      expect(game._pieceListIndex[square1]).toBe(-1);
-      expect(game._pieceListIndex[square2]).toBe(-1);
+      // Back-rank mate
+      game = new ChessGame("3R2k1/5ppp/8/8/8/8/8/4K3 b - - 0 1");
+      expect(game.isCheckmate).toBe(true);
+    });
 
-      game._updateBoard();
+    test("should return false if not checkmated", () => {
+      // Starting position
+      let game = new ChessGame();
+      expect(game.isCheckmate).toBe(false);
 
-      expect(game._pieceCount[piece]).toBe(2);
-      expect(game._pieceLists[piece]).toContain(square1);
-      expect(game._pieceLists[piece]).toContain(square2);
-      expect(game._pieceListIndex[square1]).toBeGreaterThan(-1);
-      expect(game._pieceListIndex[square2]).toBeGreaterThan(-1);
-      const index1 = game._pieceListIndex[square1];
-      const index2 = game._pieceListIndex[square2];
-      expect(game._pieceLists[piece][index1]).toBe(square1);
-      expect(game._pieceLists[piece][index2]).toBe(square2);
+      // Stalemate
+      game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+      expect(game.isCheckmate).toBe(false);
+    });
+  });
+
+  describe("isStalemate property", () => {
+    test("should return true if stalemated", () => {
+      let game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+      expect(game.isStalemate).toBe(true);
+
+      game = new ChessGame("5k2/5P2/5K2/8/8/8/8/8 b - - 0 1");
+      expect(game.isStalemate).toBe(true);
+    });
+
+    test("should return false if not stalemated", () => {
+      let game = new ChessGame();
+      expect(game.isStalemate).toBe(false);
+
+      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
+      expect(game.isStalemate).toBe(false);
     });
   });
 
@@ -182,6 +198,36 @@ describe("ChessGame class", () => {
     });
   });
 
+  describe("updateBoard() method", () => {
+    test("should update piece lists", () => {
+      const game = new ChessGame("");
+      const square1 = Square120.A1;
+      const square2 = Square120.A2;
+      const piece = ColorPiece.WhitePawn;
+
+      game._pieceBoard[square1] = piece;
+      game._pieceBoard[square2] = piece;
+
+      expect(game._pieceCount[piece]).toBe(0);
+      expect(game._pieceLists[piece]).not.toContain(square1);
+      expect(game._pieceLists[piece]).not.toContain(square2);
+      expect(game._pieceListIndex[square1]).toBe(-1);
+      expect(game._pieceListIndex[square2]).toBe(-1);
+
+      game._updateBoard();
+
+      expect(game._pieceCount[piece]).toBe(2);
+      expect(game._pieceLists[piece]).toContain(square1);
+      expect(game._pieceLists[piece]).toContain(square2);
+      expect(game._pieceListIndex[square1]).toBeGreaterThan(-1);
+      expect(game._pieceListIndex[square2]).toBeGreaterThan(-1);
+      const index1 = game._pieceListIndex[square1];
+      const index2 = game._pieceListIndex[square2];
+      expect(game._pieceLists[piece][index1]).toBe(square1);
+      expect(game._pieceLists[piece][index2]).toBe(square2);
+    });
+  });
+
   describe("changeTurn() method", () => {
     test("should switch active color", () => {
       const game = new ChessGame();
@@ -242,58 +288,6 @@ describe("ChessGame class", () => {
       game.setCastleRight(CastleRight.BlackQueen, true);
       expect(game.getCastleRight(CastleRight.BlackQueen)).toBe(true);
     });
-  });
-
-  describe("isCheckmate()", () => {
-    test("should return true if checkmated", () => {
-      // Fool's mate
-      let game = new ChessGame(
-        "rnb1kbnr/pppp1ppp/4p3/8/6Pq/5P2/PPPPP2P/RNBQKBNR w - - 0 1"
-      );
-      expect(game.isCheckmate()).toBe(true);
-
-      // King-queen mate
-      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
-      expect(game.isCheckmate()).toBe(true);
-
-      // Back-rank mate
-      game = new ChessGame("3R2k1/5ppp/8/8/8/8/8/4K3 b - - 0 1");
-      expect(game.isCheckmate()).toBe(true);
-    });
-
-    test("should return false if not checkmated", () => {
-      // Starting position
-      let game = new ChessGame();
-      expect(game.isCheckmate()).toBe(false);
-
-      // Stalemate
-      game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
-      expect(game.isCheckmate()).toBe(false);
-    });
-  });
-
-  describe("isStalemate()", () => {
-    test("should return true if stalemated", () => {
-      let game = new ChessGame("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
-      expect(game.isStalemate()).toBe(true);
-
-      game = new ChessGame("5k2/5P2/5K2/8/8/8/8/8 b - - 0 1");
-      expect(game.isStalemate()).toBe(true);
-    });
-
-    test("should return false if not stalemated", () => {
-      let game = new ChessGame();
-      expect(game.isStalemate()).toBe(false);
-
-      game = new ChessGame("8/kQK5/8/8/8/8/8/8 b - - 0 1");
-      expect(game.isStalemate()).toBe(false);
-    });
-  });
-
-  describe("isLegalMove()", () => {
-    test("should return true if the move is legal", () => {});
-
-    test("should return false if the move is illegal", () => {});
   });
 
   describe("getBoard()", () => {

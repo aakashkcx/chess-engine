@@ -121,27 +121,111 @@ export class ChessGame {
   }
 
   /**
-   * Update the board representation.
-   * Fills in the piece lists based on {@link _pieceBoard}.
+   * Check whether the active color has been checkmated.
+   * @returns Whether the current side is in checkmate.
    */
-  _updateBoard() {
-    this._pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
+  get isCheckmate(): boolean {
+    return this.inCheck && this.moves.length == 0;
+  }
 
-    this._pieceLists = Array<number[]>(N_COLORPIECES + 1)
-      .fill([])
-      .map(() => Array<number>(MAX_PIECE_COUNT).fill(NULL_INDEX));
+  /**
+   * Check whether the active color has been stalemated.
+   * @returns Whether the current side is in stalemate.
+   */
+  get isStalemate(): boolean {
+    return !this.inCheck && this.moves.length == 0;
+  }
 
-    this._pieceListIndex = Array<number>(120).fill(-1);
+  /**
+   * Check whether the game has ended as a draw.
+   * @returns Whether the game has ended as a draw.
+   */
+  get isDraw(): boolean {
+    // TODO: insufficient material, 50 move, threefold repetition.
+    return this.isStalemate;
+  }
 
-    for (let index64 = 0; index64 < 64; index64++) {
-      const index120 = index64To120(index64);
-      const piece = this._pieceBoard[index120];
-      if (piece === NO_PIECE) continue;
-      const pieceListIndex = this._pieceCount[piece];
-      this._pieceLists[piece][pieceListIndex] = index120;
-      this._pieceListIndex[index120] = pieceListIndex;
-      this._pieceCount[piece]++;
-    }
+  /**
+   * Check whether the game has ended.
+   * @returns Whether the game has ended.
+   */
+  get isEnd(): boolean {
+    return this.isCheckmate || this.isDraw;
+  }
+
+  /**
+   * The list of legal moves.
+   */
+  get moves(): Move[] {
+    if (!this._moves)
+      this._moves = this.pseudoMoves.filter((move) => isLegalMove(this, move));
+    return this._moves;
+  }
+
+  /**
+   * The list of pseudo-legal moves.
+   */
+  get pseudoMoves(): Move[] {
+    if (!this._pseudoMoves) this._pseudoMoves = generateMoves(this);
+    return this._pseudoMoves;
+  }
+
+  /**
+   * Check whether a square is attacked by the opponent.
+   * @param index120 The index of the square to check.
+   * @param side The side to check whether the opponent is attacking.
+   *  Defaults to color of piece at index, or if square empty, the current active color.
+   * @returns Whether the square is attacked by the opponent.
+   */
+  isSquareAttacked(index120: Index120, side?: Color): boolean {
+    return isSquareAttacked(this, index120, side);
+  }
+
+  /**
+   * Generate all legal or pseudo-legal moves on the chessboard.
+   * @param side The side from which to generate moves.
+   * @param legal Whether to generate only legal moves or all pseudo-legal moves.
+   * @returns An array of moves.
+   */
+  generateMoves(side?: Color, legal = true): Move[] {
+    const moves = generateMoves(this, side);
+    return legal ? moves.filter(this.isLegalMove, this) : moves;
+  }
+
+  /**
+   * Check whether a move is legal.
+   * @param move The move value.
+   * @returns Whether the move is legal.
+   */
+  isLegalMove(move: Move): boolean {
+    return isLegalMove(this, move);
+  }
+
+  /**
+   * Make a move on the chessboard.
+   * @param move The move value.
+   * @returns Whether the move was legal and therefore completed.
+   */
+  makeMove(move: Move): boolean {
+    return makeMove(this, move);
+  }
+
+  /**
+   * Take back the last move made on the chessboard.
+   * @throws {Error} If take back not possible.
+   */
+  takeBack() {
+    takeBack(this);
+  }
+
+  /**
+   * Search for the best move.
+   * @param timeMS The search time in milliseconds, default 1000 ms.
+   * @returns The best move.
+   */
+  search(timeMS?: number): Move {
+    if (!this._search) this._search = new Search(this);
+    return this._search.search(timeMS);
   }
 
   /**
@@ -217,6 +301,30 @@ export class ChessGame {
   }
 
   /**
+   * Update the board representation.
+   * Fills in the piece lists based on {@link _pieceBoard}.
+   */
+  _updateBoard() {
+    this._pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
+
+    this._pieceLists = Array<number[]>(N_COLORPIECES + 1)
+      .fill([])
+      .map(() => Array<number>(MAX_PIECE_COUNT).fill(NULL_INDEX));
+
+    this._pieceListIndex = Array<number>(120).fill(-1);
+
+    for (let index64 = 0; index64 < 64; index64++) {
+      const index120 = index64To120(index64);
+      const piece = this._pieceBoard[index120];
+      if (piece === NO_PIECE) continue;
+      const pieceListIndex = this._pieceCount[piece];
+      this._pieceLists[piece][pieceListIndex] = index120;
+      this._pieceListIndex[index120] = pieceListIndex;
+      this._pieceCount[piece]++;
+    }
+  }
+
+  /**
    * Change the current side to move.
    * @returns The updated side to mode.
    */
@@ -251,23 +359,6 @@ export class ChessGame {
   }
 
   /**
-   * The list of legal moves.
-   */
-  get moves(): Move[] {
-    if (!this._moves)
-      this._moves = this.pseudoMoves.filter((move) => isLegalMove(this, move));
-    return this._moves;
-  }
-
-  /**
-   * The list of pseudo-legal moves.
-   */
-  get pseudoMoves(): Move[] {
-    if (!this._pseudoMoves) this._pseudoMoves = generateMoves(this);
-    return this._pseudoMoves;
-  }
-
-  /**
    * Set the castling rights value.
    * @param castlingRights The castling rights.
    */
@@ -285,97 +376,6 @@ export class ChessGame {
     this._hash = hashEnPassant(this._hash, this.enPassant);
     this.enPassant = index120;
     this._hash = hashEnPassant(this._hash, this.enPassant);
-  }
-
-  /**
-   * Check whether the active color has been checkmated.
-   * @returns Whether the current side is in checkmate.
-   */
-  isCheckmate(): boolean {
-    return this.inCheck && this.generateMoves().length == 0;
-  }
-
-  /**
-   * Check whether the active color has been stalemated.
-   * @returns Whether the current side is in stalemate.
-   */
-  isStalemate(): boolean {
-    return !this.inCheck && this.generateMoves().length == 0;
-  }
-
-  /**
-   * Check whether the game has ended.
-   * @returns Whether the game has ended.
-   */
-  isEnd(): boolean {
-    return this.isCheckmate() || this.isDraw();
-  }
-
-  /**
-   * Check whether the game has ended as a draw.
-   * @returns Whether the game has ended as a draw.
-   */
-  isDraw(): boolean {
-    // TODO: insufficient material, 50 move, threefold repetition.
-    return this.isStalemate();
-  }
-
-  /**
-   * Check whether a square is attacked by the opponent.
-   * @param index120 The index of the square to check.
-   * @param side The side to check whether the opponent is attacking.
-   *  Defaults to color of piece at index, or if square empty, the current active color.
-   * @returns Whether the square is attacked by the opponent.
-   */
-  isSquareAttacked(index120: Index120, side?: Color): boolean {
-    return isSquareAttacked(this, index120, side);
-  }
-
-  /**
-   * Generate all legal or pseudo-legal moves on the chessboard.
-   * @param side The side from which to generate moves.
-   * @param legal Whether to generate only legal moves or all pseudo-legal moves.
-   * @returns An array of moves.
-   */
-  generateMoves(side?: Color, legal = true): Move[] {
-    const moves = generateMoves(this, side);
-    return legal ? moves.filter(this.isLegalMove, this) : moves;
-  }
-
-  /**
-   * Check whether a move is legal.
-   * @param move The move value.
-   * @returns Whether the move is legal.
-   */
-  isLegalMove(move: Move): boolean {
-    return isLegalMove(this, move);
-  }
-
-  /**
-   * Make a move on the chessboard.
-   * @param move The move value.
-   * @returns Whether the move was legal and therefore completed.
-   */
-  makeMove(move: Move): boolean {
-    return makeMove(this, move);
-  }
-
-  /**
-   * Take back the last move made on the chessboard.
-   * @throws {Error} If take back not possible.
-   */
-  takeBack() {
-    takeBack(this);
-  }
-
-  /**
-   * Search for the best move.
-   * @param timeMS The search time in milliseconds, default 1000 ms.
-   * @returns The best move.
-   */
-  search(timeMS?: number): Move {
-    if (!this._search) this._search = new Search(this);
-    return this._search.search(timeMS);
   }
 
   /**
