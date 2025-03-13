@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { STARTING_FEN, getFEN } from "../src/fen";
-import { ChessGame } from "../src/game";
+import { STARTING_FEN, getFEN } from "@/fen";
+import { ChessGame } from "@/game";
 
 describe("getFEN() function", () => {
   let game: ChessGame;

@@ -13,7 +13,7 @@ import {
   getColor,
   getPiece,
   swapColor,
-} from "../src/piece";
+} from "@/piece";
 
 describe("colorPiece() function", () => {
   test("should return correct ColorPiece", () => {

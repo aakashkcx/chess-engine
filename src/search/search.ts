@@ -1,13 +1,13 @@
-import { ChessGame } from "../game";
-import { Hash } from "../hash";
-import { Move, NO_MOVE, moveString, moveStringMin } from "../move";
+import { ChessGame } from "@/game";
+import { Hash } from "@/hash";
+import { Move, NO_MOVE, moveString, moveStringMin } from "@/move";
 import {
   CHECKMATE_VALUE,
   DRAW_VALUE,
   STALEMATE_VALUE,
   evaluate,
-} from "./evaluation";
-import { orderMoves } from "./moveordering";
+} from "@/search/evaluation";
+import { orderMoves } from "@/search/moveordering";
 
 /** The default search time in milliseconds. */
 const DEFAULT_TIME_MS = 1000;

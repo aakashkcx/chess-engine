@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { Index120, Square120 } from "../src/board";
-import { ALL_CASTLE_RIGHTS } from "../src/castlingrights";
-import { ChessGame } from "../src/game";
-import { Move, MoveFlag, getStart } from "../src/move";
-import { generatePseudoMoves, isSquareAttacked } from "../src/movegen";
-import { Color, ColorPiece } from "../src/piece";
+import { Index120, Square120 } from "@/board";
+import { ALL_CASTLE_RIGHTS } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, getStart } from "@/move";
+import { generatePseudoMoves, isSquareAttacked } from "@/movegen";
+import { Color, ColorPiece } from "@/piece";
 
 describe("isSquareAttacked() function", () => {
   const indexes120: Index120[] = Object.values(Square120);

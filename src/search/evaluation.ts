@@ -1,6 +1,6 @@
-import { index120To64, mirror120 } from "../board";
-import { ChessGame } from "../game";
-import { Color, ColorPiece } from "../piece";
+import { index120To64, mirror120 } from "@/board";
+import { ChessGame } from "@/game";
+import { Color, ColorPiece } from "@/piece";
 import {
   BISHOP_TABLE,
   BISHOP_VALUE,
@@ -15,7 +15,7 @@ import {
   QUEEN_VALUE,
   ROOK_TABLE,
   ROOK_VALUE,
-} from "./value";
+} from "@/search/value";
 
 /** The value of a checkmate. */
 export const CHECKMATE_VALUE = 100000;

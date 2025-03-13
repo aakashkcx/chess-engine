@@ -1,4 +1,4 @@
-export { ChessGame } from "./game";
+export { ChessGame } from "@/game";
 
 export {
   File,
@@ -24,7 +24,7 @@ export {
   string64,
   stringTo120,
   stringTo64,
-} from "./board";
+} from "@/board";
 
 export {
   getCaptured,
@@ -39,7 +39,7 @@ export {
   moveStringMin,
   NO_MOVE,
   PROMOTION_FLAGS,
-} from "./move";
+} from "@/move";
 
 export {
   Color,
@@ -56,6 +56,6 @@ export {
   Pieces,
   PieceSymbol,
   swapColor,
-} from "./piece";
+} from "@/piece";
 
-export { perft, perftDivide } from "./perft";
+export { perft, perftDivide } from "@/perft";

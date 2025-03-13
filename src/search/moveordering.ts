@@ -1,13 +1,13 @@
-import { ChessGame } from "../game";
-import { Move, MoveFlag, getMove, isPromotion } from "../move";
-import { ColorPiece, NO_PIECE, getPiece } from "../piece";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, getMove, isPromotion } from "@/move";
+import { ColorPiece, NO_PIECE, getPiece } from "@/piece";
 import {
   BISHOP_VALUE,
   KNIGHT_VALUE,
   PIECE_VALUE,
   QUEEN_VALUE,
   ROOK_VALUE,
-} from "./value";
+} from "@/search/value";
 
 /** The multiplier used for victims in MVV-LVA. */
 const VICTIM_MULTIPLIER = 100;

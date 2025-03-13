@@ -1,5 +1,5 @@
-import { ChessGame } from "./game";
-import { moveString, moveStringMin } from "./move";
+import { ChessGame } from "@/game";
+import { moveString, moveStringMin } from "@/move";
 
 export function perft(game: ChessGame, depth: number): number {
   if (depth === 0) return 1;

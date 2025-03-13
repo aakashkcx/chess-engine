@@ -1,5 +1,5 @@
-import { Index120, string120 } from "./board";
-import { ColorPiece, NO_PIECE, PieceName } from "./piece";
+import { Index120, string120 } from "@/board";
+import { ColorPiece, NO_PIECE, PieceName } from "@/piece";
 
 /**
  * A move that can be made on the chessboard.

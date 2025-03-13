@@ -5,10 +5,10 @@ import {
   rankFileTo120,
   string120,
   stringTo120,
-} from "./board";
-import { CastleRight, NO_CASTLE_RIGHTS } from "./castlingrights";
-import { ChessGame } from "./game";
-import { generateHash } from "./hash";
+} from "@/board";
+import { CastleRight, NO_CASTLE_RIGHTS } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { generateHash } from "@/hash";
 import {
   Color,
   colorPiece,
@@ -16,7 +16,7 @@ import {
   NO_PIECE,
   Piece,
   PieceName,
-} from "./piece";
+} from "@/piece";
 
 /**
  * The starting Forsyth–Edwards Notation (FEN) string.

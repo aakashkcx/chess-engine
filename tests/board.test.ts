@@ -19,7 +19,7 @@ import {
   string64,
   stringTo120,
   stringTo64,
-} from "../src/board";
+} from "@/board";
 
 describe("index64To120() function", () => {
   test("should return correct index", () => {

@@ -1,26 +1,26 @@
-import { Index120, NULL_INDEX, index64To120 } from "./board";
+import { Index120, NULL_INDEX, index64To120 } from "@/board";
 import {
   CastleRight,
   CastlingRights,
   NO_CASTLE_RIGHTS,
   getCastleRight,
   setCastleRight,
-} from "./castlingrights";
-import { STARTING_FEN, getFEN, setFEN } from "./fen";
+} from "@/castlingrights";
+import { STARTING_FEN, getFEN, setFEN } from "@/fen";
 import {
   Hash,
   hashCastlingRights,
   hashColor,
   hashEnPassant,
   hashPiece,
-} from "./hash";
-import { isLegalMove, makeMove, takeBack } from "./makemove";
-import { Move } from "./move";
+} from "@/hash";
+import { isLegalMove, makeMove, takeBack } from "@/makemove";
+import { Move } from "@/move";
 import {
   generatePseudoCaptures,
   generatePseudoMoves,
   isSquareAttacked,
-} from "./movegen";
+} from "@/movegen";
 import {
   Color,
   ColorPiece,
@@ -29,10 +29,10 @@ import {
   N_COLORPIECES,
   OFF_BOARD,
   swapColor,
-} from "./piece";
-import { Search } from "./search/search";
-import { State } from "./state";
-import { toString } from "./string";
+} from "@/piece";
+import { Search } from "@/search/search";
+import { State } from "@/state";
+import { toString } from "@/string";
 
 /** A chess game. */
 export class ChessGame {

@@ -1,5 +1,5 @@
-import { Index120 } from "./board";
-import { CastlingRights } from "./castlingrights";
+import { Index120 } from "@/board";
+import { CastlingRights } from "@/castlingrights";
 
 /**
  * Game state that stores irreversible aspects of a position.

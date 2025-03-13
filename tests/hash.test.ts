@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { ChessGame } from "../src/game";
-import { generateHash } from "../src/hash";
+import { ChessGame } from "@/game";
+import { generateHash } from "@/hash";
 
 describe("generateHash() function", () => {
   test("should return a hash", () => {

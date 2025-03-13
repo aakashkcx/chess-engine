@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NO_PIECE, OFF_BOARD, Piece } from "../../src/piece";
+import { NO_PIECE, OFF_BOARD, Piece } from "@/piece";
 import {
   BISHOP_VALUE,
   KING_VALUE,
@@ -9,7 +9,7 @@ import {
   PIECE_VALUE,
   QUEEN_VALUE,
   ROOK_VALUE,
-} from "../../src/search/value";
+} from "@/search/value";
 
 describe("PIECE_VALUE dictionary", () => {
   test("should return correct value", () => {

@@ -4,13 +4,13 @@ import {
   PAWN_PROMOTION_RANK,
   PAWN_START_RANK,
   getRank120,
-} from "./board";
+} from "@/board";
 import {
   KING_SIDE_CASTLE_RIGHT,
   QUEEN_SIDE_CASTLE_RIGHT,
-} from "./castlingrights";
-import { ChessGame } from "./game";
-import { Move, MoveFlag, PROMOTION_FLAGS } from "./move";
+} from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, PROMOTION_FLAGS } from "@/move";
 import {
   Color,
   ColorPiece,
@@ -21,7 +21,7 @@ import {
   getColor,
   getPiece,
   swapColor,
-} from "./piece";
+} from "@/piece";
 
 /** The knight piece move offsets. */
 export const KNIGHT_OFFSETS = [8, 19, 21, 12, -8, -19, -21, -12] as const;

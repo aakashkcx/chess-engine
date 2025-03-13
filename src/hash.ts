@@ -1,7 +1,7 @@
-import { Index120, index64To120, NULL_INDEX } from "./board";
-import { CastlingRights, NO_CASTLE_RIGHTS } from "./castlingrights";
-import { ChessGame } from "./game";
-import { Color, ColorPiece, ColorPieces, NO_PIECE } from "./piece";
+import { Index120, index64To120, NULL_INDEX } from "@/board";
+import { CastlingRights, NO_CASTLE_RIGHTS } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Color, ColorPiece, ColorPieces, NO_PIECE } from "@/piece";
 
 /** The largest possible integer for bitwise operations. */
 const LARGEST_INT = 2147483647; // 2 ** 31 - 1

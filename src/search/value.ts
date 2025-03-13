@@ -1,4 +1,4 @@
-import { NO_PIECE, OFF_BOARD, Piece } from "../piece";
+import { NO_PIECE, OFF_BOARD, Piece } from "@/piece";
 
 /** The value of a pawn piece. */
 export const PAWN_VALUE = 100;

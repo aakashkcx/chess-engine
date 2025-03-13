@@ -1,15 +1,15 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { NULL_INDEX, Square120 } from "../src/board";
+import { NULL_INDEX, Square120 } from "@/board";
 import {
   ALL_CASTLE_RIGHTS,
   CastleRight,
   NO_CASTLE_RIGHTS,
-} from "../src/castlingrights";
-import { STARTING_FEN } from "../src/fen";
-import { ChessGame } from "../src/game";
-import { generateHash } from "../src/hash";
-import { Color, ColorPiece, N_COLORPIECES, NO_PIECE } from "../src/piece";
+} from "@/castlingrights";
+import { STARTING_FEN } from "@/fen";
+import { ChessGame } from "@/game";
+import { generateHash } from "@/hash";
+import { Color, ColorPiece, N_COLORPIECES, NO_PIECE } from "@/piece";
 
 describe("ChessGame class", () => {
   describe("constructor()", () => {

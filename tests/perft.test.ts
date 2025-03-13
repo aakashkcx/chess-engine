@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { ChessGame } from "../src/game";
-import { perft } from "../src/perft";
+import { ChessGame } from "@/game";
+import { perft } from "@/perft";
 
 // https://www.chessprogramming.org/Perft_Results
 

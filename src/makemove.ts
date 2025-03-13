@@ -1,10 +1,10 @@
-import { NULL_INDEX, Square120 } from "./board";
-import { CastleRight } from "./castlingrights";
-import { ChessGame } from "./game";
-import { Move, MoveFlag, getMove, isPromotion } from "./move";
-import { PAWN_MOVE_OFFSET } from "./movegen";
-import { Color, Piece, colorPiece, getPiece, swapColor } from "./piece";
-import { State, getState } from "./state";
+import { NULL_INDEX, Square120 } from "@/board";
+import { CastleRight } from "@/castlingrights";
+import { ChessGame } from "@/game";
+import { Move, MoveFlag, getMove, isPromotion } from "@/move";
+import { PAWN_MOVE_OFFSET } from "@/movegen";
+import { Color, Piece, colorPiece, getPiece, swapColor } from "@/piece";
+import { State, getState } from "@/state";
 
 /**
  * Check whether a move is legal.
