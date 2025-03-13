@@ -18,7 +18,7 @@ import {
 } from "@/search/value";
 
 /** The value of a checkmate. */
-export const CHECKMATE_VALUE = 100000;
+export const CHECKMATE_VALUE = 100_000;
 
 /** The value of a draw. */
 export const DRAW_VALUE = 0;

@@ -10,7 +10,7 @@ import {
 import { orderMoves } from "@/search/moveordering";
 
 /** The default search time in milliseconds. */
-const DEFAULT_TIME_MS = 1000;
+const DEFAULT_TIME_MS = 1_000;
 
 /** The maximum search depth. */
 const MAX_DEPTH = 32;
@@ -69,7 +69,7 @@ export class Search {
 
   /**
    * Search for the best move.
-   * @param timeMS The search time in milliseconds, default 1000 ms.
+   * @param timeMS The search time in milliseconds, default 1,000 ms.
    * @returns The best move.
    */
   search(timeMS: number = DEFAULT_TIME_MS): Move {

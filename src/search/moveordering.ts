@@ -16,7 +16,7 @@ const VICTIM_MULTIPLIER = 100;
 const PROMOTION_MULTIPLIER = 100;
 
 /** The value of the principal variation move. */
-const PV_VALUE = 1000000;
+const PV_VALUE = 1_000_000;
 
 /**
  * Order a list of moves.
