@@ -49,19 +49,64 @@ export class ChessGame {
   /** The number of full moves. */
   fullMoves: number;
 
-  /** Whether the king of the active color is in check. */
+  /** Whether the king of the current turn is in check. */
   inCheck: boolean;
 
-  /** A 10*12 array storing the occupancy of each square on the board. */
+  /**
+   * A 10x12 array storing the occupancy of each square on the board.
+   * Indexed by {@link Index120}.
+   *
+   * The 10x12 board embeds the 8x8 board by 2 sentinel files and 1 sentinel rank on each side.
+   * This allows for the recognition of off-board indices during move generation.
+   *
+   * {@link https://www.chessprogramming.org/10x12_Board}
+   *
+   * @example Retrieving the piece at A2:
+   * ```
+   * _pieceBoard[Square120.A2] // ColorPiece.WhitePawn
+   * ```
+   */
   _pieceBoard: ColorPiece[];
 
-  /** The total number of each piece type on the board. */
+  /**
+   * The total number of each piece type on the board.
+   * Indexed by {@link ColorPiece}.
+   *
+   * @example Retrieving the total number of white pawns:
+   * ```
+   * _pieceCount[ColorPiece.WhitePawn] // 8
+   * ```
+   */
   _pieceCount: number[];
 
-  /** The piece lists for each piece type, storing the index of each piece on the board. */
+  /**
+   * The piece lists for each piece type, storing the index of each piece on the board.
+   * Indexed by {@link ColorPiece}.
+   *
+   * {@link https://www.chessprogramming.org/Piece-Lists}
+   *
+   * @example Retrieving the index of the first white pawn:
+   * ```
+   * _pieceLists[ColorPiece.WhitePawn][0] // Square120.A2
+   * ```
+   */
   _pieceLists: Index120[][];
 
-  /** A 10*12 array storing the index of each piece on the board within the piece lists. */
+  /**
+   * A 10x12 array storing the index of each piece on the board within the piece lists.
+   * Indexed by {@link Index120}.
+   *
+   * This index board connects the board representations of {@link _pieceBoard} and {@link _pieceLists}.
+   *
+   * {@link https://www.chessprogramming.org/Piece-Lists}
+   *
+   * @example Retrieving the piece list index of the piece at A2:
+   * ```
+   * _pieceListIndex[Square120.A2] // 0
+   * _pieceBoard[Square120.A2] // ColorPiece.WhitePawn
+   * _pieceLists[ColorPiece.WhitePawn][0] // Square120.A2
+   * ```
+   */
   _pieceListIndex: number[];
 
   /** The castling availability. */
@@ -73,13 +118,13 @@ export class ChessGame {
   /** The number of plies played. */
   _ply: number;
 
-  /** The history of moves made. */
+  /** The history of moves made. Indexed by {@link _ply}. */
   _moveHistory: Move[];
 
-  /** The history of game state. */
+  /** The history of game state. Indexed by {@link _ply}. */
   _stateHistory: State[];
 
-  /** The history of zobrist hashes. */
+  /** The history of zobrist hashes. Indexed by {@link _ply}. */
   _hashHistory: Hash[];
 
   /** The list of legal moves. */
@@ -132,24 +177,21 @@ export class ChessGame {
   }
 
   /**
-   * Check whether the active color has been checkmated.
-   * @returns Whether the current side is in checkmate.
+   * Whether the current turn has been checkmated.
    */
   get isCheckmate(): boolean {
     return this.inCheck && this.moves.length == 0;
   }
 
   /**
-   * Check whether the active color has been stalemated.
-   * @returns Whether the current side is in stalemate.
+   * Whether the current turn has been stalemated.
    */
   get isStalemate(): boolean {
     return !this.inCheck && this.moves.length == 0;
   }
 
   /**
-   * Check whether the game has ended as a draw.
-   * @returns Whether the game has ended as a draw.
+   * Whether the game has ended as a draw.
    */
   get isDraw(): boolean {
     // TODO: insufficient material, 50 move, threefold repetition.
@@ -157,8 +199,7 @@ export class ChessGame {
   }
 
   /**
-   * Check whether the game has ended.
-   * @returns Whether the game has ended.
+   * Whether the game has ended.
    */
   get isEnd(): boolean {
     return this.isCheckmate || this.isDraw;
@@ -186,6 +227,8 @@ export class ChessGame {
 
   /**
    * The list of pseudo-legal moves.
+   *
+   * Pseudo-legal moves may leave the king in check and therefore be illegal.
    */
   get pseudoMoves(): Move[] {
     if (!this._pseudoMoves) this._pseudoMoves = generatePseudoMoves(this);
@@ -194,6 +237,8 @@ export class ChessGame {
 
   /**
    * The list of pseudo-legal capture moves.
+   *
+   * Pseudo-legal moves may leave the king in check and therefore be illegal.
    */
   get pseudoCaptureMoves(): Move[] {
     if (!this._pseudoCaptureMoves)
@@ -202,11 +247,11 @@ export class ChessGame {
   }
 
   /**
-   * Check whether a square is attacked by the opponent.
-   * @param index120 The index of the square to check.
+   * Check whether a square is attacked.
+   * @param index120 The index of the square.
    * @param side The side to check whether the opponent is attacking.
-   *  Defaults to color of piece at index, or if square empty, the current active color.
-   * @returns Whether the square is attacked by the opponent.
+   *  Defaults to color of piece at index, or if square empty, the current turn.
+   * @returns Whether the square is attacked.
    */
   isSquareAttacked(index120: Index120, side?: Color): boolean {
     return isSquareAttacked(this, index120, side);
@@ -215,7 +260,7 @@ export class ChessGame {
   /**
    * Make a move on the chessboard.
    * @param move The move value.
-   * @returns Whether the move was legal and therefore completed.
+   * @returns Whether the move was legal and successful.
    */
   makeMove(move: Move): boolean {
     return makeMove(this, move);
@@ -225,7 +270,7 @@ export class ChessGame {
    * Take back the last move made on the chessboard.
    * @throws {Error} If take back not possible.
    */
-  takeBack() {
+  takeBack(): void {
     takeBack(this);
   }
 
@@ -265,7 +310,7 @@ export class ChessGame {
    * @param index120 The 120 index.
    * @param piece The color piece.
    * @throws {Error} If square is occupied.
-   * @throws {Error} If chess piece is null.
+   * @throws {Error} If piece is null.
    */
   addPiece(index120: Index120, piece: ColorPiece) {
     if (this._pieceBoard[index120] !== NO_PIECE)
@@ -334,7 +379,8 @@ export class ChessGame {
 
   /**
    * Update the board representation.
-   * Fills in the piece lists based on {@link _pieceBoard}.
+   *
+   * Repopulates {@link _pieceCount}, {@link _pieceLists} and {@link _pieceListIndex} based on {@link _pieceBoard}.
    */
   _updateBoard() {
     this._pieceCount = Array<number>(N_COLORPIECES + 1).fill(0);
@@ -382,7 +428,7 @@ export class ChessGame {
 
   /**
    * Set the castling rights value.
-   * @param castlingRights The castling rights.
+   * @param castlingRights The castling rights value.
    */
   _setCastlingRights(castlingRights: CastlingRights) {
     this._hash = hashCastlingRights(this._hash, this._castlingRights);
@@ -409,7 +455,7 @@ export class ChessGame {
   }
 
   /**
-   * Get the chess board indexed 0-63.
+   * Get the chess board as an array of length 64.
    * @returns The chess board, of length 64.
    */
   getBoard(): ColorPiece[] {
@@ -439,7 +485,9 @@ export class ChessGame {
 
   /**
    * Execute a performance test (perft).
+   *
    * Walk the legal move tree and count all leaf nodes to a certain depth.
+   *
    * @param depth The perft test depth.
    * @returns The total number of leaf nodes.
    */

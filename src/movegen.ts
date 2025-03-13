@@ -67,12 +67,12 @@ const SLIDING_PIECES_OFFSETS = [
 ] as const;
 
 /**
- * Check whether a square is attacked by the opponent.
+ * Check whether a square is attacked.
  * @param game The chess game.
- * @param index120 The index of the square to check.
+ * @param index120 The index of the square.
  * @param side The side to check whether the opponent is attacking.
- *  Defaults to color of piece at index, or if square empty, the current active color.
- * @returns Whether the square is attacked by the opponent.
+ *  Defaults to color of piece at index, or if square empty, the current turn.
+ * @returns Whether the square is attacked.
  */
 export function isSquareAttacked(
   game: ChessGame,

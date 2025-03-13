@@ -10,7 +10,7 @@ import { State, getState } from "@/state";
  * Make a move on the chessboard.
  * @param game The chess game.
  * @param move The move value.
- * @returns Whether the move was legal and therefore completed.
+ * @returns Whether the move was legal and successful.
  */
 export function makeMove(game: ChessGame, move: Move): boolean {
   const [start, target, captured, flag] = getMove(move);
@@ -115,7 +115,7 @@ export function makeMove(game: ChessGame, move: Move): boolean {
  * @param game The chess game.
  * @throws {Error} If take back not possible.
  */
-export function takeBack(game: ChessGame) {
+export function takeBack(game: ChessGame): void {
   if (game._ply === 0) throw new Error("Cannot take back!");
 
   game._ply--;

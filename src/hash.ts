@@ -7,7 +7,10 @@ import { Color, ColorPiece, ColorPieces, NO_PIECE } from "@/piece";
 const LARGEST_INT = 2147483647; // 2 ** 31 - 1
 
 /**
- * A zobrist hash for the chess game.
+ * A zobrist hash for a chess game.
+ * An *almost* unique key for any chess position.
+ *
+ * {@link https://www.chessprogramming.org/Zobrist_Hashing}
  */
 export type Hash = number;
 
