@@ -1,4 +1,4 @@
-import { ChessGame, perftDivide } from "@";
+import { ChessGame } from "@";
 
 // https://www.chessprogramming.org/Perft_Results
 
@@ -8,4 +8,4 @@ const FEN =
 const game = new ChessGame(FEN);
 game.print();
 
-console.log(perftDivide(game, 4));
+game.perft(4);

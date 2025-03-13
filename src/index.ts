@@ -57,5 +57,3 @@ export {
   PieceSymbol,
   swapColor,
 } from "@/piece";
-
-export { perft, perftDivide } from "@/perft";

@@ -21,6 +21,7 @@ import {
   generatePseudoMoves,
   isSquareAttacked,
 } from "@/movegen";
+import { perftDivide } from "@/perft";
 import {
   Color,
   ColorPiece,
@@ -418,5 +419,15 @@ export class ChessGame {
    */
   print(onlyBoard = false, useSymbols = false) {
     console.log("\n" + this.toString(onlyBoard, useSymbols) + "\n");
+  }
+
+  /**
+   * Execute a performance test (perft).
+   * Walk the legal move tree and count all leaf nodes to a certain depth.
+   * @param depth The perft test depth.
+   * @returns The total number of leaf nodes.
+   */
+  perft(depth: number): number {
+    return perftDivide(this, depth);
   }
 }
