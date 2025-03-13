@@ -28,7 +28,7 @@ async function gamePlayer(rl: readline.Interface) {
   while (true) {
     game.print();
     const side = game.turn;
-    const moves = game.generateMoves(side, true);
+    const moves = game.moves;
     const moveStrings = moves.map(moveStringMin);
     console.log(moveStrings);
     if (moves.length) {
@@ -46,7 +46,7 @@ async function gameAI(rl: readline.Interface) {
     game.print();
     const side = game.turn;
     if (side === Color.White) {
-      const moves = game.generateMoves(side, true);
+      const moves = game.moves;
       const moveStrings = moves.map(moveStringMin);
       console.log(moveStrings);
       if (moves.length) {

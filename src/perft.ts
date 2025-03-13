@@ -1,10 +1,9 @@
 import { ChessGame } from "./game";
 import { moveString, moveStringMin } from "./move";
-import { generatePseudoMoves } from "./movegen";
 
 export function perft(game: ChessGame, depth: number): number {
   if (depth === 0) return 1;
-  const moves = generatePseudoMoves(game);
+  const moves = game.pseudoMoves;
   let nodes = 0;
   for (const move of moves) {
     try {
@@ -23,7 +22,7 @@ export function perft(game: ChessGame, depth: number): number {
 export function perftDivide(game: ChessGame, depth: number): number {
   console.log(`Perft Depth: ${depth}`);
   if (depth === 0) return 1;
-  const moves = generatePseudoMoves(game);
+  const moves = game.pseudoMoves;
   let nodes = 0;
   for (const move of moves) {
     try {
