@@ -182,17 +182,6 @@ export class ChessGame {
   }
 
   /**
-   * Generate all legal or pseudo-legal moves on the chessboard.
-   * @param side The side from which to generate moves.
-   * @param legal Whether to generate only legal moves or all pseudo-legal moves.
-   * @returns An array of moves.
-   */
-  generateMoves(side?: Color, legal = true): Move[] {
-    const moves = generateMoves(this, side);
-    return legal ? moves.filter(this.isLegalMove, this) : moves;
-  }
-
-  /**
    * Check whether a move is legal.
    * @param move The move value.
    * @returns Whether the move is legal.
