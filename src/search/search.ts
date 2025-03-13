@@ -284,7 +284,7 @@ export class Search {
   _logIteration(depth: number) {
     const moveList = this._getMoveList(depth).map(moveStringMin);
     const bestMove = moveString(this.bestMove);
-    const output = `Depth ${depth}: ${bestMove} / ${this.bestScore}\t(${this.nodes} nodes)\t${moveList} `;
+    const output = `Depth ${depth}: ${bestMove} / ${this.bestScore}\t(${this.nodes} nodes)\t${moveList.toString()} `;
     console.log(output);
   }
 

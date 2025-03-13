@@ -105,12 +105,12 @@ export function generateHash(game: ChessGame): Hash {
  * Initialise the zobrist hashes.
  */
 export function initHashes() {
-  PIECE_INDEX_HASH = Array(ColorPieces.length + 1)
+  PIECE_INDEX_HASH = Array<Hash[]>(ColorPieces.length + 1)
     .fill([])
-    .map(() => Array(120).fill(0));
+    .map(() => Array<Hash>(120).fill(0));
   COLOR_HASH = randomBits();
-  CASTLING_RIGHTS_HASH = Array(16).fill(0);
-  EN_PASSANT_HASH = Array(120).fill(0);
+  CASTLING_RIGHTS_HASH = Array<Hash>(16).fill(0);
+  EN_PASSANT_HASH = Array<Hash>(120).fill(0);
 
   for (let i = 0; i < 16; i++) CASTLING_RIGHTS_HASH[i] = randomBits();
   CASTLING_RIGHTS_HASH[NO_CASTLE_RIGHTS] = 0;
