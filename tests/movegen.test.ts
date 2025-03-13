@@ -7,7 +7,7 @@ import { Move, MoveFlag, getStart } from "@/move";
 import { generatePseudoMoves, isSquareAttacked } from "@/movegen";
 import { Color, ColorPiece } from "@/piece";
 
-const indexes120: Index120[] = Object.values(Square120);
+const indices120: Index120[] = Object.values(Square120);
 
 describe("isSquareAttacked() function", () => {
   describe("should check attacks from correct side", () => {
@@ -16,12 +16,12 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       let expected: Index120[] = [Square120.D5, Square120.F5];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -30,12 +30,12 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Square120.C4, Square120.E4];
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -80,14 +80,14 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       let expected: Index120[] = [Square120.D5, Square120.F5];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120)
       );
       expect(attacked).toEqual([]);
 
       game.changeTurn();
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120)
       );
       expect(attacked).toEqual(expected);
@@ -96,14 +96,14 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       expected = [Square120.C4, Square120.E4];
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120)
       );
       expect(attacked).toEqual(expected);
 
       game.changeTurn();
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120)
       );
       expect(attacked).toEqual([]);
@@ -116,12 +116,12 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.E4, ColorPiece.WhitePawn);
       const expected: Index120[] = [Square120.D5, Square120.F5];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -132,12 +132,12 @@ describe("isSquareAttacked() function", () => {
       game.addPiece(Square120.D5, ColorPiece.BlackPawn);
       const expected: Index120[] = [Square120.C4, Square120.E4];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -157,12 +157,12 @@ describe("isSquareAttacked() function", () => {
                       Square120.D6,               Square120.F6,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -180,12 +180,12 @@ describe("isSquareAttacked() function", () => {
                       Square120.C7,               Square120.E7,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -208,12 +208,12 @@ describe("isSquareAttacked() function", () => {
         Square120.A8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -234,12 +234,12 @@ describe("isSquareAttacked() function", () => {
         Square120.A8,                                                                       Square120.G8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -262,12 +262,12 @@ describe("isSquareAttacked() function", () => {
                                                                 Square120.E8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -288,12 +288,12 @@ describe("isSquareAttacked() function", () => {
                                                   Square120.D8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -316,12 +316,12 @@ describe("isSquareAttacked() function", () => {
         Square120.A8,                                           Square120.E8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -342,12 +342,12 @@ describe("isSquareAttacked() function", () => {
         Square120.A8,                             Square120.D8,                             Square120.G8,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
@@ -365,12 +365,12 @@ describe("isSquareAttacked() function", () => {
         Square120.D5, Square120.E5, Square120.F5,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual([]);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual(expected);
@@ -386,12 +386,12 @@ describe("isSquareAttacked() function", () => {
         Square120.C6, Square120.D6, Square120.E6,
       ];
 
-      let attacked: Index120[] = indexes120.filter((index120) =>
+      let attacked: Index120[] = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.White)
       );
       expect(attacked).toEqual(expected);
 
-      attacked = indexes120.filter((index120) =>
+      attacked = indices120.filter((index120) =>
         isSquareAttacked(game, index120, Color.Black)
       );
       expect(attacked).toEqual([]);
