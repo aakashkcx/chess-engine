@@ -31,7 +31,7 @@ const ENDGAME_START_VALUE =
   4 * PAWN_VALUE + 2 * BISHOP_VALUE + 2 * ROOK_VALUE + KING_VALUE;
 
 /**
- * Calculate an evaluation score for the chessboard.
+ * Calculate an evaluation score for a chess game.
  * @param game The chess game.
  * @param side The side to evaluate from.
  * @returns An evaluation score.
@@ -57,7 +57,7 @@ export function evaluate(game: ChessGame, side?: Color): number {
 }
 
 /**
- * Calculate the value of material on the chessboard.
+ * Calculate the value of material on a chess game.
  * @param game The chess game.
  * @param side The side to evaluate from.
  * @returns The value of material.
@@ -85,7 +85,7 @@ function materialValue(game: ChessGame, side: Color): number {
 }
 
 /**
- * Calculate the value of piece positions on the chessboard.
+ * Calculate the value of piece positions on a chess game.
  * @param game The chess game.
  * @param side The side to evaluate from.
  * @param endgame Whether the game has reached endgame.
