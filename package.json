@@ -39,6 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.28.1",
     "@eslint/js": "^9.22.0",
     "@tsconfig/node-lts": "^22.0.1",
     "@types/node": "^22.13.10",
