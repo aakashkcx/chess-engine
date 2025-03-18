@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "build": "tsup",
+    "changeset": "changeset",
     "demo:cli": "tsx ./demo/cli.ts",
     "demo:perft": "tsx ./demo/perft.ts",
     "demo:search": "tsx ./demo/search.ts",
@@ -34,6 +35,7 @@
     "format:write": "prettier . --write",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "release": "pnpm build && changeset publish",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit"
