@@ -37,6 +37,7 @@
     "format:write": "prettier . --write",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "release": "pnpm build && changeset publish",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit"
