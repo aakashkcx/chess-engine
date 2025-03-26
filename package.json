@@ -23,10 +23,13 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
+    "changeset": "changeset",
     "demo:cli": "tsx ./demo/cli.ts",
     "demo:perft": "tsx ./demo/perft.ts",
     "demo:search": "tsx ./demo/search.ts",
@@ -34,22 +37,24 @@
     "format:write": "prettier . --write",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "release": "pnpm build && changeset publish",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@eslint/js": "^9.22.0",
+    "@changesets/cli": "^2.28.1",
+    "@eslint/js": "^9.23.0",
     "@tsconfig/node-lts": "^22.0.1",
-    "@types/node": "^22.13.10",
-    "@vitest/coverage-v8": "^3.0.8",
-    "eslint": "^9.22.0",
+    "@types/node": "^22.13.13",
+    "@vitest/coverage-v8": "^3.0.9",
+    "eslint": "^9.23.0",
     "prettier": "^3.5.3",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.1",
-    "vitest": "^3.0.8"
+    "typescript-eslint": "^8.28.0",
+    "vitest": "^3.0.9"
   },
-  "packageManager": "pnpm@10.6.2"
+  "packageManager": "pnpm@10.6.5"
 }
