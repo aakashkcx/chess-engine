@@ -29,6 +29,7 @@
   ],
   "scripts": {
     "build": "tsup",
+    "changeset": "changeset",
     "demo:cli": "tsx ./demo/cli.ts",
     "demo:perft": "tsx ./demo/perft.ts",
     "demo:search": "tsx ./demo/search.ts",
