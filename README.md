@@ -1,7 +1,8 @@
 # Chess Engine
 
 [![Continuous Integration](https://github.com/aakashkcx/chess-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/aakashkcx/chess-engine/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/@aakashkcx%2Fchess-engine.svg)](https://badge.fury.io/js/@aakashkcx%2Fchess-engine)
+[![Continuous Deployment to npm](https://github.com/aakashkcx/chess-engine/actions/workflows/cd.yml/badge.svg)](https://github.com/aakashkcx/chess-engine/actions/workflows/cd.yml)
+[![NPM Version](https://img.shields.io/npm/v/%40aakashkcx%2Fchess-engine)](https://www.npmjs.com/package/@aakashkcx/chess-engine)
 
 A playable example can be found at [aakashkcx.github.io/chess-game/](https://aakashkcx.github.io/chess-game/), with its source code at [aakashkcx/chess-game](https://github.com/aakashkcx/chess-game).
 
