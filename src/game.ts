@@ -216,8 +216,7 @@ export class ChessGame {
    * The list of legal moves.
    */
   get moves(): Move[] {
-    if (!this._moves)
-      this._moves = this.pseudoMoves.filter((move) => this.isLegalMove(move));
+    this._moves ??= this.pseudoMoves.filter((move) => this.isLegalMove(move));
     return this._moves;
   }
 
@@ -225,10 +224,9 @@ export class ChessGame {
    * The list of legal capture moves.
    */
   get captureMoves(): Move[] {
-    if (!this._captureMoves)
-      this._captureMoves = this.pseudoCaptureMoves.filter((move) =>
-        this.isLegalMove(move)
-      );
+    this._captureMoves ??= this.pseudoCaptureMoves.filter((move) =>
+      this.isLegalMove(move)
+    );
     return this._captureMoves;
   }
 
@@ -238,7 +236,7 @@ export class ChessGame {
    * Pseudo-legal moves may leave the king in check and therefore be illegal.
    */
   get pseudoMoves(): Move[] {
-    if (!this._pseudoMoves) this._pseudoMoves = generatePseudoMoves(this);
+    this._pseudoMoves ??= generatePseudoMoves(this);
     return this._pseudoMoves;
   }
 
@@ -248,8 +246,7 @@ export class ChessGame {
    * Pseudo-legal moves may leave the king in check and therefore be illegal.
    */
   get pseudoCaptureMoves(): Move[] {
-    if (!this._pseudoCaptureMoves)
-      this._pseudoCaptureMoves = generatePseudoCaptures(this);
+    this._pseudoCaptureMoves ??= generatePseudoCaptures(this);
     return this._pseudoCaptureMoves;
   }
 
@@ -298,7 +295,7 @@ export class ChessGame {
    * @returns The best move.
    */
   search(timeMS?: number): Move {
-    if (!this._search) this._search = new Search(this);
+    this._search ??= new Search(this);
     return this._search.search(timeMS);
   }
 
